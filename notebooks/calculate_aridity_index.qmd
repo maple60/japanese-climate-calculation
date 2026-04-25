@@ -64,5 +64,3 @@ write.csv(
 
 ## References
 
-::: {#refs}
-:::

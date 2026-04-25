@@ -264,7 +264,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section><section id="シェープファイルの読み込み" class="level2"><h2 class="anchored" data-anchor-id="シェープファイルの読み込み">シェープファイルの読み込み</h2>
 <p>zipファイルが展開されたら、zipファイルのファイル名が名前の付いたフォルダができています。 その中に、<code>G02-22_5436-jgd_GML.shp</code>のようなシェープファイルがあります。 これを読み込んで、データフレームにまとめます。</p>
-<p>データの列名は<code>G02_001</code>のように、コードで表されているので、別途用意したラベルファイルを使って、列名をわかりやすい名前に変換します。 <a href="../data/manual/mesh_climate_data_labels.csv"><code>data/manual/mesh_climate_data_labels.csv</code></a>に、コードと対応する変数名を保存していますので、これをお使いください。</p>
+<p>データの列名は<code>G02_001</code>のように、コードで表されているので、別途用意したラベルファイルを使って、列名をわかりやすい名前に変換します。 <a href="../data/manual/mesh_climate_data_labels.csv"><code>data/manual/mesh_climate_data_labels.csv</code></a>に、コードと対応する変数名を保存していますので、これをお使いください (クリックでダウンロードできます)。</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">data_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co"># Shapefile のフルパスを取得</span></span>
@@ -891,7 +891,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a>これを読み込んで、データフレームにまとめます。</span>
 <span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>データの列名は<span class="in">`G02_001`</span>のように、コードで表されているので、別途用意したラベルファイルを使って、列名をわかりやすい名前に変換します。</span>
-<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">`data/manual/mesh_climate_data_labels.csv`</span><span class="co">](../data/manual/mesh_climate_data_labels.csv)</span>に、コードと対応する変数名を保存していますので、これをお使いください。</span>
+<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">`data/manual/mesh_climate_data_labels.csv`</span><span class="co">](../data/manual/mesh_climate_data_labels.csv)</span>に、コードと対応する変数名を保存していますので、これをお使いください (クリックでダウンロードできます)。</span>
 <span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a>data_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>

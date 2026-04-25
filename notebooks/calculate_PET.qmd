@@ -106,6 +106,3 @@ write.csv(
 ```
 
 ## References
-
-::: {#refs}
-:::

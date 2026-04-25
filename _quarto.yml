@@ -3,7 +3,8 @@ project:
   execute-dir: project
   output-dir: docs # for GitHub Pages
   resources:
-    - data/*.csv
+    - data/manual/mesh_climate_data_labels.csv
+    - R/get_nearest_climate_value.R
 
 book:
   title: "Climate Data Processing with Mesh Climatology 2020 (メッシュ平年値2020を用いた気候変数の処理)"

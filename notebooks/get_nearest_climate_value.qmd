@@ -157,7 +157,7 @@ result <- get_nearest_climate_value(
 print(result)
 ```
 
-```{.r filename ="Result"}
+```{.r filename="Result"}
        aridity_index
 165824       1.84528
 ```
@@ -174,7 +174,7 @@ result <- get_nearest_climate_value(
 print(result)
 ```
 
-```{.r filename ="Result"}
+```{.r filename="Result"}
        aridity_index precipitation_year
 165824       1.84528             1553.8
 ```
@@ -197,7 +197,7 @@ result <- get_nearest_climate_value(
 print(result)
 ```
 
-```{.r filename ="Result"}
+```{.r filename="Result"}
        id longitude latitude aridity_index
 165824  1  139.6917  35.6895      1.845280
 111106  2  135.5022  34.6937      1.442432
@@ -222,7 +222,7 @@ result <- get_nearest_climate_value(
 print(result)
 ```
 
-```{.r filename ="Result"}
+```{.r filename="Result"}
        id longitude latitude aridity_index precipitation_year
 165824  1  139.6917  35.6895      1.845280             1553.8
 111106  2  135.5022  34.6937      1.442432             1312.0
@@ -243,7 +243,7 @@ result <- get_nearest_climate_value(
 print(result)
 ```
 
-```{.r filename ="Result"}
+```{.r filename="Result"}
        mesh_code_3rd precipitation_Jan precipitation_Feb precipitation_Mar
 165824      53394525              55.8              53.6             112.5
        precipitation_Apr precipitation_May precipitation_Jun precipitation_Jul
