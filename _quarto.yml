@@ -2,6 +2,8 @@ project:
   type: book
   execute-dir: project
   output-dir: docs # for GitHub Pages
+  resources:
+    - data/*.csv
 
 book:
   title: "Climate Data Processing with Mesh Climatology 2020 (メッシュ平年値2020を用いた気候変数の処理)"
@@ -21,6 +23,7 @@ book:
       text: "Plot Japan Climate Map"
 
 number-sections: false
+bibliography: notebooks/references.bib
 
 format:
   html:

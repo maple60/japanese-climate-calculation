@@ -204,7 +204,7 @@
     "href": "notebooks/calculate_PET.html#references",
     "title": "Calculate Potential Evapotranspiration (PET)",
     "section": "References",
-    "text": "References",
+    "text": "References\n\n\nBeguería, Santiago, and Sergio M. Vicente-Serrano. 2023. SPEI:\nCalculation of the Standardized Precipitation-Evapotranspiration\nIndex. https://doi.org/10.32614/CRAN.package.SPEI.\n\n\nThornthwaite, C. W. 1948. “An Approach Toward a Rational\nClassification of Climate.” Geographical Review 38 (1):\n55–94. https://doi.org/10.2307/210739.\n\n\nWorld Atlas of Desertification. 1992. UNEP.",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate Potential Evapotranspiration (PET)</span>"
     ]
