@@ -112,5 +112,10 @@ saveRDS(sf_climate, file.path(save_dir, "climate_mesh_data.rds"))
 
 ```{r}
 df_climate <- st_drop_geometry(sf_climate)
-write.csv(df_climate, file.path(save_dir, "climate_mesh_data.csv"))
+write.csv(
+  df_climate,
+  file.path(save_dir, "climate_mesh_data.csv"),
+  row.names = FALSE,
+  fileEncoding = "UTF-8"
+)
 ```
