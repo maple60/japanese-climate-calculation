@@ -1,0 +1,60 @@
+---
+title: "Calculate Aridity Index"
+---
+
+Aridity Index (AI) を計算します。
+AI は、気候の乾燥度を表す指標で、降水量(precipitation)と蒸発散量(potential evapotranspication)の比率として定義されます。
+
+ほかにもいろいろな定義があるようですが、ここでは以下の式を用います。
+
+$$
+AI = \frac{P}{PET}
+$$
+
+ここで、$P$ は降水量、$PET$ は潜在蒸発散量です。
+
+## ライブラリの読み込み
+
+```{r}
+library(sf)
+```
+
+## データの読み込み
+
+```{r}
+data_dir <- Sys.getenv("PROJECT_DATA_DIR")
+```
+
+```{r}
+sf_climate <- readRDS(file.path(
+  data_dir,
+  "climate_mesh_data_joined/climate_mesh_data_with_pet.rds"
+))
+```
+
+## Aridity Index の計算
+
+```{r}
+sf_climate$aridity_index <- sf_climate$precipitation_year / sf_climate$PET_year
+```
+
+## データの保存
+
+```{r}
+saveRDS(
+  sf_climate,
+  file.path(
+    data_dir,
+    "climate_mesh_data_joined/climate_mesh_data_with_aridity_index.rds"
+  )
+)
+df_climate <- st_drop_geometry(sf_climate)
+write.csv(
+  df_climate,
+  file.path(
+    data_dir,
+    "climate_mesh_data_joined/climate_mesh_data_with_aridity_index.csv"
+  ),
+  row.names = FALSE
+)
+```
