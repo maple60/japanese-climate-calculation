@@ -6,3 +6,5 @@
 .Renviron
 
 data/climate_mesh_data/
+/.quarto/
+**/*.quarto_ipynb
