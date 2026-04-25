@@ -1,0 +1,103 @@
+---
+title: "Calculate Potential Evapotranspiration (PET)"
+---
+
+潜在蒸発散量 Potential evapotranspiration; PET を計算します。
+方法は Thornthwaite method です。
+パッケージは [SPEI](https://cran.r-project.org/web/packages/SPEI/index.html) を使用します。
+
+## ライブラリの読み込み
+
+```{r}
+library(sf)
+library(SPEI)
+#library(tmap)
+#library(rnaturalearth)
+```
+
+```{r}
+data_dir <- Sys.getenv("PROJECT_DATA_DIR")
+```
+
+## データの読み込み
+
+```{r}
+sf_climate <- readRDS(file.path(
+  data_dir,
+  "climate_mesh_data_joined/climate_mesh_data.rds"
+))
+```
+
+## 計算用データフレームの作成
+
+緯度、月平均気温を抽出します。
+
+```{r}
+latitudes <- sf_climate$latitude
+df_temp <- sf_climate[, grep("mean_temperature", names(sf_climate))]
+df_temp <- st_drop_geometry(df_temp) # ジオメトリを削除
+df_temp <- df_temp[, 1:12] # 年平均気温を除外
+
+keep <- complete.cases(df_temp) # NAを含まない行
+removed_rows <- which(!keep) # 削除される元の行番号
+
+df_temp_clean <- df_temp[keep, ]
+sf_climate_clean <- sf_climate[keep, ]
+row.names(df_temp_clean) <- sf_climate_clean$mesh_code_3rd
+```
+
+## PETの計算
+
+`SPEI::thornthwaite()` 関数を使用してPETを計算します。
+もしメッセージを抑制したい場合は、引数に`verbose = FALSE`を追加してください。
+
+```{r}
+n <- nrow(df_temp_clean) # サンプル数
+pet_month <- matrix(NA, n, 12)
+for (i in seq_len(n)) {
+  pet_month[i, ] <- SPEI::thornthwaite(
+    Tave = as.numeric(df_temp_clean[i, ]),
+    lat = latitudes[i],
+    verbose = FALSE
+  )
+}
+head(pet_month)
+```
+
+## PETデータの整形
+
+`pet_month`マトリックスをデータフレームに変換し、列名を設定します。
+また、年間PETも計算します。
+
+```{r}
+df_pet <- as.data.frame(pet_month)
+names(df_pet) <- paste0("PET", 1:12)
+df_pet$PET_year <- rowSums(df_pet)
+head(df_pet)
+```
+
+## データの結合
+
+```{r}
+df_pet$mesh_code_3rd <- row.names(df_temp_clean)
+sf_merged <- merge(
+  sf_climate,
+  df_pet,
+  by = "mesh_code_3rd",
+  all.x = TRUE,
+  sort = FALSE
+)
+df_merged <- st_drop_geometry(sf_merged)
+```
+
+## データの保存
+
+```{r}
+save_dir <- file.path(data_dir, "climate_mesh_data_joined")
+saveRDS(sf_merged, file.path(save_dir, "climate_mesh_data_with_pet.rds"))
+write.csv(
+  df_merged,
+  file.path(save_dir, "climate_mesh_data_with_pet.csv"),
+  row.names = FALSE
+)
+```
