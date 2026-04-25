@@ -264,7 +264,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </div>
 </section><section id="シェープファイルの読み込み" class="level2"><h2 class="anchored" data-anchor-id="シェープファイルの読み込み">シェープファイルの読み込み</h2>
 <p>zipファイルが展開されたら、zipファイルのファイル名が名前の付いたフォルダができています。 その中に、<code>G02-22_5436-jgd_GML.shp</code>のようなシェープファイルがあります。 これを読み込んで、データフレームにまとめます。</p>
-<p>データの列名は<code>G02_001</code>のように、コードで表されているので、別途用意したラベルファイルを使って、列名をわかりやすい名前に変換します。 <a href="data/manual/mesh_climate_data_labels.csv"><code>data/manual/mesh_climate_data_labels.csv</code></a>に、コードと対応する変数名を保存していますので、これをお使いください。</p>
+<p>データの列名は<code>G02_001</code>のように、コードで表されているので、別途用意したラベルファイルを使って、列名をわかりやすい名前に変換します。 <a href="../data/manual/mesh_climate_data_labels.csv"><code>data/manual/mesh_climate_data_labels.csv</code></a>に、コードと対応する変数名を保存していますので、これをお使いください。</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">data_list</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co"># Shapefile のフルパスを取得</span></span>
@@ -322,7 +322,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="va">sf_climate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_set_geometry</a></span><span class="op">(</span><span class="va">df</span>, <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_geometry</a></span><span class="op">(</span><span class="va">sf_climate</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
 </section><section id="緯度と経度の抽出" class="level2"><h2 class="anchored" data-anchor-id="緯度と経度の抽出">緯度と経度の抽出</h2>
-<p><code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html">st_centroid()</a></code> を使うと、ポリゴンの重心を取得できます (<a href="https://r-spatial.github.io/sf/reference/geos_unary.html">参考</a>)。</p>
+<p><code><a href="https://r-spatial.github.io/sf/reference/geos_unary.html">st_centroid()</a></code> を使うと、ポリゴンの重心を取得できます。</p>
 <p>メッシュは正方形のポリゴンで表されているので、重心はメッシュの中心点になります。</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">sf_climate</span><span class="op">$</span><span class="va">longitude</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_coordinates.html">st_coordinates</a></span><span class="op">(</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/geos_unary.html">st_centroid</a></span><span class="op">(</span><span class="va">sf_climate</span><span class="op">)</span><span class="op">)</span><span class="op">[</span>, <span class="fl">1</span><span class="op">]</span></span>
@@ -891,7 +891,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-84"><a href="#cb10-84" aria-hidden="true" tabindex="-1"></a>これを読み込んで、データフレームにまとめます。</span>
 <span id="cb10-85"><a href="#cb10-85" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-86"><a href="#cb10-86" aria-hidden="true" tabindex="-1"></a>データの列名は<span class="in">`G02_001`</span>のように、コードで表されているので、別途用意したラベルファイルを使って、列名をわかりやすい名前に変換します。</span>
-<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">`data/manual/mesh_climate_data_labels.csv`</span><span class="co">](data/manual/mesh_climate_data_labels.csv)</span>に、コードと対応する変数名を保存していますので、これをお使いください。</span>
+<span id="cb10-87"><a href="#cb10-87" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">`data/manual/mesh_climate_data_labels.csv`</span><span class="co">](../data/manual/mesh_climate_data_labels.csv)</span>に、コードと対応する変数名を保存していますので、これをお使いください。</span>
 <span id="cb10-88"><a href="#cb10-88" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-91"><a href="#cb10-91" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
 <span id="cb10-92"><a href="#cb10-92" aria-hidden="true" tabindex="-1"></a>data_list <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
@@ -951,7 +951,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb10-148"><a href="#cb10-148" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-149"><a href="#cb10-149" aria-hidden="true" tabindex="-1"></a><span class="fu">## 緯度と経度の抽出</span></span>
 <span id="cb10-150"><a href="#cb10-150" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-151"><a href="#cb10-151" aria-hidden="true" tabindex="-1"></a><span class="in">`st_centroid()`</span> を使うと、ポリゴンの重心を取得できます (<span class="co">[</span><span class="ot">参考</span><span class="co">](https://r-spatial.github.io/sf/reference/geos_unary.html)</span>)。</span>
+<span id="cb10-151"><a href="#cb10-151" aria-hidden="true" tabindex="-1"></a><span class="in">`st_centroid()`</span> を使うと、ポリゴンの重心を取得できます。</span>
 <span id="cb10-152"><a href="#cb10-152" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb10-153"><a href="#cb10-153" aria-hidden="true" tabindex="-1"></a>メッシュは正方形のポリゴンで表されているので、重心はメッシュの中心点になります。</span>
 <span id="cb10-154"><a href="#cb10-154" aria-hidden="true" tabindex="-1"></a></span>

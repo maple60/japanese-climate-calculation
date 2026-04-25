@@ -104,7 +104,7 @@
     "href": "notebooks/prepare_climate_data.html#緯度と経度の抽出",
     "title": "Prepare Climate Data",
     "section": "緯度と経度の抽出",
-    "text": "緯度と経度の抽出\nst_centroid() を使うと、ポリゴンの重心を取得できます (参考)。\nメッシュは正方形のポリゴンで表されているので、重心はメッシュの中心点になります。\n\nsf_climate$longitude &lt;- st_coordinates(st_centroid(sf_climate))[, 1]\nsf_climate$latitude &lt;- st_coordinates(st_centroid(sf_climate))[, 2]",
+    "text": "緯度と経度の抽出\nst_centroid() を使うと、ポリゴンの重心を取得できます。\nメッシュは正方形のポリゴンで表されているので、重心はメッシュの中心点になります。\n\nsf_climate$longitude &lt;- st_coordinates(st_centroid(sf_climate))[, 1]\nsf_climate$latitude &lt;- st_coordinates(st_centroid(sf_climate))[, 2]",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Prepare Climate Data</span>"
     ]
