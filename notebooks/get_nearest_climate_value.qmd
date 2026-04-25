@@ -2,6 +2,11 @@
 title: "座標を与えたら最も近い気候変数の値を返す関数"
 ---
 
+ここまででデータを処理して、新たに潜在蒸発散量(PET)や乾燥指数(Aridity Index)を計算してきました。
+これらのデータを簡単に利用できるように、座標を与えたら最も近い気候変数の値を返す関数 `get_nearest_climate_value()` を定義します。
+この関数のファイルは[R/get_nearest_climate_value.R](../R/get_nearest_climate_value.R) にあります。
+ファイルをダウンロードして、`source("get_nearest_climate_value.R")` (ファイルパスは適宜変更してください)することで利用できます。
+
 ## ライブラリの読み込み
 
 ```{r}
@@ -9,6 +14,9 @@ library(sf)
 ```
 
 ## データの読み込み
+
+このリポジトリの解析では、環境変数 `PROJECT_DATA_DIR` にデータの保存先を指定しています。
+必要に応じて、適宜変更してください。
 
 ```{r}
 data_dir <- Sys.getenv("PROJECT_DATA_DIR")
@@ -19,6 +27,10 @@ sf_climate <- readRDS(file.path(
 ```
 
 ## 最も近い気候変数の値を返す関数の定義
+
+緯度経度やデータフレームを与えると、最も近い気候変数の値を返す関数 `get_nearest_climate_value()` を定義します。
+この関数のファイルは[R/get_nearest_climate_value.R](../R/get_nearest_climate_value.R) にあります。
+ファイルをダウンロードして、`source("get_nearest_climate_value.R")` (ファイルパスは適宜変更してください)することで利用できます。
 
 ```{r}
 get_nearest_climate_value <- function(
@@ -131,6 +143,8 @@ get_nearest_climate_value <- function(
 
 ## 使い方
 
+関数の使い方をいくつか例示します。
+
 ### 緯度経度を指定して最も近いaridity_indexを取得
 
 ```{r}
@@ -143,6 +157,11 @@ result <- get_nearest_climate_value(
 print(result)
 ```
 
+```{.r filename ="Result"}
+       aridity_index
+165824       1.84528
+```
+
 ### 緯度経度を指定して、複数の気候変数を取得
 
 ```{r}
@@ -153,6 +172,11 @@ result <- get_nearest_climate_value(
   value_col = c("aridity_index", "precipitation_year")
 )
 print(result)
+```
+
+```{.r filename ="Result"}
+       aridity_index precipitation_year
+165824       1.84528             1553.8
 ```
 
 ### データフレームを指定して最も近いaridity_indexを取得
@@ -173,6 +197,13 @@ result <- get_nearest_climate_value(
 print(result)
 ```
 
+```{.r filename ="Result"}
+       id longitude latitude aridity_index
+165824  1  139.6917  35.6895      1.845280
+111106  2  135.5022  34.6937      1.442432
+44366   3  130.4181  33.5902      1.821206
+```
+
 ### データフレームを指定して、複数の気候変数を取得
 
 ```{r}
@@ -190,3 +221,89 @@ result <- get_nearest_climate_value(
 )
 print(result)
 ```
+
+```{.r filename ="Result"}
+       id longitude latitude aridity_index precipitation_year
+165824  1  139.6917  35.6895      1.845280             1553.8
+111106  2  135.5022  34.6937      1.442432             1312.0
+44366   3  130.4181  33.5902      1.821206             1648.9
+```
+
+## 緯度経度を指定して、全ての変数を取得
+
+`value_col = NULL` とすることで、全ての変数を取得できます。
+
+```{r}
+result <- get_nearest_climate_value(
+  sf_climate,
+  lon = 139.6917,
+  lat = 35.6895,
+  value_col = NULL
+)
+print(result)
+```
+
+```{.r filename ="Result"}
+       mesh_code_3rd precipitation_Jan precipitation_Feb precipitation_Mar
+165824      53394525              55.8              53.6             112.5
+       precipitation_Apr precipitation_May precipitation_Jun precipitation_Jul
+165824             124.9             133.8             166.1             158.4
+       precipitation_Aug precipitation_Sep precipitation_Oct precipitation_Nov
+165824             154.9             222.4             225.1              90.6
+       precipitation_Dec precipitation_year maximum_temperature_Jan
+165824              55.7             1553.8                     9.7
+       minimum_temperature_Jan mean_temperature_Jan maximum_temperature_Feb
+165824                     0.8                  5.2                    10.7
+       minimum_temperature_Feb mean_temperature_Feb maximum_temperature_Mar
+165824                     1.8                    6                    13.9
+       minimum_temperature_Mar mean_temperature_Mar maximum_temperature_Apr
+165824                     4.9                  9.3                    19.2
+       minimum_temperature_Apr mean_temperature_Apr maximum_temperature_May
+165824                     9.9                 14.3                    23.7
+       minimum_temperature_May mean_temperature_May maximum_temperature_Jun
+165824                    14.8                 18.9                    26.3
+       minimum_temperature_Jun mean_temperature_Jun maximum_temperature_Jul
+165824                    18.7                   22                    30.2
+       minimum_temperature_Jul mean_temperature_Jul maximum_temperature_Aug
+165824                    22.5                 25.8                    31.5
+       minimum_temperature_Aug mean_temperature_Aug maximum_temperature_Sep
+165824                    23.7                   27                    27.5
+       minimum_temperature_Sep mean_temperature_Sep maximum_temperature_Oct
+165824                    20.4                 23.4                      22
+       minimum_temperature_Oct mean_temperature_Oct maximum_temperature_Nov
+165824                    14.8                 18.1                    16.6
+       minimum_temperature_Nov mean_temperature_Nov maximum_temperature_Dec
+165824                     8.7                 12.6                      12
+       minimum_temperature_Dec mean_temperature_Dec maximum_temperature_year
+165824                     3.4                  7.6                     20.3
+       minimum_temperature_year mean_temperature_year maximum_snow_depth_Jan
+165824                       12                  15.9                      3
+       maximum_snow_depth_Feb maximum_snow_depth_Mar maximum_snow_depth_Dec
+165824                      3                      0                      0
+       maximum_snow_depth_year sunshine_duration_Jan sunshine_duration_Feb
+165824                       3                 198.4                 176.3
+       sunshine_duration_Mar sunshine_duration_Apr sunshine_duration_May
+165824                 176.8                 179.4                 180.4
+       sunshine_duration_Jun sunshine_duration_Jul sunshine_duration_Aug
+165824                   123                 147.7                 173.9
+       sunshine_duration_Sep sunshine_duration_Oct sunshine_duration_Nov
+165824                 129.1                 134.5                   156
+       sunshine_duration_Dec sunshine_duration_year global_solar_radiation_Jan
+165824                 178.5                   1954                        9.7
+       global_solar_radiation_Feb global_solar_radiation_Mar global_solar_radiation_Apr
+165824                       11.8                       13.8                       16.5
+       global_solar_radiation_May global_solar_radiation_Jun global_solar_radiation_Jul
+165824                       17.6                       15.3                       16.3
+       global_solar_radiation_Aug global_solar_radiation_Sep global_solar_radiation_Oct
+165824                       16.6                       12.8                       10.4
+       global_solar_radiation_Nov global_solar_radiation_Dec global_solar_radiation_year
+165824                          9                        8.3                        13.2
+       longitude latitude     PET1     PET2     PET3    PET4     PET5     PET6     PET7
+165824  139.6937  35.6875 7.319984 9.144842 23.23313 51.1194 90.94641 118.0401 157.3831
+           PET8     PET9    PET10    PET11    PET12 PET_year aridity_index
+165824 159.9936 111.3146 67.64351 32.34395 13.55769 842.0402       1.84528
+```
+
+## データの出典
+
+本ページで使用している気候データは、気象庁の[メッシュ平年値2020](https://www.data.jma.go.jp/stats/etrn/view/atlas.html)を元に加工したものです。
