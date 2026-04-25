@@ -5,8 +5,6 @@ project:
 
 book:
   title: "Climate Data Processing with Mesh Climatology 2020 (メッシュ平年値2020を用いた気候変数の処理)"
-  author: "Kaede Konrai"
-  date: "2026-04-09"
   chapters:
     - href: index.qmd
       text: "Climate Data Processing with Mesh Climatology 2020"
