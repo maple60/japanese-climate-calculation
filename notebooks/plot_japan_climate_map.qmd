@@ -1,0 +1,40 @@
+---
+title: "Plot Japan Climate Map"
+---
+
+```{r}
+library(tmap)
+library(rnaturalearth)
+```
+
+日本地図を描画するには、[rnaturalearthhiresパッケージ](https://github.com/ropensci/rnaturalearthhires)が必要です。
+
+```{r}
+#renv::install("ropensci/rnaturalearthhires")
+japan <- ne_states(country = "Japan", returnclass = "sf")
+sf_plot <- sf_pet[!is.na(sf_pet[["PET_year"]]), ]
+tm <- tm_shape(japan, crs = 4612) +
+  tm_polygons(col = "gray90") +
+  tm_shape(sf_plot[, "PET_year"], crs = 4612) +
+  tm_symbols(
+    shape = 20,
+    fill = "PET_year",
+    size = 0.1,
+    fill_alpha = 0.9,
+    fill.scale = tm_scale_continuous(
+      values = "viridis"
+    ),
+    fill.legend = tm_legend(
+      title = "PET",
+      reverse = TRUE,
+      position = c("right", "bottom"),
+      frame = FALSE,
+      bg.color = "transparent"
+    )
+  ) +
+  tm_layout(
+    frame = FALSE,
+    bg.color = "transparent"
+  )
+print(tm)
+```
