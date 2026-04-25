@@ -2,3 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
+
+.Renviron
+
+data/climate_mesh_data/
