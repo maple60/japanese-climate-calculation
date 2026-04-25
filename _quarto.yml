@@ -1,0 +1,34 @@
+project:
+  type: book
+  execute-dir: project
+  output-dir: docs # for GitHub Pages
+
+book:
+  title: "Climate Data Processing with Mesh Climatology 2020 (メッシュ平年値2020を用いた気候変数の処理)"
+  author: "Kaede Konrai"
+  date: "2026-04-09"
+  chapters:
+    - href: index.qmd
+      text: "Climate Data Processing with Mesh Climatology 2020"
+    - href: notebooks/prepare_climate_data.qmd
+      text: "Prepare Climate Data"
+    - href: notebooks/calculate_PET.qmd
+      text: "Calculate Potential Evapotranspiration (PET)"
+    - href: notebooks/calculate_aridity_index.qmd
+      text: "Calculate Aridity Index"
+    - href: notebooks/get_nearest_climate_value.qmd
+      text: "Get Nearest Climate Value"
+  appendices:
+    - href: notebooks/plot_japan_climate_map.qmd
+      text: "Plot Japan Climate Map"
+
+number-sections: false
+
+format:
+  html:
+    code-overflow: wrap
+    code-tools: true
+    code-link: true
+    theme: cosmo
+    execute:
+      eval: false
