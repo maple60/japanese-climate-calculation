@@ -1,0 +1,116 @@
+---
+title: "Prepare Climate Data"
+---
+
+平均値メッシュデータを用いて、気候変数を作成していきます。
+データソースには、国土数値情報の [平均値メッシュデータ](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html) を使用します。
+
+## ライブラリの読み込み
+
+使用するライブラリを読み込みます。
+
+```{r}
+library(tools)
+library(sf)
+#library(rnaturalearth)
+#library(viridis)
+```
+
+```{r}
+data_dir <- Sys.getenv("PROJECT_DATA_DIR")
+```
+
+## zipファイルの展開
+
+データはzipファイルで提供されているので、展開します。
+
+```{r}
+zip_output_dir <- file.path("data", "climate_mesh_data")
+dir.create(zip_output_dir, showWarnings = FALSE, recursive = TRUE)
+
+zip_files <- list.files(
+  file.path(data_dir, "climate_mesh_data_zip"),
+  pattern = "^G02-22_.*\\.zip$",
+  full.names = TRUE
+)
+file_names <- tools::file_path_sans_ext(basename(zip_files))
+lapply(zip_files, unzip, overwrite = TRUE, exdir = zip_output_dir)
+```
+
+## シェープファイルの読み込み
+
+```{r}
+data_list <- list()
+# Shapefile のフルパスを取得
+data_paths <- list.files(
+  zip_output_dir,
+  pattern = "^G02-22_.*\\.shp$",
+  full.names = TRUE,
+  recursive = TRUE
+)
+# やや時間がかかるので注意
+for (i in seq_along(data_paths)) {
+  path <- data_paths[i] # file full path
+  name <- file_path_sans_ext(basename(path)) # file name
+  data_list[[name]] <- st_read(path) # add SpatVector to list
+  #cat(paste0(i, "/", length(data_paths), " : ", name, "\n"))
+}
+sf_climate <- do.call(rbind, data_list) # 一つのオブジェクトにまとめる
+df_label <- read.csv(
+  file.path(data_dir, "manual/mesh_climate_data_labels.csv"),
+  fileEncoding = "UTF-8"
+)
+names(sf_climate) <- make.names(c(df_label$name_en, "geometry")) # 変数名の先頭が数字だとだめなので修正
+```
+
+## 値の変換
+
+降水量、気温、日照時間、全天日射量は10分の1にするとちゃんとした値になります。
+- 降水量は0.1mm単位
+- 気温は0.1℃単位
+- 日照時間は0.1時間単位
+- 全天日射量は0.1MJm-2単位
+
+- 参考: [国土数値情報 平年値メッシュデータ](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html)
+
+```{r}
+col_index <- c(
+  grep("precipitation", names(sf_climate)),
+  grep("temperature", names(sf_climate)),
+  grep("sunshine_duration", names(sf_climate)),
+  grep("global_solar_radiation", names(sf_climate))
+)
+indices_snow <- grep("maximum_snow_depth", names(sf_climate))
+
+NA_value <- 999999
+df <- st_drop_geometry(sf_climate)
+df[, col_index][df[, col_index] == NA_value] <- NA # 999999のときはNAに変換
+df[, col_index] <- df[, col_index] * 0.1
+df[, indices_snow][df[, indices_snow] == NA_value] <- 0 # 最深積雪が999999のときは0に変換
+sf_climate <- st_set_geometry(df, st_geometry(sf_climate))
+```
+
+## 緯度と経度の抽出
+
+`st_point_on_surface()` を使うと、ポリゴンの中心点を取得できます ([参考](https://r-spatial.github.io/sf/reference/geos_unary.html))。
+
+```{r}
+sf_climate$longitude <- st_coordinates(st_centroid(sf_climate))[, 1]
+sf_climate$latitude <- st_coordinates(st_centroid(sf_climate))[, 2]
+```
+
+## データの保存
+
+```{r}
+save_dir <- file.path(data_dir, "climate_mesh_data_joined")
+dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
+
+saveRDS(sf_climate, file.path(save_dir, "climate_mesh_data.rds"))
+```
+
+## CSVファイルにして保存
+
+```{r}
+df_climate <- st_drop_geometry(sf_climate)
+write.csv(df_climate, file.path(save_dir, "climate_mesh_data.csv"))
+```
