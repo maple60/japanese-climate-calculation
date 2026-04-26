@@ -1,0 +1,29 @@
+---
+title: "メッシュ平年値2020を用いた気候変数の処理"
+---
+
+[English version](index.qmd)
+
+
+このドキュメントでは、気象庁の[メッシュ平年値2020](https://www.data.jma.go.jp/stats/etrn/view/atlas.html)を用いて、気候変数を処理する方法を説明します。
+
+## データについて
+
+::: {.callout-note}
+メッシュ平年値2020の概要については、[気象庁の報道発表資料](https://www.jma.go.jp/jma/press/2204/04a/mesh2020.html)を参照してください。
+:::
+
+データは、国土数値情報の[平均値メッシュデータ](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html)を使用します。
+
+元データや加工データについてはこのリポジトリでは配布いたしません。
+必要なデータは、ご自身でダウンロードいただくようお願いいたします。
+
+利用規約については、[国土数値情報の利用規約](https://nlftp.mlit.go.jp/ksj/other/agreement.html)をご確認ください。
+特に、**出典の明記**を忘れないようにお願いいたします。
+
+## パッケージ管理について
+
+本リポジトリでは、Rのパッケージ管理に[renv](https://rstudio.github.io/renv/)を使用しています。
+リポジトリをクローンした場合、`renv::restore()`を実行することで、本リポジトリの環境を再現できます。
+
+もしrenvを使用しない場合、適宜必要なパッケージをインストールしてください。

@@ -7,14 +7,14 @@ project:
     - R/get_nearest_climate_value.R
 
 book:
-  title: "Climate Data Processing with Mesh Climatology 2020 (メッシュ平年値2020を用いた気候変数の処理)"
+  title: "Climate Data Processing with Mesh Climatology 2020"
   chapters:
     - href: index.qmd
-      text: "Climate Data Processing with Mesh Climatology 2020"
+      text: "Home"
     - href: notebooks/prepare_climate_data.qmd
       text: "Prepare Climate Data"
     - href: notebooks/calculate_PET.qmd
-      text: "Calculate Potential Evapotranspiration (PET)"
+      text: "Calculate PET"
     - href: notebooks/calculate_aridity_index.qmd
       text: "Calculate Aridity Index"
     - href: notebooks/get_nearest_climate_value.qmd
@@ -22,6 +22,18 @@ book:
   appendices:
     - href: notebooks/plot_japan_climate_map.qmd
       text: "Plot Japan Climate Map"
+    - href: index_ja.qmd
+      text: "日本語版: はじめに"
+    - href: notebooks/prepare_climate_data_ja.qmd
+      text: "日本語版: 気候データの準備"
+    - href: notebooks/calculate_PET_ja.qmd
+      text: "日本語版: PETの計算"
+    - href: notebooks/calculate_aridity_index_ja.qmd
+      text: "日本語版: 乾燥指数の計算"
+    - href: notebooks/get_nearest_climate_value_ja.qmd
+      text: "日本語版: 最近傍の気候値取得"
+    - href: notebooks/plot_japan_climate_map_ja.qmd
+      text: "日本語版: 気候マップの描画"
 
 number-sections: false
 bibliography: notebooks/references.bib

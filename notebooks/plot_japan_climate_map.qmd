@@ -2,18 +2,16 @@
 title: "Plot Japan Climate Map"
 ---
 
-[tmap](https://r-tmap.github.io/tmap/index.html)パッケージを使用して、日本の気候マップを描画します。
-[rnaturalearth](https://docs.ropensci.org/rnaturalearth/articles/rnaturalearth.html)パッケージは、日本地図を描画するために使用します。
+[日本語版はこちら (Japanese version)](plot_japan_climate_map_ja.qmd)
+
+This chapter draws Japan climate maps using [tmap](https://r-tmap.github.io/tmap/index.html) and [rnaturalearth](https://docs.ropensci.org/rnaturalearth/articles/rnaturalearth.html).
 
 ```{r}
 library(tmap)
 library(rnaturalearth)
 ```
 
-## データの読み込み
-
-このリポジトリの解析では、環境変数 `PROJECT_DATA_DIR` にデータの保存先を指定しています。
-必要に応じて、適宜変更してください。
+## Load data
 
 ```{r}
 data_dir <- Sys.getenv("PROJECT_DATA_DIR")
@@ -23,18 +21,10 @@ sf_climate <- readRDS(file.path(
 ))
 ```
 
-## Evapotranspiration (PET)の描画
-
-日本地図を描画するには、[rnaturalearthhiresパッケージ](https://github.com/ropensci/rnaturalearthhires)が必要です。
-
-tmapの描画は、[ggplot2](https://ggplot2.tidyverse.org/)の描画のように、レイヤを重ねる形で行います。
-まず、日本地図を描画し、その上に気候変数を描画します。
-その後、レイアウトを調整して完成です。
-
-保存したい場合は、`tm`オブジェクトを`tmap_save()`関数に渡すことで、描画を保存できます。
+## Plot PET
 
 ```{r}
-#renv::install("ropensci/rnaturalearthhires")
+# renv::install("ropensci/rnaturalearthhires")
 variable <- "PET_year"
 japan <- ne_states(country = "Japan", returnclass = "sf")
 sf_plot <- sf_climate[!is.na(sf_climate[[variable]]), ]
@@ -46,9 +36,7 @@ tm <- tm_shape(japan, crs = 4612) +
     fill = variable,
     size = 0.1,
     fill_alpha = 0.9,
-    fill.scale = tm_scale_continuous(
-      values = "viridis"
-    ),
+    fill.scale = tm_scale_continuous(values = "viridis"),
     fill.legend = tm_legend(
       title = variable,
       reverse = TRUE,
@@ -57,42 +45,21 @@ tm <- tm_shape(japan, crs = 4612) +
       bg.color = "transparent"
     )
   ) +
-  tm_layout(
-    frame = FALSE,
-    bg.color = "transparent"
-  )
+  tm_layout(frame = FALSE, bg.color = "transparent")
 print(tm)
 
 output_dir <- "output"
 dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
 tmap_save(
   tm,
-  filename = file.path(
-    output_dir,
-    paste0("japan_climate_map_", variable, ".png")
-  ),
+  filename = file.path(output_dir, paste0("japan_climate_map_", variable, ".png")),
   dpi = 300
 )
 ```
 
-結果は以下のようになります。
+![PET map result](../output/japan_climate_map_PET_year.png)
 
-![PETの描画結果｜出典：国土交通省国土数値情報ダウンロードサイト URL: https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html](../output/japan_climate_map_PET_year.png)
-
-::: {.callout-note}
-## 描画関数
-
-- `tm_polygons()`は、ポリゴンを描画するための関数です。境界線と塗りつぶしの両方を描画します。
-- `tm_fill()`は、塗りつぶしのみを描画するための関数です。境界線は描画しません。
-- `tm_borders()`は、境界線のみを描画するための関数です。塗りつぶしは描画しません。
-
-今回のようにポリゴンが小さく、多い場合は、境界線を書いてしまうと塗りつぶしが見えなくなってしまうことがあります。
-そのため、今回は`tm_fill()`を使用して、塗りつぶしのみを描画します。
-:::
-
-## Aridity Indexの描画
-
-次に、Aridity Indexを描画します。
+## Plot Aridity Index
 
 ```{r}
 variable <- "aridity_index"
@@ -106,9 +73,7 @@ tm <- tm_shape(japan, crs = 4612) +
     fill = variable,
     size = 0.1,
     fill_alpha = 0.9,
-    fill.scale = tm_scale_continuous(
-      values = "viridis"
-    ),
+    fill.scale = tm_scale_continuous(values = "viridis"),
     fill.legend = tm_legend(
       title = variable,
       reverse = TRUE,
@@ -117,22 +82,14 @@ tm <- tm_shape(japan, crs = 4612) +
       bg.color = "transparent"
     )
   ) +
-  tm_layout(
-    frame = FALSE,
-    bg.color = "transparent"
-  )
+  tm_layout(frame = FALSE, bg.color = "transparent")
 print(tm)
 
 tmap_save(
   tm,
-  filename = file.path(
-    output_dir,
-    paste0("japan_climate_map_", variable, ".png")
-  ),
+  filename = file.path(output_dir, paste0("japan_climate_map_", variable, ".png")),
   dpi = 300
 )
 ```
 
-結果は以下のようになります。
-
-![Aridity Indexの描画結果｜出典：国土交通省国土数値情報ダウンロードサイト URL: https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html](../output/japan_climate_map_aridity_index.png)
+![Aridity Index map result](../output/japan_climate_map_aridity_index.png)

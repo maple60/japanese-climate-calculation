@@ -2,61 +2,47 @@
 title: "Prepare Climate Data"
 ---
 
-平均値メッシュデータを用いて、気候変数を作成していきます。
-データソースには、国土数値情報の [平均値メッシュデータ](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html) を使用します。
+[日本語版はこちら (Japanese version)](prepare_climate_data_ja.qmd)
 
-## 平均値メッシュデータのダウンロード
+This chapter creates climate variables from Average Value Mesh Data.
+The data source is NLNI's [Average Value Mesh Data](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html).
 
-平均値メッシュデータは、以下の国土数値情報のサイトからダウンロードできます。
+## Download Average Value Mesh Data
 
-- [平均値メッシュデータ](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html)
+Download required data from:
 
-必要なデータをダウンロードします。
-形式はzipファイルで提供されているので、展開して使用します。
-筆者はすべてのデータをダウンロードしましたが、必要なデータだけをダウンロードしても問題ありません。
+- [Average Value Mesh Data](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html)
 
-データは、任意のフォルダにまとめて保存してください。
-なお、このリポジトリの解析では、環境変数 `PROJECT_DATA_DIR` にデータの保存先を指定しています。
-具体的には、データ自体はDropboxに保存しており、ルートディレクトリに `.Renviron` ファイルを作成して、以下のように環境変数を設定しています。
+Data files are distributed as ZIP files. Extract them after download.
+
+Store downloaded data in any folder. In this project, the path is set through the `PROJECT_DATA_DIR` environment variable.
 
 ```{.bash filename=".Renviron"}
 PROJECT_DATA_DIR=C:/Users/Username/Dropbox/GitHub/japanese_climate_calculation
 ```
 
 ::: {.callout-note}
-## 利用規約について
+## Terms of use
 
-国土数値情報の利用規約については、[こちら](https://nlftp.mlit.go.jp/ksj/other/agreement.html)をご確認ください。
+Please check the NLNI terms of use [here](https://nlftp.mlit.go.jp/ksj/other/agreement.html).
 :::
 
-## ライブラリの読み込み
-
-使用するライブラリを読み込みます。
+## Load libraries
 
 ```{r}
 library(tools)
 library(sf)
 ```
 
-## データディレクトリの指定
-
-ここでは、環境変数 `PROJECT_DATA_DIR` を使用して、データの保存先を指定しています。
-必要に応じて、適宜変更してください。
+## Set the data directory
 
 ```{r}
 data_dir <- Sys.getenv("PROJECT_DATA_DIR")
-# もし環境変数が設定されていない場合は、以下のように直接パスを指定してください。
+# If the environment variable is not set:
 # data_dir <- "data"
 ```
 
-## zipファイルの展開
-
-データはzipファイルで提供されているので、展開します。
-ファイルパスには、zipファイルがまとめて保存してあるディレクトリを指定してください。
-
-zipファイルは、`G02-22_5436-jgd_GML.zip`のような形式で提供されているはずです。
-`G02`は平均値メッシュデータの分類コード、`22`は2022年に更新されたデータであることを示しています。
-`12`となっているファイルもありますが、これは2012年に更新されたデータであることを示しています。
+## Extract ZIP files
 
 ```{r}
 zip_output_dir <- file.path("data", "climate_mesh_data")
@@ -71,53 +57,35 @@ file_names <- tools::file_path_sans_ext(basename(zip_files))
 lapply(zip_files, unzip, overwrite = TRUE, exdir = zip_output_dir)
 ```
 
-## シェープファイルの読み込み
-
-zipファイルが展開されたら、zipファイルのファイル名が名前の付いたフォルダができています。
-その中に、`G02-22_5436-jgd_GML.shp`のようなシェープファイルがあります。
-これを読み込んで、データフレームにまとめます。
-
-データの列名は`G02_001`のように、コードで表されているので、別途用意したラベルファイルを使って、列名をわかりやすい名前に変換します。
-[`data/manual/mesh_climate_data_labels.csv`](../data/manual/mesh_climate_data_labels.csv)に、コードと対応する変数名を保存していますので、これをお使いください (クリックでダウンロードできます)。
+## Read shapefiles
 
 ```{r}
 data_list <- list()
-# Shapefile のフルパスを取得
 data_paths <- list.files(
   zip_output_dir,
   pattern = "^G02-22_.*\\.shp$",
   full.names = TRUE,
   recursive = TRUE
 )
-# やや時間がかかるので注意
+
 for (i in seq_along(data_paths)) {
-  path <- data_paths[i] # file full path
-  name <- file_path_sans_ext(basename(path)) # file name
-  data_list[[name]] <- st_read(path) # add SpatVector to list
-  #cat(paste0(i, "/", length(data_paths), " : ", name, "\n"))
+  path <- data_paths[i]
+  name <- file_path_sans_ext(basename(path))
+  data_list[[name]] <- st_read(path)
 }
-sf_climate <- do.call(rbind, data_list) # 一つのオブジェクトにまとめる
+sf_climate <- do.call(rbind, data_list)
+
 df_label <- read.csv(
   file.path(data_dir, "manual/mesh_climate_data_labels.csv"),
   fileEncoding = "UTF-8"
 )
-names(sf_climate) <- make.names(c(df_label$name_en, "geometry")) # 変数名の先頭が数字だとだめなので修正
+names(sf_climate) <- make.names(c(df_label$name_en, "geometry"))
 ```
 
-## 値の変換
+## Convert values
 
-データの値は、小数を避けるために10倍されているので、元の値に戻すために10で割ります。
-
-降水量、気温、日照時間、全天日射量は10分の1にするとちゃんとした値になります。  
-
-- 降水量は0.1mm単位  
-- 気温は0.1℃単位  
-- 日照時間は0.1時間単位  
-- 全天日射量は0.1MJm-2単位  
-
-また、欠損値は`999999`で表されているので、これを`NA`に変換します。
-
-- 参考: [国土数値情報 平年値メッシュデータ](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html)
+Values are scaled by 10 in the source data; divide by 10 to recover original units.
+Missing values are encoded as `999999`.
 
 ```{r}
 col_index <- c(
@@ -130,29 +98,20 @@ indices_snow <- grep("maximum_snow_depth", names(sf_climate))
 
 NA_value <- 999999
 df <- st_drop_geometry(sf_climate)
-df[, col_index][df[, col_index] == NA_value] <- NA # 999999のときはNAに変換
+df[, col_index][df[, col_index] == NA_value] <- NA
 df[, col_index] <- df[, col_index] * 0.1
-df[, indices_snow][df[, indices_snow] == NA_value] <- 0 # 最深積雪が999999のときは0に変換
+df[, indices_snow][df[, indices_snow] == NA_value] <- 0
 sf_climate <- st_set_geometry(df, st_geometry(sf_climate))
 ```
 
-## 緯度と経度の抽出
-
-`st_centroid()` を使うと、ポリゴンの重心を取得できます。
-
-メッシュは正方形のポリゴンで表されているので、重心はメッシュの中心点になります。
+## Extract longitude and latitude
 
 ```{r}
 sf_climate$longitude <- st_coordinates(st_centroid(sf_climate))[, 1]
 sf_climate$latitude <- st_coordinates(st_centroid(sf_climate))[, 2]
 ```
 
-## データの保存
-
-データは、RDSファイルとCSVファイルの両方で保存します。
-Excelなどですぐに確認をしたい場合はCSVファイルを、Rで再利用したい場合はRDSファイルを使用するのが便利です。
-
-なお、CSVファイルは`read.csv()`で、RDSファイルは`readRDS()`で読み込むことができます。
+## Save data
 
 ```{r}
 save_dir <- file.path(data_dir, "climate_mesh_data_joined")
@@ -160,7 +119,7 @@ dir.create(save_dir, showWarnings = FALSE, recursive = TRUE)
 saveRDS(sf_climate, file.path(save_dir, "climate_mesh_data.rds"))
 ```
 
-## CSVファイルにして保存
+## Save as CSV
 
 ```{r}
 df_climate <- st_drop_geometry(sf_climate)
