@@ -324,7 +324,29 @@
     "href": "notebooks/plot_japan_climate_map.html",
     "title": "Appendix A — Plot Japan Climate Map",
     "section": "",
-    "text": "library(tmap)\nlibrary(rnaturalearth)\n\n日本地図を描画するには、rnaturalearthhiresパッケージが必要です。\n\n#renv::install(\"ropensci/rnaturalearthhires\")\njapan &lt;- ne_states(country = \"Japan\", returnclass = \"sf\")\nsf_plot &lt;- sf_pet[!is.na(sf_pet[[\"PET_year\"]]), ]\ntm &lt;- tm_shape(japan, crs = 4612) +\n  tm_polygons(col = \"gray90\") +\n  tm_shape(sf_plot[, \"PET_year\"], crs = 4612) +\n  tm_symbols(\n    shape = 20,\n    fill = \"PET_year\",\n    size = 0.1,\n    fill_alpha = 0.9,\n    fill.scale = tm_scale_continuous(\n      values = \"viridis\"\n    ),\n    fill.legend = tm_legend(\n      title = \"PET\",\n      reverse = TRUE,\n      position = c(\"right\", \"bottom\"),\n      frame = FALSE,\n      bg.color = \"transparent\"\n    )\n  ) +\n  tm_layout(\n    frame = FALSE,\n    bg.color = \"transparent\"\n  )\nprint(tm)",
+    "text": "データの読み込み\ntmapパッケージを使用して、日本の気候マップを描画します。 rnaturalearthパッケージは、日本地図を描画するために使用します。\nこのリポジトリの解析では、環境変数 PROJECT_DATA_DIR にデータの保存先を指定しています。 必要に応じて、適宜変更してください。\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\nsf_climate &lt;- readRDS(file.path(\n  data_dir,\n  \"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.rds\"\n))",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Plot Japan Climate Map</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/plot_japan_climate_map.html#evapotranspiration-petの描画",
+    "href": "notebooks/plot_japan_climate_map.html#evapotranspiration-petの描画",
+    "title": "Appendix A — Plot Japan Climate Map",
+    "section": "Evapotranspiration (PET)の描画",
+    "text": "Evapotranspiration (PET)の描画\n日本地図を描画するには、rnaturalearthhiresパッケージが必要です。\ntmapの描画は、ggplot2の描画のように、レイヤを重ねる形で行います。 まず、日本地図を描画し、その上に気候変数を描画します。 その後、レイアウトを調整して完成です。\n保存したい場合は、tmオブジェクトをtmap_save()関数に渡すことで、描画を保存できます。\n\n#renv::install(\"ropensci/rnaturalearthhires\")\nvariable &lt;- \"PET_year\"\njapan &lt;- ne_states(country = \"Japan\", returnclass = \"sf\")\nsf_plot &lt;- sf_climate[!is.na(sf_climate[[variable]]), ]\ntm &lt;- tm_shape(japan, crs = 4612) +\n  tm_polygons(col = \"gray90\") +\n  tm_shape(sf_plot[, variable], crs = 4612) +\n  tm_symbols(\n    shape = 20,\n    fill = variable,\n    size = 0.1,\n    fill_alpha = 0.9,\n    fill.scale = tm_scale_continuous(\n      values = \"viridis\"\n    ),\n    fill.legend = tm_legend(\n      title = variable,\n      reverse = TRUE,\n      position = c(\"right\", \"bottom\"),\n      frame = FALSE,\n      bg.color = \"transparent\"\n    )\n  ) +\n  tm_layout(\n    frame = FALSE,\n    bg.color = \"transparent\"\n  )\nprint(tm)\n\noutput_dir &lt;- \"output\"\ndir.create(output_dir, showWarnings = FALSE, recursive = TRUE)\ntmap_save(\n  tm,\n  filename = file.path(\n    output_dir,\n    paste0(\"japan_climate_map_\", variable, \".png\")\n  ),\n  dpi = 300\n)\n\n結果は以下のようになります。\n\n\nPETの描画結果｜出典：国土交通省国土数値情報ダウンロードサイト URL: https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html\n\n\n\n\n\n\n\nNote描画関数\n\n\n\n\n\ntm_polygons()は、ポリゴンを描画するための関数です。境界線と塗りつぶしの両方を描画します。\n\ntm_fill()は、塗りつぶしのみを描画するための関数です。境界線は描画しません。\n\ntm_borders()は、境界線のみを描画するための関数です。塗りつぶしは描画しません。\n\n今回のようにポリゴンが小さく、多い場合は、境界線を書いてしまうと塗りつぶしが見えなくなってしまうことがあります。 そのため、今回はtm_fill()を使用して、塗りつぶしのみを描画します。",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Plot Japan Climate Map</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/plot_japan_climate_map.html#aridity-indexの描画",
+    "href": "notebooks/plot_japan_climate_map.html#aridity-indexの描画",
+    "title": "Appendix A — Plot Japan Climate Map",
+    "section": "Aridity Indexの描画",
+    "text": "Aridity Indexの描画\n次に、Aridity Indexを描画します。\n\nvariable &lt;- \"aridity_index\"\njapan &lt;- ne_states(country = \"Japan\", returnclass = \"sf\")\nsf_plot &lt;- sf_climate[!is.na(sf_climate[[variable]]), ]\ntm &lt;- tm_shape(japan, crs = 4612) +\n  tm_polygons(col = \"gray90\") +\n  tm_shape(sf_plot[, variable], crs = 4612) +\n  tm_symbols(\n    shape = 20,\n    fill = variable,\n    size = 0.1,\n    fill_alpha = 0.9,\n    fill.scale = tm_scale_continuous(\n      values = \"viridis\"\n    ),\n    fill.legend = tm_legend(\n      title = variable,\n      reverse = TRUE,\n      position = c(\"right\", \"bottom\"),\n      frame = FALSE,\n      bg.color = \"transparent\"\n    )\n  ) +\n  tm_layout(\n    frame = FALSE,\n    bg.color = \"transparent\"\n  )\nprint(tm)\n\ntmap_save(\n  tm,\n  filename = file.path(\n    output_dir,\n    paste0(\"japan_climate_map_\", variable, \".png\")\n  ),\n  dpi = 300\n)\n\n結果は以下のようになります。\n\n\nAridity Indexの描画結果｜出典：国土交通省国土数値情報ダウンロードサイト URL: https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>A</span>  <span class='chapter-title'>Plot Japan Climate Map</span>"
