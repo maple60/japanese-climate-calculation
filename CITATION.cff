@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+title: "Climate Data Processing with Mesh Climatology 2020"
+authors:
+  - family-names: "Konrai"
+    given-names: "Kaede"
+    orcid: "https://orcid.org/0009-0005-4555-8424"
+year: 2026
+url: "https://github.com/USER/REPO"
+date-released: 2026-04-26
+url: "https://github.com/maple60/japanese-climate-calculation"
