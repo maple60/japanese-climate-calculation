@@ -3,24 +3,21 @@ title: "Calculate Aridity Index"
 bibliography: references.bib
 ---
 
-Aridity Index (AI)を計算します。 AIは気候の乾燥度を表す指標で、降水量(precipitation)と蒸発散量(potential evapotranspication)の比率として定義されます [@UNEP1992]。
+[日本語版はこちら (Japanese version)](calculate_aridity_index_ja.qmd)
 
-ほかにもいろいろな定義があるようですが、ここでは以下の式を用います。
+This chapter calculates the Aridity Index (AI), a dryness indicator defined as the ratio of precipitation to potential evapotranspiration [@UNEP1992].
 
 $$AI = \frac{P}{PET}$$
 
-ここで、$P$ は降水量、$PET$ は潜在蒸発散量です。
+where $P$ is precipitation and $PET$ is potential evapotranspiration.
 
-## ライブラリの読み込み
+## Load libraries
 
 ```{r}
 library(sf)
 ```
 
-## データの読み込み
-
-このリポジトリの解析では、環境変数 `PROJECT_DATA_DIR` にデータの保存先を指定しています。
-必要に応じて、適宜変更してください。
+## Load data
 
 ```{r}
 data_dir <- Sys.getenv("PROJECT_DATA_DIR")
@@ -30,18 +27,13 @@ sf_climate <- readRDS(file.path(
 ))
 ```
 
-## Aridity Index の計算
-
-Aridity Index を計算して、`sf_climate`オブジェクトに新しい列`aridity_index`として追加します。
+## Calculate Aridity Index
 
 ```{r}
 sf_climate$aridity_index <- sf_climate$precipitation_year / sf_climate$PET_year
 ```
 
-## データの保存
-
-RDS形式とCSV形式で保存します。
-必要に応じて、保存先のパスを変更してください。
+## Save data
 
 ```{r}
 saveRDS(
@@ -63,4 +55,3 @@ write.csv(
 ```
 
 ## References
-

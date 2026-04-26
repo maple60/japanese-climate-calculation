@@ -12,17 +12,17 @@ get_nearest_climate_value <- function(
   climate_lat_col = "latitude"
 ) {
   if (!inherits(sf_climate, "sf")) {
-    stop("sf_climate は sf オブジェクトである必要があります。")
+    stop("sf_climate must be an sf object.")
   }
 
-  # 最近傍検索に使う geometry を決める
-  # calc_by_centroid = TRUE の場合は、重心の座標を使う(こちらのほうが早い)
+  # Select geometry used for nearest-neighbor search.
+  # If calc_by_centroid = TRUE, centroid coordinates are used for faster lookup.
   if (calc_by_centroid) {
     if (!climate_lon_col %in% names(sf_climate)) {
-      stop("climate_lon_col が sf_climate に存在しません: ", climate_lon_col)
+      stop("climate_lon_col does not exist in sf_climate: ", climate_lon_col)
     }
     if (!climate_lat_col %in% names(sf_climate)) {
-      stop("climate_lat_col が sf_climate に存在しません: ", climate_lat_col)
+      stop("climate_lat_col does not exist in sf_climate: ", climate_lat_col)
     }
 
     sf_clim <- sf::st_as_sf(
@@ -32,34 +32,34 @@ get_nearest_climate_value <- function(
       remove = FALSE
     )
   } else {
-    # geometry をそのまま使う場合
+    # Use original geometry.
     sf_clim <- sf_climate
   }
 
-  # value_col = NULL の場合は、geometry 以外の全列を返す
+  # If value_col = NULL, return all non-geometry columns.
   if (is.null(value_col)) {
     value_col <- names(sf::st_drop_geometry(sf_clim))
   }
 
-  # value_col の存在確認
+  # Validate requested value columns.
   missing_cols <- setdiff(value_col, names(sf_clim))
   if (length(missing_cols) > 0) {
     stop(
-      "以下の value_col が sf_climate に存在しません: ",
+      "The following value_col entries do not exist in sf_climate: ",
       paste(missing_cols, collapse = ", ")
     )
   }
 
-  # 出力列名の処理
+  # Process output column names.
   if (is.null(output_col)) {
     output_col <- value_col
   }
 
   if (length(output_col) != length(value_col)) {
-    stop("output_col は value_col と同じ長さである必要があります。")
+    stop("output_col must have the same length as value_col.")
   }
 
-  # lon, lat が直接与えられた場合
+  # If lon/lat are provided directly.
   if (!is.null(lon) && !is.null(lat) && is.null(df)) {
     pt <- sf::st_sfc(
       sf::st_point(c(lon, lat)),
@@ -74,13 +74,13 @@ get_nearest_climate_value <- function(
     return(out)
   }
 
-  # data.frame が与えられた場合
+  # If a data.frame is provided.
   if (!is.null(df) && is.null(lon) && is.null(lat)) {
     if (!lon_col %in% names(df)) {
-      stop("lon_col が df に存在しません: ", lon_col)
+      stop("lon_col does not exist in df: ", lon_col)
     }
     if (!lat_col %in% names(df)) {
-      stop("lat_col が df に存在しません: ", lat_col)
+      stop("lat_col does not exist in df: ", lat_col)
     }
 
     pts <- sf::st_as_sf(
@@ -101,6 +101,6 @@ get_nearest_climate_value <- function(
   }
 
   stop(
-    "lon と lat の両方を指定するか、df を指定してください。両方同時には指定しないでください。"
+    "Specify both lon and lat, or specify df. Do not specify both input styles at once."
   )
 }

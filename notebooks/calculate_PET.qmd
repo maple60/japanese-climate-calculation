@@ -3,55 +3,48 @@ title: "Calculate Potential Evapotranspiration (PET)"
 bibliography: references.bib
 ---
 
-潜在蒸発散量 Potential evapotranspiration; PETを計算します。
-方法はThornthwaite method[@thornthwaite1948]です。 パッケージは[SPEI](https://cran.r-project.org/web/packages/SPEI/index.html)を使用します[@Santiago2023]。
+[日本語版はこちら (Japanese version)](calculate_PET_ja.qmd)
 
-## ライブラリの読み込み
+This chapter calculates potential evapotranspiration (PET) using the Thornthwaite method [@thornthwaite1948] with the [SPEI](https://cran.r-project.org/web/packages/SPEI/index.html) package [@Santiago2023].
+
+## Load libraries
 
 ```{r}
 library(sf)
 library(SPEI)
 ```
 
-## データの読み込み
-
-このリポジトリの解析では、環境変数 `PROJECT_DATA_DIR` にデータの保存先を指定しています。
-必要に応じて、適宜変更してください。
+## Load data
 
 ```{r}
 data_dir <- Sys.getenv("PROJECT_DATA_DIR")
-# data_dir <- "data" # もし環境変数が設定されていない場合は、直接パスを指定してください。
+# data_dir <- "data" # if PROJECT_DATA_DIR is not set
 sf_climate <- readRDS(file.path(
   data_dir,
   "climate_mesh_data_joined/climate_mesh_data.rds"
 ))
 ```
 
-## 計算用データフレームの作成
-
-緯度、月平均気温を抽出します。
+## Create a data frame for PET calculation
 
 ```{r}
 latitudes <- sf_climate$latitude
 df_temp <- sf_climate[, grep("mean_temperature", names(sf_climate))]
-df_temp <- st_drop_geometry(df_temp) # ジオメトリを削除
-df_temp <- df_temp[, 1:12] # 年平均気温を除外
+df_temp <- st_drop_geometry(df_temp)
+df_temp <- df_temp[, 1:12]
 
-keep <- complete.cases(df_temp) # NAを含まない行
-removed_rows <- which(!keep) # 削除される元の行番号
+keep <- complete.cases(df_temp)
+removed_rows <- which(!keep)
 
 df_temp_clean <- df_temp[keep, ]
 sf_climate_clean <- sf_climate[keep, ]
 row.names(df_temp_clean) <- sf_climate_clean$mesh_code_3rd
 ```
 
-## PETの計算
-
-`SPEI::thornthwaite()` 関数を使用してPETを計算します。
-もしメッセージを抑制したい場合は、引数に`verbose = FALSE`を追加してください。
+## Calculate PET
 
 ```{r}
-n <- nrow(df_temp_clean) # サンプル数
+n <- nrow(df_temp_clean)
 pet_month <- matrix(NA, n, 12)
 for (i in seq_len(n)) {
   pet_month[i, ] <- SPEI::thornthwaite(
@@ -62,10 +55,7 @@ for (i in seq_len(n)) {
 }
 ```
 
-## PETデータの整形
-
-`pet_month`マトリックスをデータフレームに変換し、列名を設定します
-また、年間PETも計算します。
+## Shape PET data
 
 ```{r}
 df_pet <- as.data.frame(pet_month)
@@ -73,10 +63,7 @@ names(df_pet) <- paste0("PET", 1:12)
 df_pet$PET_year <- rowSums(df_pet)
 ```
 
-## データの結合
-
-`mesh_code_3rd`をキーにして、PETデータを元の気候データと結合します。
-結合後、ジオメトリを削除して、データフレームとして保存します。
+## Join PET to climate data
 
 ```{r}
 df_pet$mesh_code_3rd <- row.names(df_temp_clean)
@@ -90,10 +77,7 @@ sf_merged <- merge(
 df_merged <- st_drop_geometry(sf_merged)
 ```
 
-## データの保存
-
-RDS形式とCSV形式で保存します。
-必要に応じて、保存先のパスを変更してください。
+## Save data
 
 ```{r}
 save_dir <- file.path(data_dir, "climate_mesh_data_joined")

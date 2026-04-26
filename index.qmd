@@ -1,26 +1,26 @@
 ---
-title: "メッシュ平年値2020を用いた気候変数の処理"
+title: "Climate Data Processing with Mesh Climatology 2020"
 ---
 
-このドキュメントでは、気象庁の[メッシュ平年値2020](https://www.data.jma.go.jp/stats/etrn/view/atlas.html)を用いて、気候変数を処理する方法を説明します。
+[日本語版はこちら (Japanese version)](index_ja.qmd)
 
-## データについて
+This documentation explains how to process climate variables using the Japan Meteorological Agency's [Mesh Climatology 2020](https://www.data.jma.go.jp/stats/etrn/view/atlas.html).
+
+## About the data
 
 ::: {.callout-note}
-メッシュ平年値2020の概要については、[気象庁の報道発表資料](https://www.jma.go.jp/jma/press/2204/04a/mesh2020.html)を参照してください。
+For an overview of Mesh Climatology 2020, see the [JMA press release](https://www.jma.go.jp/jma/press/2204/04a/mesh2020.html).
 :::
 
-データは、国土数値情報の[平均値メッシュデータ](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html)を使用します。
+This project uses the National Land Numerical Information (MLIT) [Average Value Mesh Data](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html).
 
-元データや加工データについてはこのリポジトリでは配布いたしません。
-必要なデータは、ご自身でダウンロードいただくようお願いいたします。
+This repository does not redistribute original or processed datasets. Please download required data on your own.
 
-利用規約については、[国土数値情報の利用規約](https://nlftp.mlit.go.jp/ksj/other/agreement.html)をご確認ください。
-特に、**出典の明記**を忘れないようにお願いいたします。
+Please review the [NLNI terms of use](https://nlftp.mlit.go.jp/ksj/other/agreement.html), especially the source attribution requirement.
 
-## パッケージ管理について
+## Package management
 
-本リポジトリでは、Rのパッケージ管理に[renv](https://rstudio.github.io/renv/)を使用しています。
-リポジトリをクローンした場合、`renv::restore()`を実行することで、本リポジトリの環境を再現できます。
+This repository uses [renv](https://rstudio.github.io/renv/) for R package dependency management.
+After cloning, run `renv::restore()` to reproduce the package environment.
 
-もしrenvを使用しない場合、適宜必要なパッケージをインストールしてください。
+If you do not use renv, install required packages manually.
