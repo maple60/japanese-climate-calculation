@@ -1,21 +1,23 @@
 # japanese-climate-calculation
 
-[Documentation](https://maple60.github.io/japanese-climate-calculation/)
+[日本語版のREADMEはこちら (Japanese version)](README_ja.md)
 
-A reproducible R + Quarto project for processing climate mesh data in Japan and deriving additional climate indicators such as Potential Evapotranspiration (PET) and Aridity Index.
+[Full documentation](https://maple60.github.io/japanese-climate-calculation/)
+
+A reproducible R + [Quarto](https://quarto.org/) project for processing climate mesh data in Japan and deriving additional climate indicators such as Potential Evapotranspiration (PET) and Aridity Index.
 
 ## Overview
 
 This repository documents a workflow based on:
 
-- Japan Meteorological Agency: Mesh Climatology 2020
-- MLIT National Land Numerical Information: Average Value Mesh Data
+- Japan Meteorological Agency: [Mesh Climatology 2020](https://www.data.jma.go.jp/stats/etrn/view/atlas.html)
+- MLIT National Land Numerical Information: [Average Value Mesh Data](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html)
 
 Main outputs include:
 
 - Cleaned climate mesh dataset
 - PET (Thornthwaite method)
-- Aridity Index (`P / PET`)
+- Aridity Index (`Precipitation / PET`)
 - Utility function to retrieve nearest climate values from arbitrary coordinates
 - Example map visualizations for Japan
 
@@ -27,9 +29,8 @@ The full documentation is available at:
 
 - English-first documentation is published from `docs/`.
 - Each English page includes a link to the corresponding Japanese page.
-- Japanese pages are maintained as proofread versions of the original content.
 
-If GitHub Pages is enabled for this repository, the site is served from `/docs` on the default branch.
+The site is served from `/docs` on the default branch.
 
 ## Project structure
 
