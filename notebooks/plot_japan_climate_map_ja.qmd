@@ -44,11 +44,8 @@ sf_plot <- sf_climate[!is.na(sf_climate[[variable]]), ]
 tm <- tm_shape(japan, crs = 4612) +
   tm_polygons(col = "gray90") +
   tm_shape(sf_plot[, variable], crs = 4612) +
-  tm_symbols(
-    shape = 20,
+  tm_fill(
     fill = variable,
-    size = 0.1,
-    fill_alpha = 0.9,
     fill.scale = tm_scale_continuous(
       values = "viridis"
     ),
@@ -104,11 +101,8 @@ sf_plot <- sf_climate[!is.na(sf_climate[[variable]]), ]
 tm <- tm_shape(japan, crs = 4612) +
   tm_polygons(col = "gray90") +
   tm_shape(sf_plot[, variable], crs = 4612) +
-  tm_symbols(
-    shape = 20,
+  tm_fill(
     fill = variable,
-    size = 0.1,
-    fill_alpha = 0.9,
     fill.scale = tm_scale_continuous(
       values = "viridis"
     ),
