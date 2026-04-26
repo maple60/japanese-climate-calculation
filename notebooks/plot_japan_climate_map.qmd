@@ -52,12 +52,15 @@ output_dir <- "output"
 dir.create(output_dir, showWarnings = FALSE, recursive = TRUE)
 tmap_save(
   tm,
-  filename = file.path(output_dir, paste0("japan_climate_map_", variable, ".png")),
+  filename = file.path(
+    output_dir,
+    paste0("japan_climate_map_", variable, ".png")
+  ),
   dpi = 300
 )
 ```
 
-![PET map result](../output/japan_climate_map_PET_year.png)
+![PET map result; Data source: National Land Numerical Information Download Site, Ministry of Land, Infrastructure, Transport and Tourism, Japan. URL: https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html](../output/japan_climate_map_PET_year.png)
 
 ## Plot Aridity Index
 
@@ -87,9 +90,12 @@ print(tm)
 
 tmap_save(
   tm,
-  filename = file.path(output_dir, paste0("japan_climate_map_", variable, ".png")),
+  filename = file.path(
+    output_dir,
+    paste0("japan_climate_map_", variable, ".png")
+  ),
   dpi = 300
 )
 ```
 
-![Aridity Index map result](../output/japan_climate_map_aridity_index.png)
+![Aridity Index map result; Data source: National Land Numerical Information Download Site, Ministry of Land, Infrastructure, Transport and Tourism, Japan. URL: https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html](../output/japan_climate_map_aridity_index.png)

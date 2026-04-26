@@ -9,11 +9,6 @@ project:
 book:
   title: "Climate Data Processing with Mesh Climatology 2020"
   repo-url: https://github.com/maple60/japanese-climate-calculation
-  navbar:
-    right:
-      - icon: github
-        href: https://github.com/maple60/japanese-climate-calculation
-        aria-label: GitHub
   chapters:
     - href: index.qmd
       text: "Home"
