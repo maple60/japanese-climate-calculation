@@ -1,5 +1,7 @@
 # japanese-climate-calculation
 
+[Documentation](https://maple60.github.io/japanese-climate-calculation/)
+
 A reproducible R + Quarto project for processing climate mesh data in Japan and deriving additional climate indicators such as Potential Evapotranspiration (PET) and Aridity Index.
 
 ## Overview
@@ -18,6 +20,10 @@ Main outputs include:
 - Example map visualizations for Japan
 
 ## Documentation (GitHub Pages)
+
+The full documentation is available at:
+
+- [https://maple60.github.io/japanese-climate-calculation/](https://maple60.github.io/japanese-climate-calculation/)
 
 - English-first documentation is published from `docs/`.
 - Each English page includes a link to the corresponding Japanese page.
@@ -87,3 +93,12 @@ When using derivatives from NLNI datasets, include required attribution per prov
 
 Issues and pull requests are welcome.
 Please keep code comments and error messages in English.
+
+## License
+
+Code in this repository is licensed under the [MIT License](LICENSE).
+
+Documentation, text, and original figures are licensed under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/deed.en), unless otherwise noted.
+
+Source climate and geospatial datasets are not redistributed in this repository and are not covered by these licenses. 
+Please obtain the original datasets from the official providers and follow their terms of use.
