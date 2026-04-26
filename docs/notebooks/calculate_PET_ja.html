@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.36">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>Calculate Potential Evapotranspiration (PET) – Climate Data Processing with Mesh Climatology 2020</title>
+<title>Appendix D — Calculate Potential Evapotranspiration (PET) – Climate Data Processing with Mesh Climatology 2020</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -83,8 +83,8 @@ div.csl-indent {
 <script src="../site_libs/quarto-search/fuse.min.js"></script>
 <script src="../site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="../">
-<link href="../notebooks/calculate_aridity_index.html" rel="next">
-<link href="../notebooks/prepare_climate_data.html" rel="prev">
+<link href="../notebooks/calculate_aridity_index_ja.html" rel="next">
+<link href="../notebooks/prepare_climate_data_ja.html" rel="prev">
 <script src="../site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
@@ -152,7 +152,7 @@ div.csl-indent {
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/calculate_PET.html"><span class="chapter-title">Calculate PET</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/plot_japan_climate_map.html">Appendices</a></li><li class="breadcrumb-item"><a href="../notebooks/calculate_PET_ja.html"><span class="chapter-title">日本語版: PETの計算</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
     </div>
@@ -172,7 +172,7 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notebooks/calculate_PET.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Calculate PET</span></a>
+  <a href="../notebooks/calculate_PET.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Calculate PET</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -211,7 +211,7 @@ div.csl-indent {
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notebooks/calculate_PET_ja.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">日本語版: PETの計算</span></a>
+  <a href="../notebooks/calculate_PET_ja.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">日本語版: PETの計算</span></a>
   </div>
 </li>
           <li class="sidebar-item">
@@ -239,19 +239,19 @@ div.csl-indent {
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#load-libraries" id="toc-load-libraries" class="nav-link active" data-scroll-target="#load-libraries">Load libraries</a></li>
-  <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data">Load data</a></li>
-  <li><a href="#create-a-data-frame-for-pet-calculation" id="toc-create-a-data-frame-for-pet-calculation" class="nav-link" data-scroll-target="#create-a-data-frame-for-pet-calculation">Create a data frame for PET calculation</a></li>
-  <li><a href="#calculate-pet" id="toc-calculate-pet" class="nav-link" data-scroll-target="#calculate-pet">Calculate PET</a></li>
-  <li><a href="#shape-pet-data" id="toc-shape-pet-data" class="nav-link" data-scroll-target="#shape-pet-data">Shape PET data</a></li>
-  <li><a href="#join-pet-to-climate-data" id="toc-join-pet-to-climate-data" class="nav-link" data-scroll-target="#join-pet-to-climate-data">Join PET to climate data</a></li>
-  <li><a href="#save-data" id="toc-save-data" class="nav-link" data-scroll-target="#save-data">Save data</a></li>
+<li><a href="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%AE%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%81%BF" id="toc-ライブラリの読み込み" class="nav-link active" data-scroll-target="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%AE%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%81%BF">ライブラリの読み込み</a></li>
+  <li><a href="#%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%81%BF" id="toc-データの読み込み" class="nav-link" data-scroll-target="#%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%81%BF">データの読み込み</a></li>
+  <li><a href="#%E8%A8%88%E7%AE%97%E7%94%A8%E3%83%87%E3%83%BC%E3%82%BF%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%81%AE%E4%BD%9C%E6%88%90" id="toc-計算用データフレームの作成" class="nav-link" data-scroll-target="#%E8%A8%88%E7%AE%97%E7%94%A8%E3%83%87%E3%83%BC%E3%82%BF%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%81%AE%E4%BD%9C%E6%88%90">計算用データフレームの作成</a></li>
+  <li><a href="#pet%E3%81%AE%E8%A8%88%E7%AE%97" id="toc-petの計算" class="nav-link" data-scroll-target="#pet%E3%81%AE%E8%A8%88%E7%AE%97">PETの計算</a></li>
+  <li><a href="#pet%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E6%95%B4%E5%BD%A2" id="toc-petデータの整形" class="nav-link" data-scroll-target="#pet%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E6%95%B4%E5%BD%A2">PETデータの整形</a></li>
+  <li><a href="#%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E7%B5%90%E5%90%88" id="toc-データの結合" class="nav-link" data-scroll-target="#%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E7%B5%90%E5%90%88">データの結合</a></li>
+  <li><a href="#%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E4%BF%9D%E5%AD%98" id="toc-データの保存" class="nav-link" data-scroll-target="#%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E4%BF%9D%E5%AD%98">データの保存</a></li>
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-title">Calculate Potential Evapotranspiration (PET)</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/plot_japan_climate_map.html">Appendices</a></li><li class="breadcrumb-item"><a href="../notebooks/calculate_PET_ja.html"><span class="chapter-title">日本語版: PETの計算</span></a></li></ol></nav><div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title">Appendix D — Calculate Potential Evapotranspiration (PET)</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -265,39 +265,42 @@ div.csl-indent {
   
 
 
-</header><p><a href="../notebooks/calculate_PET_ja.html">日本語版はこちら (Japanese version)</a></p>
-<p>This chapter calculates potential evapotranspiration (PET) using the Thornthwaite method <span class="citation" data-cites="thornthwaite1948">(<a href="#ref-thornthwaite1948" role="doc-biblioref">Thornthwaite 1948</a>)</span> with the <a href="https://cran.r-project.org/web/packages/SPEI/index.html">SPEI</a> package <span class="citation" data-cites="Santiago2023">(<a href="#ref-Santiago2023" role="doc-biblioref">Beguería and Vicente-Serrano 2023</a>)</span>.</p>
-<section id="load-libraries" class="level2"><h2 class="anchored" data-anchor-id="load-libraries">Load libraries</h2>
+</header><p><a href="../notebooks/calculate_PET.html">English version</a></p>
+<p>潜在蒸発散量 Potential evapotranspiration; PETを計算します。 方法はThornthwaite method<span class="citation" data-cites="thornthwaite1948">(<a href="#ref-thornthwaite1948" role="doc-biblioref">Thornthwaite 1948</a>)</span>です。 パッケージは<a href="https://cran.r-project.org/web/packages/SPEI/index.html">SPEI</a>を使用します<span class="citation" data-cites="Santiago2023">(<a href="#ref-Santiago2023" role="doc-biblioref">Beguería and Vicente-Serrano 2023</a>)</span>。</p>
+<section id="ライブラリの読み込み" class="level2"><h2 class="anchored" data-anchor-id="ライブラリの読み込み">ライブラリの読み込み</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://spei.csic.es">SPEI</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section><section id="load-data" class="level2"><h2 class="anchored" data-anchor-id="load-data">Load data</h2>
+</section><section id="データの読み込み" class="level2"><h2 class="anchored" data-anchor-id="データの読み込み">データの読み込み</h2>
+<p>このリポジトリの解析では、環境変数 <code>PROJECT_DATA_DIR</code> にデータの保存先を指定しています。 必要に応じて、適宜変更してください。</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">data_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"PROJECT_DATA_DIR"</span><span class="op">)</span></span>
-<span><span class="co"># data_dir &lt;- "data" # if PROJECT_DATA_DIR is not set</span></span>
+<span><span class="co"># data_dir &lt;- "data" # もし環境変数が設定されていない場合は、直接パスを指定してください。</span></span>
 <span><span class="va">sf_climate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span></span>
 <span>  <span class="va">data_dir</span>,</span>
 <span>  <span class="st">"climate_mesh_data_joined/climate_mesh_data.rds"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section><section id="create-a-data-frame-for-pet-calculation" class="level2"><h2 class="anchored" data-anchor-id="create-a-data-frame-for-pet-calculation">Create a data frame for PET calculation</h2>
+</section><section id="計算用データフレームの作成" class="level2"><h2 class="anchored" data-anchor-id="計算用データフレームの作成">計算用データフレームの作成</h2>
+<p>緯度、月平均気温を抽出します。</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">latitudes</span> <span class="op">&lt;-</span> <span class="va">sf_climate</span><span class="op">$</span><span class="va">latitude</span></span>
 <span><span class="va">df_temp</span> <span class="op">&lt;-</span> <span class="va">sf_climate</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/grep.html">grep</a></span><span class="op">(</span><span class="st">"mean_temperature"</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">sf_climate</span><span class="op">)</span><span class="op">)</span><span class="op">]</span></span>
-<span><span class="va">df_temp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="va">df_temp</span><span class="op">)</span></span>
-<span><span class="va">df_temp</span> <span class="op">&lt;-</span> <span class="va">df_temp</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span></span>
+<span><span class="va">df_temp</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="va">df_temp</span><span class="op">)</span> <span class="co"># ジオメトリを削除</span></span>
+<span><span class="va">df_temp</span> <span class="op">&lt;-</span> <span class="va">df_temp</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">]</span> <span class="co"># 年平均気温を除外</span></span>
 <span></span>
-<span><span class="va">keep</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/complete.cases.html">complete.cases</a></span><span class="op">(</span><span class="va">df_temp</span><span class="op">)</span></span>
-<span><span class="va">removed_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="op">!</span><span class="va">keep</span><span class="op">)</span></span>
+<span><span class="va">keep</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/complete.cases.html">complete.cases</a></span><span class="op">(</span><span class="va">df_temp</span><span class="op">)</span> <span class="co"># NAを含まない行</span></span>
+<span><span class="va">removed_rows</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="op">!</span><span class="va">keep</span><span class="op">)</span> <span class="co"># 削除される元の行番号</span></span>
 <span></span>
 <span><span class="va">df_temp_clean</span> <span class="op">&lt;-</span> <span class="va">df_temp</span><span class="op">[</span><span class="va">keep</span>, <span class="op">]</span></span>
 <span><span class="va">sf_climate_clean</span> <span class="op">&lt;-</span> <span class="va">sf_climate</span><span class="op">[</span><span class="va">keep</span>, <span class="op">]</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">df_temp_clean</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">sf_climate_clean</span><span class="op">$</span><span class="va">mesh_code_3rd</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section><section id="calculate-pet" class="level2"><h2 class="anchored" data-anchor-id="calculate-pet">Calculate PET</h2>
+</section><section id="petの計算" class="level2"><h2 class="anchored" data-anchor-id="petの計算">PETの計算</h2>
+<p><code><a href="https://rdrr.io/pkg/SPEI/man/Potential-evapotranspiration.html">SPEI::thornthwaite()</a></code> 関数を使用してPETを計算します。 もしメッセージを抑制したい場合は、引数に<code>verbose = FALSE</code>を追加してください。</p>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df_temp_clean</span><span class="op">)</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">n</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">df_temp_clean</span><span class="op">)</span> <span class="co"># サンプル数</span></span>
 <span><span class="va">pet_month</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="cn">NA</span>, <span class="va">n</span>, <span class="fl">12</span><span class="op">)</span></span>
 <span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="va">n</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">pet_month</span><span class="op">[</span><span class="va">i</span>, <span class="op">]</span> <span class="op">&lt;-</span> <span class="fu">SPEI</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/SPEI/man/Potential-evapotranspiration.html">thornthwaite</a></span><span class="op">(</span></span>
@@ -307,13 +310,15 @@ div.csl-indent {
 <span>  <span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section><section id="shape-pet-data" class="level2"><h2 class="anchored" data-anchor-id="shape-pet-data">Shape PET data</h2>
+</section><section id="petデータの整形" class="level2"><h2 class="anchored" data-anchor-id="petデータの整形">PETデータの整形</h2>
+<p><code>pet_month</code>マトリックスをデータフレームに変換し、列名を設定します また、年間PETも計算します。</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_pet</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/as.data.frame.html">as.data.frame</a></span><span class="op">(</span><span class="va">pet_month</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">df_pet</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste0</a></span><span class="op">(</span><span class="st">"PET"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span></span>
 <span><span class="va">df_pet</span><span class="op">$</span><span class="va">PET_year</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colSums.html">rowSums</a></span><span class="op">(</span><span class="va">df_pet</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section><section id="join-pet-to-climate-data" class="level2"><h2 class="anchored" data-anchor-id="join-pet-to-climate-data">Join PET to climate data</h2>
+</section><section id="データの結合" class="level2"><h2 class="anchored" data-anchor-id="データの結合">データの結合</h2>
+<p><code>mesh_code_3rd</code>をキーにして、PETデータを元の気候データと結合します。 結合後、ジオメトリを削除して、データフレームとして保存します。</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_pet</span><span class="op">$</span><span class="va">mesh_code_3rd</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/row.names.html">row.names</a></span><span class="op">(</span><span class="va">df_temp_clean</span><span class="op">)</span></span>
 <span><span class="va">sf_merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/merge.html">merge</a></span><span class="op">(</span></span>
@@ -325,7 +330,8 @@ div.csl-indent {
 <span><span class="op">)</span></span>
 <span><span class="va">df_merged</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="va">sf_merged</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section><section id="save-data" class="level2"><h2 class="anchored" data-anchor-id="save-data">Save data</h2>
+</section><section id="データの保存" class="level2"><h2 class="anchored" data-anchor-id="データの保存">データの保存</h2>
+<p>RDS形式とCSV形式で保存します。 必要に応じて、保存先のパスを変更してください。</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">save_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">data_dir</span>, <span class="st">"climate_mesh_data_joined"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">saveRDS</a></span><span class="op">(</span><span class="va">sf_merged</span>, <span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span><span class="va">save_dir</span>, <span class="st">"climate_mesh_data_with_pet.rds"</span><span class="op">)</span><span class="op">)</span></span>
@@ -799,13 +805,13 @@ Thornthwaite, C. W. 1948. <span>“An Approach Toward a Rational Classification 
     }
   });
   </script><nav class="page-navigation"><div class="nav-page nav-page-previous">
-      <a href="../notebooks/prepare_climate_data.html" class="pagination-link" aria-label="Prepare Climate Data">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">Prepare Climate Data</span></span>
+      <a href="../notebooks/prepare_climate_data_ja.html" class="pagination-link" aria-label="日本語版: 気候データの準備">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-title">日本語版: 気候データの準備</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="../notebooks/calculate_aridity_index.html" class="pagination-link" aria-label="Calculate Aridity Index">
-        <span class="nav-page-text"><span class="chapter-title">Calculate Aridity Index</span></span> <i class="bi bi-arrow-right-short"></i>
+      <a href="../notebooks/calculate_aridity_index_ja.html" class="pagination-link" aria-label="日本語版: 乾燥指数の計算">
+        <span class="nav-page-text"><span class="chapter-title">日本語版: 乾燥指数の計算</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
@@ -814,93 +820,112 @@ Thornthwaite, C. W. 1948. <span>“An Approach Toward a Rational Classification 
 <span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="an">bibliography:</span><span class="co"> references.bib</span></span>
 <span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">日本語版はこちら (Japanese version)</span><span class="co">](calculate_PET_ja.qmd)</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">English version</span><span class="co">](calculate_PET.qmd)</span></span>
 <span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>This chapter calculates potential evapotranspiration (PET) using the Thornthwaite method <span class="co">[</span><span class="ot">@thornthwaite1948</span><span class="co">]</span> with the <span class="co">[</span><span class="ot">SPEI</span><span class="co">](https://cran.r-project.org/web/packages/SPEI/index.html)</span> package <span class="co">[</span><span class="ot">@Santiago2023</span><span class="co">]</span>.</span>
-<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## Load libraries</span></span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>潜在蒸発散量 Potential evapotranspiration; PETを計算します。</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>方法はThornthwaite method<span class="co">[</span><span class="ot">@thornthwaite1948</span><span class="co">]</span>です。 パッケージは<span class="co">[</span><span class="ot">SPEI</span><span class="co">](https://cran.r-project.org/web/packages/SPEI/index.html)</span>を使用します<span class="co">[</span><span class="ot">@Santiago2023</span><span class="co">]</span>。</span>
 <span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SPEI)</span>
-<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## Load data</span></span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a><span class="fu">## ライブラリの読み込み</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(SPEI)</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>data_dir <span class="ot">&lt;-</span> <span class="fu">Sys.getenv</span>(<span class="st">"PROJECT_DATA_DIR"</span>)</span>
-<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a><span class="co"># data_dir &lt;- "data" # if PROJECT_DATA_DIR is not set</span></span>
-<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>sf_climate <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(</span>
-<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>  data_dir,</span>
-<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>  <span class="st">"climate_mesh_data_joined/climate_mesh_data.rds"</span></span>
-<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a><span class="fu">## Create a data frame for PET calculation</span></span>
-<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>latitudes <span class="ot">&lt;-</span> sf_climate<span class="sc">$</span>latitude</span>
-<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a>df_temp <span class="ot">&lt;-</span> sf_climate[, <span class="fu">grep</span>(<span class="st">"mean_temperature"</span>, <span class="fu">names</span>(sf_climate))]</span>
-<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>df_temp <span class="ot">&lt;-</span> <span class="fu">st_drop_geometry</span>(df_temp)</span>
-<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a>df_temp <span class="ot">&lt;-</span> df_temp[, <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>]</span>
-<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-42"><a href="#cb8-42" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">complete.cases</span>(df_temp)</span>
-<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a>removed_rows <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="sc">!</span>keep)</span>
-<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>df_temp_clean <span class="ot">&lt;-</span> df_temp[keep, ]</span>
-<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>sf_climate_clean <span class="ot">&lt;-</span> sf_climate[keep, ]</span>
-<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(df_temp_clean) <span class="ot">&lt;-</span> sf_climate_clean<span class="sc">$</span>mesh_code_3rd</span>
-<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a><span class="fu">## Calculate PET</span></span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## データの読み込み</span></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>このリポジトリの解析では、環境変数 <span class="in">`PROJECT_DATA_DIR`</span> にデータの保存先を指定しています。</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>必要に応じて、適宜変更してください。</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>data_dir <span class="ot">&lt;-</span> <span class="fu">Sys.getenv</span>(<span class="st">"PROJECT_DATA_DIR"</span>)</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="co"># data_dir &lt;- "data" # もし環境変数が設定されていない場合は、直接パスを指定してください。</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>sf_climate <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>  data_dir,</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>  <span class="st">"climate_mesh_data_joined/climate_mesh_data.rds"</span></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a><span class="fu">## 計算用データフレームの作成</span></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a>緯度、月平均気温を抽出します。</span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-43"><a href="#cb8-43" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a>latitudes <span class="ot">&lt;-</span> sf_climate<span class="sc">$</span>latitude</span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>df_temp <span class="ot">&lt;-</span> sf_climate[, <span class="fu">grep</span>(<span class="st">"mean_temperature"</span>, <span class="fu">names</span>(sf_climate))]</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>df_temp <span class="ot">&lt;-</span> <span class="fu">st_drop_geometry</span>(df_temp) <span class="co"># ジオメトリを削除</span></span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>df_temp <span class="ot">&lt;-</span> df_temp[, <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>] <span class="co"># 年平均気温を除外</span></span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>keep <span class="ot">&lt;-</span> <span class="fu">complete.cases</span>(df_temp) <span class="co"># NAを含まない行</span></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>removed_rows <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="sc">!</span>keep) <span class="co"># 削除される元の行番号</span></span>
 <span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(df_temp_clean)</span>
-<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a>pet_month <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, n, <span class="dv">12</span>)</span>
-<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(n)) {</span>
-<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a>  pet_month[i, ] <span class="ot">&lt;-</span> SPEI<span class="sc">::</span><span class="fu">thornthwaite</span>(</span>
-<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>    <span class="at">Tave =</span> <span class="fu">as.numeric</span>(df_temp_clean[i, ]),</span>
-<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>    <span class="at">lat =</span> latitudes[i],</span>
-<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>    <span class="at">verbose =</span> <span class="cn">FALSE</span></span>
-<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a><span class="fu">## Shape PET data</span></span>
-<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a>df_pet <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(pet_month)</span>
-<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df_pet) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"PET"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>)</span>
-<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>df_pet<span class="sc">$</span>PET_year <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(df_pet)</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a>df_temp_clean <span class="ot">&lt;-</span> df_temp[keep, ]</span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a>sf_climate_clean <span class="ot">&lt;-</span> sf_climate[keep, ]</span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a><span class="fu">row.names</span>(df_temp_clean) <span class="ot">&lt;-</span> sf_climate_clean<span class="sc">$</span>mesh_code_3rd</span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-56"><a href="#cb8-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-57"><a href="#cb8-57" aria-hidden="true" tabindex="-1"></a><span class="fu">## PETの計算</span></span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a><span class="in">`SPEI::thornthwaite()`</span> 関数を使用してPETを計算します。</span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>もしメッセージを抑制したい場合は、引数に<span class="in">`verbose = FALSE`</span>を追加してください。</span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a>n <span class="ot">&lt;-</span> <span class="fu">nrow</span>(df_temp_clean) <span class="co"># サンプル数</span></span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a>pet_month <span class="ot">&lt;-</span> <span class="fu">matrix</span>(<span class="cn">NA</span>, n, <span class="dv">12</span>)</span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(n)) {</span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a>  pet_month[i, ] <span class="ot">&lt;-</span> SPEI<span class="sc">::</span><span class="fu">thornthwaite</span>(</span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a>    <span class="at">Tave =</span> <span class="fu">as.numeric</span>(df_temp_clean[i, ]),</span>
+<span id="cb8-70"><a href="#cb8-70" aria-hidden="true" tabindex="-1"></a>    <span class="at">lat =</span> latitudes[i],</span>
+<span id="cb8-71"><a href="#cb8-71" aria-hidden="true" tabindex="-1"></a>    <span class="at">verbose =</span> <span class="cn">FALSE</span></span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>}</span>
 <span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a><span class="fu">## Join PET to climate data</span></span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a><span class="fu">## PETデータの整形</span></span>
 <span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>df_pet<span class="sc">$</span>mesh_code_3rd <span class="ot">&lt;-</span> <span class="fu">row.names</span>(df_temp_clean)</span>
-<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a>sf_merged <span class="ot">&lt;-</span> <span class="fu">merge</span>(</span>
-<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a>  sf_climate,</span>
-<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a>  df_pet,</span>
-<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">"mesh_code_3rd"</span>,</span>
-<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>  <span class="at">all.x =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> <span class="cn">FALSE</span></span>
-<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a>df_merged <span class="ot">&lt;-</span> <span class="fu">st_drop_geometry</span>(sf_merged)</span>
-<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a><span class="fu">## Save data</span></span>
+<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a><span class="in">`pet_month`</span>マトリックスをデータフレームに変換し、列名を設定します</span>
+<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a>また、年間PETも計算します。</span>
+<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a>df_pet <span class="ot">&lt;-</span> <span class="fu">as.data.frame</span>(pet_month)</span>
+<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a><span class="fu">names</span>(df_pet) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">"PET"</span>, <span class="dv">1</span><span class="sc">:</span><span class="dv">12</span>)</span>
+<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a>df_pet<span class="sc">$</span>PET_year <span class="ot">&lt;-</span> <span class="fu">rowSums</span>(df_pet)</span>
+<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a><span class="fu">## データの結合</span></span>
+<span id="cb8-90"><a href="#cb8-90" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-91"><a href="#cb8-91" aria-hidden="true" tabindex="-1"></a><span class="in">`mesh_code_3rd`</span>をキーにして、PETデータを元の気候データと結合します。</span>
+<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a>結合後、ジオメトリを削除して、データフレームとして保存します。</span>
 <span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a>save_dir <span class="ot">&lt;-</span> <span class="fu">file.path</span>(data_dir, <span class="st">"climate_mesh_data_joined"</span>)</span>
-<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(sf_merged, <span class="fu">file.path</span>(save_dir, <span class="st">"climate_mesh_data_with_pet.rds"</span>))</span>
-<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(</span>
-<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a>  df_merged,</span>
-<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a>  <span class="fu">file.path</span>(save_dir, <span class="st">"climate_mesh_data_with_pet.csv"</span>),</span>
-<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="cn">FALSE</span></span>
-<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
+<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a>df_pet<span class="sc">$</span>mesh_code_3rd <span class="ot">&lt;-</span> <span class="fu">row.names</span>(df_temp_clean)</span>
+<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a>sf_merged <span class="ot">&lt;-</span> <span class="fu">merge</span>(</span>
+<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a>  sf_climate,</span>
+<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a>  df_pet,</span>
+<span id="cb8-101"><a href="#cb8-101" aria-hidden="true" tabindex="-1"></a>  <span class="at">by =</span> <span class="st">"mesh_code_3rd"</span>,</span>
+<span id="cb8-102"><a href="#cb8-102" aria-hidden="true" tabindex="-1"></a>  <span class="at">all.x =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-103"><a href="#cb8-103" aria-hidden="true" tabindex="-1"></a>  <span class="at">sort =</span> <span class="cn">FALSE</span></span>
+<span id="cb8-104"><a href="#cb8-104" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-105"><a href="#cb8-105" aria-hidden="true" tabindex="-1"></a>df_merged <span class="ot">&lt;-</span> <span class="fu">st_drop_geometry</span>(sf_merged)</span>
+<span id="cb8-106"><a href="#cb8-106" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-107"><a href="#cb8-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-108"><a href="#cb8-108" aria-hidden="true" tabindex="-1"></a><span class="fu">## データの保存</span></span>
+<span id="cb8-109"><a href="#cb8-109" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-110"><a href="#cb8-110" aria-hidden="true" tabindex="-1"></a>RDS形式とCSV形式で保存します。</span>
+<span id="cb8-111"><a href="#cb8-111" aria-hidden="true" tabindex="-1"></a>必要に応じて、保存先のパスを変更してください。</span>
+<span id="cb8-112"><a href="#cb8-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-115"><a href="#cb8-115" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-116"><a href="#cb8-116" aria-hidden="true" tabindex="-1"></a>save_dir <span class="ot">&lt;-</span> <span class="fu">file.path</span>(data_dir, <span class="st">"climate_mesh_data_joined"</span>)</span>
+<span id="cb8-117"><a href="#cb8-117" aria-hidden="true" tabindex="-1"></a><span class="fu">saveRDS</span>(sf_merged, <span class="fu">file.path</span>(save_dir, <span class="st">"climate_mesh_data_with_pet.rds"</span>))</span>
+<span id="cb8-118"><a href="#cb8-118" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(</span>
+<span id="cb8-119"><a href="#cb8-119" aria-hidden="true" tabindex="-1"></a>  df_merged,</span>
+<span id="cb8-120"><a href="#cb8-120" aria-hidden="true" tabindex="-1"></a>  <span class="fu">file.path</span>(save_dir, <span class="st">"climate_mesh_data_with_pet.csv"</span>),</span>
+<span id="cb8-121"><a href="#cb8-121" aria-hidden="true" tabindex="-1"></a>  <span class="at">row.names =</span> <span class="cn">FALSE</span></span>
+<span id="cb8-122"><a href="#cb8-122" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-123"><a href="#cb8-123" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-124"><a href="#cb8-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-125"><a href="#cb8-125" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

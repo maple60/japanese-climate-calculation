@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="generator" content="quarto-1.9.36">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
-<title>座標を与えたら最も近い気候変数の値を返す関数 – Climate Data Processing with Mesh Climatology 2020 (メッシュ平年値2020を用いた気候変数の処理)</title>
+<title>Get Nearest Climate Value by Coordinates – Climate Data Processing with Mesh Climatology 2020</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -76,11 +76,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="../site_libs/bootstrap/bootstrap-1c9137b7b1c0320e377730bf2be1742e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light"><script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
+  "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
+  "panel-placement": "end",
+  "type": "overlay",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
@@ -103,37 +103,47 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   }
 }</script>
 </head>
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar floating nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
-  <header id="quarto-header" class="headroom fixed-top"><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
+  <header id="quarto-header" class="headroom fixed-top"><nav class="navbar navbar-expand-lg " data-bs-theme="dark"><div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="../index.html">
+    <span class="navbar-title">Climate Data Processing with Mesh Climatology 2020</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+<li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/maple60/japanese-climate-calculation"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+</div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+    <a href="https://github.com/maple60/japanese-climate-calculation" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav><nav class="quarto-secondary-nav"><div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
         <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/get_nearest_climate_value.html"><span class="chapter-title">Get Nearest Climate Value</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
     </div>
-  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+  </nav></header><!-- content --><div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="pt-lg-2 mt-2 text-left sidebar-header">
-    <div class="sidebar-title mb-0 py-0">
-      <a href="../">Climate Data Processing with Mesh Climatology 2020 (メッシュ平年値2020を用いた気候変数の処理)</a> 
-    </div>
-      </div>
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Search"></div>
-        </div>
-        </div>
-    <div class="sidebar-menu-container"> 
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto"><div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
 <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Climate Data Processing with Mesh Climatology 2020</span></a>
+  <a href="../index.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Home</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -143,7 +153,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="../notebooks/calculate_PET.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Calculate Potential Evapotranspiration (PET)</span></a>
+  <a href="../notebooks/calculate_PET.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Calculate PET</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -170,6 +180,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <a href="../notebooks/plot_japan_climate_map.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Plot Japan Climate Map</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index_ja.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">日本語版: はじめに</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/prepare_climate_data_ja.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">日本語版: 気候データの準備</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/calculate_PET_ja.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">日本語版: PETの計算</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/calculate_aridity_index_ja.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">日本語版: 乾燥指数の計算</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/get_nearest_climate_value_ja.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">日本語版: 最近傍の気候値取得</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/plot_japan_climate_map_ja.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">日本語版: 気候マップの描画</span></a>
+  </div>
+</li>
       </ul>
 </li>
     </ul>
@@ -180,25 +220,23 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         <nav id="TOC" role="doc-toc" class="toc-active"><h2 id="toc-title">Table of contents</h2>
    
   <ul>
-<li><a href="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%AE%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%81%BF" id="toc-ライブラリの読み込み" class="nav-link active" data-scroll-target="#%E3%83%A9%E3%82%A4%E3%83%96%E3%83%A9%E3%83%AA%E3%81%AE%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%81%BF">ライブラリの読み込み</a></li>
-  <li><a href="#%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%81%BF" id="toc-データの読み込み" class="nav-link" data-scroll-target="#%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E8%AA%AD%E3%81%BF%E8%BE%BC%E3%81%BF">データの読み込み</a></li>
-  <li><a href="#%E6%9C%80%E3%82%82%E8%BF%91%E3%81%84%E6%B0%97%E5%80%99%E5%A4%89%E6%95%B0%E3%81%AE%E5%80%A4%E3%82%92%E8%BF%94%E3%81%99%E9%96%A2%E6%95%B0%E3%81%AE%E5%AE%9A%E7%BE%A9" id="toc-最も近い気候変数の値を返す関数の定義" class="nav-link" data-scroll-target="#%E6%9C%80%E3%82%82%E8%BF%91%E3%81%84%E6%B0%97%E5%80%99%E5%A4%89%E6%95%B0%E3%81%AE%E5%80%A4%E3%82%92%E8%BF%94%E3%81%99%E9%96%A2%E6%95%B0%E3%81%AE%E5%AE%9A%E7%BE%A9">最も近い気候変数の値を返す関数の定義</a></li>
+<li><a href="#load-library" id="toc-load-library" class="nav-link active" data-scroll-target="#load-library">Load library</a></li>
+  <li><a href="#load-data" id="toc-load-data" class="nav-link" data-scroll-target="#load-data">Load data</a></li>
+  <li><a href="#define-the-function" id="toc-define-the-function" class="nav-link" data-scroll-target="#define-the-function">Define the function</a></li>
   <li>
-<a href="#%E4%BD%BF%E3%81%84%E6%96%B9" id="toc-使い方" class="nav-link" data-scroll-target="#%E4%BD%BF%E3%81%84%E6%96%B9">使い方</a>
+<a href="#usage" id="toc-usage" class="nav-link" data-scroll-target="#usage">Usage</a>
   <ul class="collapse">
-<li><a href="#%E7%B7%AF%E5%BA%A6%E7%B5%8C%E5%BA%A6%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%97%E3%81%A6%E6%9C%80%E3%82%82%E8%BF%91%E3%81%84aridity_index%E3%82%92%E5%8F%96%E5%BE%97" id="toc-緯度経度を指定して最も近いaridity_indexを取得" class="nav-link" data-scroll-target="#%E7%B7%AF%E5%BA%A6%E7%B5%8C%E5%BA%A6%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%97%E3%81%A6%E6%9C%80%E3%82%82%E8%BF%91%E3%81%84aridity_index%E3%82%92%E5%8F%96%E5%BE%97">緯度経度を指定して最も近いaridity_indexを取得</a></li>
-  <li><a href="#%E7%B7%AF%E5%BA%A6%E7%B5%8C%E5%BA%A6%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%97%E3%81%A6%E8%A4%87%E6%95%B0%E3%81%AE%E6%B0%97%E5%80%99%E5%A4%89%E6%95%B0%E3%82%92%E5%8F%96%E5%BE%97" id="toc-緯度経度を指定して複数の気候変数を取得" class="nav-link" data-scroll-target="#%E7%B7%AF%E5%BA%A6%E7%B5%8C%E5%BA%A6%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%97%E3%81%A6%E8%A4%87%E6%95%B0%E3%81%AE%E6%B0%97%E5%80%99%E5%A4%89%E6%95%B0%E3%82%92%E5%8F%96%E5%BE%97">緯度経度を指定して、複数の気候変数を取得</a></li>
-  <li><a href="#%E3%83%87%E3%83%BC%E3%82%BF%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%97%E3%81%A6%E6%9C%80%E3%82%82%E8%BF%91%E3%81%84aridity_index%E3%82%92%E5%8F%96%E5%BE%97" id="toc-データフレームを指定して最も近いaridity_indexを取得" class="nav-link" data-scroll-target="#%E3%83%87%E3%83%BC%E3%82%BF%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%97%E3%81%A6%E6%9C%80%E3%82%82%E8%BF%91%E3%81%84aridity_index%E3%82%92%E5%8F%96%E5%BE%97">データフレームを指定して最も近いaridity_indexを取得</a></li>
-  <li><a href="#%E3%83%87%E3%83%BC%E3%82%BF%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%97%E3%81%A6%E8%A4%87%E6%95%B0%E3%81%AE%E6%B0%97%E5%80%99%E5%A4%89%E6%95%B0%E3%82%92%E5%8F%96%E5%BE%97" id="toc-データフレームを指定して複数の気候変数を取得" class="nav-link" data-scroll-target="#%E3%83%87%E3%83%BC%E3%82%BF%E3%83%95%E3%83%AC%E3%83%BC%E3%83%A0%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%97%E3%81%A6%E8%A4%87%E6%95%B0%E3%81%AE%E6%B0%97%E5%80%99%E5%A4%89%E6%95%B0%E3%82%92%E5%8F%96%E5%BE%97">データフレームを指定して、複数の気候変数を取得</a></li>
+<li><a href="#get-nearest-aridity_index-for-one-coordinate" id="toc-get-nearest-aridity_index-for-one-coordinate" class="nav-link" data-scroll-target="#get-nearest-aridity_index-for-one-coordinate">Get nearest <code>aridity_index</code> for one coordinate</a></li>
+  <li><a href="#get-multiple-variables-for-one-coordinate" id="toc-get-multiple-variables-for-one-coordinate" class="nav-link" data-scroll-target="#get-multiple-variables-for-one-coordinate">Get multiple variables for one coordinate</a></li>
+  <li><a href="#get-nearest-values-for-a-data-frame-of-coordinates" id="toc-get-nearest-values-for-a-data-frame-of-coordinates" class="nav-link" data-scroll-target="#get-nearest-values-for-a-data-frame-of-coordinates">Get nearest values for a data frame of coordinates</a></li>
+  <li><a href="#get-all-attributes" id="toc-get-all-attributes" class="nav-link" data-scroll-target="#get-all-attributes">Get all attributes</a></li>
   </ul>
 </li>
-  <li><a href="#%E7%B7%AF%E5%BA%A6%E7%B5%8C%E5%BA%A6%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%97%E3%81%A6%E5%85%A8%E3%81%A6%E3%81%AE%E5%A4%89%E6%95%B0%E3%82%92%E5%8F%96%E5%BE%97" id="toc-緯度経度を指定して全ての変数を取得" class="nav-link" data-scroll-target="#%E7%B7%AF%E5%BA%A6%E7%B5%8C%E5%BA%A6%E3%82%92%E6%8C%87%E5%AE%9A%E3%81%97%E3%81%A6%E5%85%A8%E3%81%A6%E3%81%AE%E5%A4%89%E6%95%B0%E3%82%92%E5%8F%96%E5%BE%97">緯度経度を指定して、全ての変数を取得</a></li>
-  <li><a href="#%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E5%87%BA%E5%85%B8" id="toc-データの出典" class="nav-link" data-scroll-target="#%E3%83%87%E3%83%BC%E3%82%BF%E3%81%AE%E5%87%BA%E5%85%B8">データの出典</a></li>
   </ul></nav>
     </div>
 <!-- main -->
 <main class="content" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block default"><div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-title">座標を与えたら最も近い気候変数の値を返す関数</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-title">Get Nearest Climate Value by Coordinates</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -212,13 +250,13 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   
 
 
-</header><p>ここまででデータを処理して、新たに潜在蒸発散量(PET)や乾燥指数(Aridity Index)を計算してきました。 これらのデータを簡単に利用できるように、座標を与えたら最も近い気候変数の値を返す関数 <code>get_nearest_climate_value()</code> を定義します。 この関数のファイルは<a href="../R/get_nearest_climate_value.R">R/get_nearest_climate_value.R</a> にあります。 ファイルをダウンロードして、<code>source("get_nearest_climate_value.R")</code> (ファイルパスは適宜変更してください)することで利用できます。</p>
-<section id="ライブラリの読み込み" class="level2"><h2 class="anchored" data-anchor-id="ライブラリの読み込み">ライブラリの読み込み</h2>
+</header><p><a href="../notebooks/get_nearest_climate_value_ja.html">日本語版はこちら (Japanese version)</a></p>
+<p>This chapter introduces <code>get_nearest_climate_value()</code>, which returns climate variable values from the nearest mesh cell to given coordinates. The function source file is <a href="../R/get_nearest_climate_value.R">R/get_nearest_climate_value.R</a>.</p>
+<section id="load-library" class="level2"><h2 class="anchored" data-anchor-id="load-library">Load library</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html">library</a></span><span class="op">(</span><span class="va"><a href="https://r-spatial.github.io/sf/">sf</a></span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section><section id="データの読み込み" class="level2"><h2 class="anchored" data-anchor-id="データの読み込み">データの読み込み</h2>
-<p>このリポジトリの解析では、環境変数 <code>PROJECT_DATA_DIR</code> にデータの保存先を指定しています。 必要に応じて、適宜変更してください。</p>
+</section><section id="load-data" class="level2"><h2 class="anchored" data-anchor-id="load-data">Load data</h2>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">data_dir</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Sys.getenv.html">Sys.getenv</a></span><span class="op">(</span><span class="st">"PROJECT_DATA_DIR"</span><span class="op">)</span></span>
 <span><span class="va">sf_climate</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/file.path.html">file.path</a></span><span class="op">(</span></span>
@@ -226,119 +264,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span>  <span class="st">"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.rds"</span></span>
 <span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section><section id="最も近い気候変数の値を返す関数の定義" class="level2"><h2 class="anchored" data-anchor-id="最も近い気候変数の値を返す関数の定義">最も近い気候変数の値を返す関数の定義</h2>
-<p>緯度経度やデータフレームを与えると、最も近い気候変数の値を返す関数 <code>get_nearest_climate_value()</code> を定義します。 この関数のファイルは<a href="../R/get_nearest_climate_value.R">R/get_nearest_climate_value.R</a> にあります。 ファイルをダウンロードして、<code>source("get_nearest_climate_value.R")</code> (ファイルパスは適宜変更してください)することで利用できます。</p>
+</section><section id="define-the-function" class="level2"><h2 class="anchored" data-anchor-id="define-the-function">Define the function</h2>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">get_nearest_climate_value</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span></span>
-<span>  <span class="va">sf_climate</span>,</span>
-<span>  <span class="va">lon</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">lat</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">df</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">lon_col</span> <span class="op">=</span> <span class="st">"longitude"</span>,</span>
-<span>  <span class="va">lat_col</span> <span class="op">=</span> <span class="st">"latitude"</span>,</span>
-<span>  <span class="va">value_col</span> <span class="op">=</span> <span class="st">"aridity_index"</span>,</span>
-<span>  <span class="va">output_col</span> <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  <span class="va">calc_by_centroid</span> <span class="op">=</span> <span class="cn">TRUE</span>,</span>
-<span>  <span class="va">climate_lon_col</span> <span class="op">=</span> <span class="st">"longitude"</span>,</span>
-<span>  <span class="va">climate_lat_col</span> <span class="op">=</span> <span class="st">"latitude"</span></span>
-<span><span class="op">)</span> <span class="op">{</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/class.html">inherits</a></span><span class="op">(</span><span class="va">sf_climate</span>, <span class="st">"sf"</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"sf_climate は sf オブジェクトである必要があります。"</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span></span>
-<span>  <span class="co"># 最近傍検索に使う geometry を決める</span></span>
-<span>  <span class="co"># calc_by_centroid = TRUE の場合は、重心の座標を使う(こちらのほうが早い)</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">calc_by_centroid</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="va">climate_lon_col</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">sf_climate</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"climate_lon_col が sf_climate に存在しません: "</span>, <span class="va">climate_lon_col</span><span class="op">)</span></span>
-<span>    <span class="op">}</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="va">climate_lat_col</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">sf_climate</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"climate_lat_col が sf_climate に存在しません: "</span>, <span class="va">climate_lat_col</span><span class="op">)</span></span>
-<span>    <span class="op">}</span></span>
-<span></span>
-<span>    <span class="va">sf_clim</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span></span>
-<span>      <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="va">sf_climate</span><span class="op">)</span>,</span>
-<span>      coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">climate_lon_col</span>, <span class="va">climate_lat_col</span><span class="op">)</span>,</span>
-<span>      crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">sf_climate</span><span class="op">)</span>,</span>
-<span>      remove <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">}</span> <span class="kw">else</span> <span class="op">{</span></span>
-<span>    <span class="co"># geometry をそのまま使う場合</span></span>
-<span>    <span class="va">sf_clim</span> <span class="op">&lt;-</span> <span class="va">sf_climate</span></span>
-<span>  <span class="op">}</span></span>
-<span></span>
-<span>  <span class="co"># value_col = NULL の場合は、geometry 以外の全列を返す</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">value_col</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">value_col</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="va">sf_clim</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span></span>
-<span>  <span class="co"># value_col の存在確認</span></span>
-<span>  <span class="va">missing_cols</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html">setdiff</a></span><span class="op">(</span><span class="va">value_col</span>, <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">sf_clim</span><span class="op">)</span><span class="op">)</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">missing_cols</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span></span>
-<span>      <span class="st">"以下の value_col が sf_climate に存在しません: "</span>,</span>
-<span>      <span class="fu"><a href="https://rdrr.io/r/base/paste.html">paste</a></span><span class="op">(</span><span class="va">missing_cols</span>, collapse <span class="op">=</span> <span class="st">", "</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span></span>
-<span>  <span class="co"># 出力列名の処理</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">output_col</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">output_col</span> <span class="op">&lt;-</span> <span class="va">value_col</span></span>
-<span>  <span class="op">}</span></span>
-<span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">output_col</span><span class="op">)</span> <span class="op">!=</span> <span class="fu"><a href="https://rdrr.io/r/base/length.html">length</a></span><span class="op">(</span><span class="va">value_col</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"output_col は value_col と同じ長さである必要があります。"</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span></span>
-<span>  <span class="co"># lon, lat が直接与えられた場合</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">lon</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">lat</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="va">pt</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/sfc.html">st_sfc</a></span><span class="op">(</span></span>
-<span>      <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st.html">st_point</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">lon</span>, <span class="va">lat</span><span class="op">)</span><span class="op">)</span>,</span>
-<span>      crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">sf_clim</span><span class="op">)</span></span>
-<span>    <span class="op">)</span></span>
-<span></span>
-<span>    <span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_nearest_feature.html">st_nearest_feature</a></span><span class="op">(</span><span class="va">pt</span>, <span class="va">sf_clim</span><span class="op">)</span></span>
-<span></span>
-<span>    <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="va">sf_clim</span><span class="op">[</span><span class="va">idx</span>, <span class="va">value_col</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">output_col</span></span>
-<span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span></span>
-<span>  <span class="co"># data.frame が与えられた場合</span></span>
-<span>  <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">lon</span><span class="op">)</span> <span class="op">&amp;&amp;</span> <span class="fu"><a href="https://rdrr.io/r/base/NULL.html">is.null</a></span><span class="op">(</span><span class="va">lat</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="va">lon_col</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"lon_col が df に存在しません: "</span>, <span class="va">lon_col</span><span class="op">)</span></span>
-<span>    <span class="op">}</span></span>
-<span>    <span class="kw">if</span> <span class="op">(</span><span class="op">!</span><span class="va">lat_col</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">df</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
-<span>      <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span><span class="st">"lat_col が df に存在しません: "</span>, <span class="va">lat_col</span><span class="op">)</span></span>
-<span>    <span class="op">}</span></span>
-<span></span>
-<span>    <span class="va">pts</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_as_sf.html">st_as_sf</a></span><span class="op">(</span></span>
-<span>      <span class="va">df</span>,</span>
-<span>      coords <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">lon_col</span>, <span class="va">lat_col</span><span class="op">)</span>,</span>
-<span>      crs <span class="op">=</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_crs.html">st_crs</a></span><span class="op">(</span><span class="va">sf_clim</span><span class="op">)</span>,</span>
-<span>      remove <span class="op">=</span> <span class="cn">FALSE</span></span>
-<span>    <span class="op">)</span></span>
-<span></span>
-<span>    <span class="va">idx</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_nearest_feature.html">st_nearest_feature</a></span><span class="op">(</span><span class="va">pts</span>, <span class="va">sf_clim</span><span class="op">)</span></span>
-<span></span>
-<span>    <span class="va">vals</span> <span class="op">&lt;-</span> <span class="fu">sf</span><span class="fu">::</span><span class="fu"><a href="https://r-spatial.github.io/sf/reference/st_geometry.html">st_drop_geometry</a></span><span class="op">(</span><span class="va">sf_clim</span><span class="op">[</span><span class="va">idx</span>, <span class="va">value_col</span>, drop <span class="op">=</span> <span class="cn">FALSE</span><span class="op">]</span><span class="op">)</span></span>
-<span>    <span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">vals</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="va">output_col</span></span>
-<span></span>
-<span>    <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html">cbind</a></span><span class="op">(</span><span class="va">df</span>, <span class="va">vals</span><span class="op">)</span></span>
-<span></span>
-<span>    <span class="kw"><a href="https://rdrr.io/r/base/function.html">return</a></span><span class="op">(</span><span class="va">out</span><span class="op">)</span></span>
-<span>  <span class="op">}</span></span>
-<span></span>
-<span>  <span class="kw"><a href="https://rdrr.io/r/base/stop.html">stop</a></span><span class="op">(</span></span>
-<span>    <span class="st">"lon と lat の両方を指定するか、df を指定してください。両方同時には指定しないでください。"</span></span>
-<span>  <span class="op">)</span></span>
-<span><span class="op">}</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html">source</a></span><span class="op">(</span><span class="st">"../R/get_nearest_climate_value.R"</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-</section><section id="使い方" class="level2"><h2 class="anchored" data-anchor-id="使い方">使い方</h2>
-<p>関数の使い方をいくつか例示します。</p>
-<section id="緯度経度を指定して最も近いaridity_indexを取得" class="level3"><h3 class="anchored" data-anchor-id="緯度経度を指定して最も近いaridity_indexを取得">緯度経度を指定して最も近いaridity_indexを取得</h3>
+</section><section id="usage" class="level2"><h2 class="anchored" data-anchor-id="usage">Usage</h2>
+<section id="get-nearest-aridity_index-for-one-coordinate" class="level3"><h3 class="anchored" data-anchor-id="get-nearest-aridity_index-for-one-coordinate">Get nearest <code>aridity_index</code> for one coordinate</h3>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">get_nearest_climate_value</span><span class="op">(</span></span>
 <span>  <span class="va">sf_climate</span>,</span>
@@ -348,16 +279,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>Result</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5" data-filename="Result"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>       aridity_index</span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>       <span class="fl">1.84528</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section><section id="緯度経度を指定して複数の気候変数を取得" class="level3"><h3 class="anchored" data-anchor-id="緯度経度を指定して複数の気候変数を取得">緯度経度を指定して、複数の気候変数を取得</h3>
+</section><section id="get-multiple-variables-for-one-coordinate" class="level3"><h3 class="anchored" data-anchor-id="get-multiple-variables-for-one-coordinate">Get multiple variables for one coordinate</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">get_nearest_climate_value</span><span class="op">(</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb5"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">get_nearest_climate_value</span><span class="op">(</span></span>
 <span>  <span class="va">sf_climate</span>,</span>
 <span>  lon <span class="op">=</span> <span class="fl">139.6917</span>,</span>
 <span>  lat <span class="op">=</span> <span class="fl">35.6895</span>,</span>
@@ -365,41 +289,9 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>Result</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7" data-filename="Result"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>       aridity_index precipitation_year</span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>       <span class="fl">1.84528</span>             <span class="fl">1553.8</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section><section id="データフレームを指定して最も近いaridity_indexを取得" class="level3"><h3 class="anchored" data-anchor-id="データフレームを指定して最も近いaridity_indexを取得">データフレームを指定して最も近いaridity_indexを取得</h3>
+</section><section id="get-nearest-values-for-a-data-frame-of-coordinates" class="level3"><h3 class="anchored" data-anchor-id="get-nearest-values-for-a-data-frame-of-coordinates">Get nearest values for a data frame of coordinates</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_input</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
-<span>  id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
-<span>  longitude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">139.6917</span>, <span class="fl">135.5022</span>, <span class="fl">130.4181</span><span class="op">)</span>,</span>
-<span>  latitude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">35.6895</span>, <span class="fl">34.6937</span>, <span class="fl">33.5902</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">get_nearest_climate_value</span><span class="op">(</span></span>
-<span>  <span class="va">sf_climate</span>,</span>
-<span>  df <span class="op">=</span> <span class="va">df_input</span>,</span>
-<span>  lon_col <span class="op">=</span> <span class="st">"longitude"</span>,</span>
-<span>  lat_col <span class="op">=</span> <span class="st">"latitude"</span>,</span>
-<span>  value_col <span class="op">=</span> <span class="st">"aridity_index"</span></span>
-<span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>Result</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb9" data-filename="Result"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>       id longitude latitude aridity_index</span>
-<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>  <span class="dv">1</span>  <span class="fl">139.6917</span>  <span class="fl">35.6895</span>      <span class="fl">1.845280</span></span>
-<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a><span class="dv">111106</span>  <span class="dv">2</span>  <span class="fl">135.5022</span>  <span class="fl">34.6937</span>      <span class="fl">1.442432</span></span>
-<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a><span class="dv">44366</span>   <span class="dv">3</span>  <span class="fl">130.4181</span>  <span class="fl">33.5902</span>      <span class="fl">1.821206</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section><section id="データフレームを指定して複数の気候変数を取得" class="level3"><h3 class="anchored" data-anchor-id="データフレームを指定して複数の気候変数を取得">データフレームを指定して、複数の気候変数を取得</h3>
-<div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb10"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_input</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb6"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">df_input</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
 <span>  id <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">3</span>,</span>
 <span>  longitude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">139.6917</span>, <span class="fl">135.5022</span>, <span class="fl">130.4181</span><span class="op">)</span>,</span>
 <span>  latitude <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">35.6895</span>, <span class="fl">34.6937</span>, <span class="fl">33.5902</span><span class="op">)</span></span>
@@ -413,96 +305,21 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>Result</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb11" data-filename="Result"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>       id longitude latitude aridity_index precipitation_year</span>
-<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>  <span class="dv">1</span>  <span class="fl">139.6917</span>  <span class="fl">35.6895</span>      <span class="fl">1.845280</span>             <span class="fl">1553.8</span></span>
-<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="dv">111106</span>  <span class="dv">2</span>  <span class="fl">135.5022</span>  <span class="fl">34.6937</span>      <span class="fl">1.442432</span>             <span class="fl">1312.0</span></span>
-<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a><span class="dv">44366</span>   <span class="dv">3</span>  <span class="fl">130.4181</span>  <span class="fl">33.5902</span>      <span class="fl">1.821206</span>             <span class="fl">1648.9</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section></section><section id="緯度経度を指定して全ての変数を取得" class="level2"><h2 class="anchored" data-anchor-id="緯度経度を指定して全ての変数を取得">緯度経度を指定して、全ての変数を取得</h2>
-<p><code>value_col = NULL</code> とすることで、全ての変数を取得できます。</p>
+</section><section id="get-all-attributes" class="level3"><h3 class="anchored" data-anchor-id="get-all-attributes">Get all attributes</h3>
 <div class="cell">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">get_nearest_climate_value</span><span class="op">(</span></span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">get_nearest_climate_value</span><span class="op">(</span></span>
 <span>  <span class="va">sf_climate</span>,</span>
 <span>  lon <span class="op">=</span> <span class="fl">139.6917</span>,</span>
 <span>  lat <span class="op">=</span> <span class="fl">35.6895</span>,</span>
 <span>  value_col <span class="op">=</span> <span class="cn">NULL</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">result</span><span class="op">)</span><span class="op">)</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 </div>
-<div class="code-with-filename">
-<div class="code-with-filename-file">
-<pre><strong>Result</strong></pre>
-</div>
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb13" data-filename="Result"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>       mesh_code_3rd precipitation_Jan precipitation_Feb precipitation_Mar</span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>      <span class="dv">53394525</span>              <span class="fl">55.8</span>              <span class="fl">53.6</span>             <span class="fl">112.5</span></span>
-<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>       precipitation_Apr precipitation_May precipitation_Jun precipitation_Jul</span>
-<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>             <span class="fl">124.9</span>             <span class="fl">133.8</span>             <span class="fl">166.1</span>             <span class="fl">158.4</span></span>
-<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>       precipitation_Aug precipitation_Sep precipitation_Oct precipitation_Nov</span>
-<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>             <span class="fl">154.9</span>             <span class="fl">222.4</span>             <span class="fl">225.1</span>              <span class="fl">90.6</span></span>
-<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>       precipitation_Dec precipitation_year maximum_temperature_Jan</span>
-<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>              <span class="fl">55.7</span>             <span class="fl">1553.8</span>                     <span class="fl">9.7</span></span>
-<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Jan mean_temperature_Jan maximum_temperature_Feb</span>
-<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                     <span class="fl">0.8</span>                  <span class="fl">5.2</span>                    <span class="fl">10.7</span></span>
-<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Feb mean_temperature_Feb maximum_temperature_Mar</span>
-<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                     <span class="fl">1.8</span>                    <span class="dv">6</span>                    <span class="fl">13.9</span></span>
-<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Mar mean_temperature_Mar maximum_temperature_Apr</span>
-<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                     <span class="fl">4.9</span>                  <span class="fl">9.3</span>                    <span class="fl">19.2</span></span>
-<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Apr mean_temperature_Apr maximum_temperature_May</span>
-<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                     <span class="fl">9.9</span>                 <span class="fl">14.3</span>                    <span class="fl">23.7</span></span>
-<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_May mean_temperature_May maximum_temperature_Jun</span>
-<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                    <span class="fl">14.8</span>                 <span class="fl">18.9</span>                    <span class="fl">26.3</span></span>
-<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Jun mean_temperature_Jun maximum_temperature_Jul</span>
-<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                    <span class="fl">18.7</span>                   <span class="dv">22</span>                    <span class="fl">30.2</span></span>
-<span id="cb13-21"><a href="#cb13-21" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Jul mean_temperature_Jul maximum_temperature_Aug</span>
-<span id="cb13-22"><a href="#cb13-22" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                    <span class="fl">22.5</span>                 <span class="fl">25.8</span>                    <span class="fl">31.5</span></span>
-<span id="cb13-23"><a href="#cb13-23" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Aug mean_temperature_Aug maximum_temperature_Sep</span>
-<span id="cb13-24"><a href="#cb13-24" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                    <span class="fl">23.7</span>                   <span class="dv">27</span>                    <span class="fl">27.5</span></span>
-<span id="cb13-25"><a href="#cb13-25" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Sep mean_temperature_Sep maximum_temperature_Oct</span>
-<span id="cb13-26"><a href="#cb13-26" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                    <span class="fl">20.4</span>                 <span class="fl">23.4</span>                      <span class="dv">22</span></span>
-<span id="cb13-27"><a href="#cb13-27" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Oct mean_temperature_Oct maximum_temperature_Nov</span>
-<span id="cb13-28"><a href="#cb13-28" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                    <span class="fl">14.8</span>                 <span class="fl">18.1</span>                    <span class="fl">16.6</span></span>
-<span id="cb13-29"><a href="#cb13-29" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Nov mean_temperature_Nov maximum_temperature_Dec</span>
-<span id="cb13-30"><a href="#cb13-30" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                     <span class="fl">8.7</span>                 <span class="fl">12.6</span>                      <span class="dv">12</span></span>
-<span id="cb13-31"><a href="#cb13-31" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Dec mean_temperature_Dec maximum_temperature_year</span>
-<span id="cb13-32"><a href="#cb13-32" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                     <span class="fl">3.4</span>                  <span class="fl">7.6</span>                     <span class="fl">20.3</span></span>
-<span id="cb13-33"><a href="#cb13-33" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_year mean_temperature_year maximum_snow_depth_Jan</span>
-<span id="cb13-34"><a href="#cb13-34" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                       <span class="dv">12</span>                  <span class="fl">15.9</span>                      <span class="dv">3</span></span>
-<span id="cb13-35"><a href="#cb13-35" aria-hidden="true" tabindex="-1"></a>       maximum_snow_depth_Feb maximum_snow_depth_Mar maximum_snow_depth_Dec</span>
-<span id="cb13-36"><a href="#cb13-36" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                      <span class="dv">3</span>                      <span class="dv">0</span>                      <span class="dv">0</span></span>
-<span id="cb13-37"><a href="#cb13-37" aria-hidden="true" tabindex="-1"></a>       maximum_snow_depth_year sunshine_duration_Jan sunshine_duration_Feb</span>
-<span id="cb13-38"><a href="#cb13-38" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                       <span class="dv">3</span>                 <span class="fl">198.4</span>                 <span class="fl">176.3</span></span>
-<span id="cb13-39"><a href="#cb13-39" aria-hidden="true" tabindex="-1"></a>       sunshine_duration_Mar sunshine_duration_Apr sunshine_duration_May</span>
-<span id="cb13-40"><a href="#cb13-40" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                 <span class="fl">176.8</span>                 <span class="fl">179.4</span>                 <span class="fl">180.4</span></span>
-<span id="cb13-41"><a href="#cb13-41" aria-hidden="true" tabindex="-1"></a>       sunshine_duration_Jun sunshine_duration_Jul sunshine_duration_Aug</span>
-<span id="cb13-42"><a href="#cb13-42" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                   <span class="dv">123</span>                 <span class="fl">147.7</span>                 <span class="fl">173.9</span></span>
-<span id="cb13-43"><a href="#cb13-43" aria-hidden="true" tabindex="-1"></a>       sunshine_duration_Sep sunshine_duration_Oct sunshine_duration_Nov</span>
-<span id="cb13-44"><a href="#cb13-44" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                 <span class="fl">129.1</span>                 <span class="fl">134.5</span>                   <span class="dv">156</span></span>
-<span id="cb13-45"><a href="#cb13-45" aria-hidden="true" tabindex="-1"></a>       sunshine_duration_Dec sunshine_duration_year global_solar_radiation_Jan</span>
-<span id="cb13-46"><a href="#cb13-46" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                 <span class="fl">178.5</span>                   <span class="dv">1954</span>                        <span class="fl">9.7</span></span>
-<span id="cb13-47"><a href="#cb13-47" aria-hidden="true" tabindex="-1"></a>       global_solar_radiation_Feb global_solar_radiation_Mar global_solar_radiation_Apr</span>
-<span id="cb13-48"><a href="#cb13-48" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                       <span class="fl">11.8</span>                       <span class="fl">13.8</span>                       <span class="fl">16.5</span></span>
-<span id="cb13-49"><a href="#cb13-49" aria-hidden="true" tabindex="-1"></a>       global_solar_radiation_May global_solar_radiation_Jun global_solar_radiation_Jul</span>
-<span id="cb13-50"><a href="#cb13-50" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                       <span class="fl">17.6</span>                       <span class="fl">15.3</span>                       <span class="fl">16.3</span></span>
-<span id="cb13-51"><a href="#cb13-51" aria-hidden="true" tabindex="-1"></a>       global_solar_radiation_Aug global_solar_radiation_Sep global_solar_radiation_Oct</span>
-<span id="cb13-52"><a href="#cb13-52" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                       <span class="fl">16.6</span>                       <span class="fl">12.8</span>                       <span class="fl">10.4</span></span>
-<span id="cb13-53"><a href="#cb13-53" aria-hidden="true" tabindex="-1"></a>       global_solar_radiation_Nov global_solar_radiation_Dec global_solar_radiation_year</span>
-<span id="cb13-54"><a href="#cb13-54" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                          <span class="dv">9</span>                        <span class="fl">8.3</span>                        <span class="fl">13.2</span></span>
-<span id="cb13-55"><a href="#cb13-55" aria-hidden="true" tabindex="-1"></a>       longitude latitude     PET1     PET2     PET3    PET4     PET5     PET6     PET7</span>
-<span id="cb13-56"><a href="#cb13-56" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>  <span class="fl">139.6937</span>  <span class="fl">35.6875</span> <span class="fl">7.319984</span> <span class="fl">9.144842</span> <span class="fl">23.23313</span> <span class="fl">51.1194</span> <span class="fl">90.94641</span> <span class="fl">118.0401</span> <span class="fl">157.3831</span></span>
-<span id="cb13-57"><a href="#cb13-57" aria-hidden="true" tabindex="-1"></a>           PET8     PET9    PET10    PET11    PET12 PET_year aridity_index</span>
-<span id="cb13-58"><a href="#cb13-58" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span> <span class="fl">159.9936</span> <span class="fl">111.3146</span> <span class="fl">67.64351</span> <span class="fl">32.34395</span> <span class="fl">13.55769</span> <span class="fl">842.0402</span>       <span class="fl">1.84528</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
-</div>
-</section><section id="データの出典" class="level2"><h2 class="anchored" data-anchor-id="データの出典">データの出典</h2>
-<p>本ページで使用している気候データは、気象庁の<a href="https://www.data.jma.go.jp/stats/etrn/view/atlas.html">メッシュ平年値2020</a>を元に加工したものです。</p>
 
 
 <!-- -->
 
-</section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
+</section></section></main><!-- /main --><script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     const icon = "";
     const anchorJS = new window.AnchorJS();
@@ -963,315 +780,92 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
       </a>
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
-<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb14" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "座標を与えたら最も近い気候変数の値を返す関数"</span></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>ここまででデータを処理して、新たに潜在蒸発散量(PET)や乾燥指数(Aridity Index)を計算してきました。</span>
-<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>これらのデータを簡単に利用できるように、座標を与えたら最も近い気候変数の値を返す関数 <span class="in">`get_nearest_climate_value()`</span> を定義します。</span>
-<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>この関数のファイルは<span class="co">[</span><span class="ot">R/get_nearest_climate_value.R</span><span class="co">](../R/get_nearest_climate_value.R)</span> にあります。</span>
-<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>ファイルをダウンロードして、<span class="in">`source("get_nearest_climate_value.R")`</span> (ファイルパスは適宜変更してください)することで利用できます。</span>
-<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## ライブラリの読み込み</span></span>
-<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
-<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a><span class="fu">## データの読み込み</span></span>
-<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a>このリポジトリの解析では、環境変数 <span class="in">`PROJECT_DATA_DIR`</span> にデータの保存先を指定しています。</span>
-<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>必要に応じて、適宜変更してください。</span>
-<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>data_dir <span class="ot">&lt;-</span> <span class="fu">Sys.getenv</span>(<span class="st">"PROJECT_DATA_DIR"</span>)</span>
-<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>sf_climate <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(</span>
-<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>  data_dir,</span>
-<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>  <span class="st">"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.rds"</span></span>
-<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a>))</span>
-<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a><span class="fu">## 最も近い気候変数の値を返す関数の定義</span></span>
-<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>緯度経度やデータフレームを与えると、最も近い気候変数の値を返す関数 <span class="in">`get_nearest_climate_value()`</span> を定義します。</span>
-<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>この関数のファイルは<span class="co">[</span><span class="ot">R/get_nearest_climate_value.R</span><span class="co">](../R/get_nearest_climate_value.R)</span> にあります。</span>
-<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>ファイルをダウンロードして、<span class="in">`source("get_nearest_climate_value.R")`</span> (ファイルパスは適宜変更してください)することで利用できます。</span>
-<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-42"><a href="#cb14-42" aria-hidden="true" tabindex="-1"></a>get_nearest_climate_value <span class="ot">&lt;-</span> <span class="cf">function</span>(</span>
-<span id="cb14-43"><a href="#cb14-43" aria-hidden="true" tabindex="-1"></a>  sf_climate,</span>
-<span id="cb14-44"><a href="#cb14-44" aria-hidden="true" tabindex="-1"></a>  <span class="at">lon =</span> <span class="cn">NULL</span>,</span>
-<span id="cb14-45"><a href="#cb14-45" aria-hidden="true" tabindex="-1"></a>  <span class="at">lat =</span> <span class="cn">NULL</span>,</span>
-<span id="cb14-46"><a href="#cb14-46" aria-hidden="true" tabindex="-1"></a>  <span class="at">df =</span> <span class="cn">NULL</span>,</span>
-<span id="cb14-47"><a href="#cb14-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">lon_col =</span> <span class="st">"longitude"</span>,</span>
-<span id="cb14-48"><a href="#cb14-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">lat_col =</span> <span class="st">"latitude"</span>,</span>
-<span id="cb14-49"><a href="#cb14-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">value_col =</span> <span class="st">"aridity_index"</span>,</span>
-<span id="cb14-50"><a href="#cb14-50" aria-hidden="true" tabindex="-1"></a>  <span class="at">output_col =</span> <span class="cn">NULL</span>,</span>
-<span id="cb14-51"><a href="#cb14-51" aria-hidden="true" tabindex="-1"></a>  <span class="at">calc_by_centroid =</span> <span class="cn">TRUE</span>,</span>
-<span id="cb14-52"><a href="#cb14-52" aria-hidden="true" tabindex="-1"></a>  <span class="at">climate_lon_col =</span> <span class="st">"longitude"</span>,</span>
-<span id="cb14-53"><a href="#cb14-53" aria-hidden="true" tabindex="-1"></a>  <span class="at">climate_lat_col =</span> <span class="st">"latitude"</span></span>
-<span id="cb14-54"><a href="#cb14-54" aria-hidden="true" tabindex="-1"></a>) {</span>
-<span id="cb14-55"><a href="#cb14-55" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">inherits</span>(sf_climate, <span class="st">"sf"</span>)) {</span>
-<span id="cb14-56"><a href="#cb14-56" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"sf_climate は sf オブジェクトである必要があります。"</span>)</span>
-<span id="cb14-57"><a href="#cb14-57" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb14-58"><a href="#cb14-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-59"><a href="#cb14-59" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 最近傍検索に使う geometry を決める</span></span>
-<span id="cb14-60"><a href="#cb14-60" aria-hidden="true" tabindex="-1"></a>  <span class="co"># calc_by_centroid = TRUE の場合は、重心の座標を使う(こちらのほうが早い)</span></span>
-<span id="cb14-61"><a href="#cb14-61" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (calc_by_centroid) {</span>
-<span id="cb14-62"><a href="#cb14-62" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span>climate_lon_col <span class="sc">%in%</span> <span class="fu">names</span>(sf_climate)) {</span>
-<span id="cb14-63"><a href="#cb14-63" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"climate_lon_col が sf_climate に存在しません: "</span>, climate_lon_col)</span>
-<span id="cb14-64"><a href="#cb14-64" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb14-65"><a href="#cb14-65" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span>climate_lat_col <span class="sc">%in%</span> <span class="fu">names</span>(sf_climate)) {</span>
-<span id="cb14-66"><a href="#cb14-66" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"climate_lat_col が sf_climate に存在しません: "</span>, climate_lat_col)</span>
-<span id="cb14-67"><a href="#cb14-67" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb14-68"><a href="#cb14-68" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-69"><a href="#cb14-69" aria-hidden="true" tabindex="-1"></a>    sf_clim <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_as_sf</span>(</span>
-<span id="cb14-70"><a href="#cb14-70" aria-hidden="true" tabindex="-1"></a>      sf<span class="sc">::</span><span class="fu">st_drop_geometry</span>(sf_climate),</span>
-<span id="cb14-71"><a href="#cb14-71" aria-hidden="true" tabindex="-1"></a>      <span class="at">coords =</span> <span class="fu">c</span>(climate_lon_col, climate_lat_col),</span>
-<span id="cb14-72"><a href="#cb14-72" aria-hidden="true" tabindex="-1"></a>      <span class="at">crs =</span> sf<span class="sc">::</span><span class="fu">st_crs</span>(sf_climate),</span>
-<span id="cb14-73"><a href="#cb14-73" aria-hidden="true" tabindex="-1"></a>      <span class="at">remove =</span> <span class="cn">FALSE</span></span>
-<span id="cb14-74"><a href="#cb14-74" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb14-75"><a href="#cb14-75" aria-hidden="true" tabindex="-1"></a>  } <span class="cf">else</span> {</span>
-<span id="cb14-76"><a href="#cb14-76" aria-hidden="true" tabindex="-1"></a>    <span class="co"># geometry をそのまま使う場合</span></span>
-<span id="cb14-77"><a href="#cb14-77" aria-hidden="true" tabindex="-1"></a>    sf_clim <span class="ot">&lt;-</span> sf_climate</span>
-<span id="cb14-78"><a href="#cb14-78" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb14-79"><a href="#cb14-79" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-80"><a href="#cb14-80" aria-hidden="true" tabindex="-1"></a>  <span class="co"># value_col = NULL の場合は、geometry 以外の全列を返す</span></span>
-<span id="cb14-81"><a href="#cb14-81" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(value_col)) {</span>
-<span id="cb14-82"><a href="#cb14-82" aria-hidden="true" tabindex="-1"></a>    value_col <span class="ot">&lt;-</span> <span class="fu">names</span>(sf<span class="sc">::</span><span class="fu">st_drop_geometry</span>(sf_clim))</span>
-<span id="cb14-83"><a href="#cb14-83" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb14-84"><a href="#cb14-84" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-85"><a href="#cb14-85" aria-hidden="true" tabindex="-1"></a>  <span class="co"># value_col の存在確認</span></span>
-<span id="cb14-86"><a href="#cb14-86" aria-hidden="true" tabindex="-1"></a>  missing_cols <span class="ot">&lt;-</span> <span class="fu">setdiff</span>(value_col, <span class="fu">names</span>(sf_clim))</span>
-<span id="cb14-87"><a href="#cb14-87" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(missing_cols) <span class="sc">&gt;</span> <span class="dv">0</span>) {</span>
-<span id="cb14-88"><a href="#cb14-88" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(</span>
-<span id="cb14-89"><a href="#cb14-89" aria-hidden="true" tabindex="-1"></a>      <span class="st">"以下の value_col が sf_climate に存在しません: "</span>,</span>
-<span id="cb14-90"><a href="#cb14-90" aria-hidden="true" tabindex="-1"></a>      <span class="fu">paste</span>(missing_cols, <span class="at">collapse =</span> <span class="st">", "</span>)</span>
-<span id="cb14-91"><a href="#cb14-91" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb14-92"><a href="#cb14-92" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb14-93"><a href="#cb14-93" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-94"><a href="#cb14-94" aria-hidden="true" tabindex="-1"></a>  <span class="co"># 出力列名の処理</span></span>
-<span id="cb14-95"><a href="#cb14-95" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.null</span>(output_col)) {</span>
-<span id="cb14-96"><a href="#cb14-96" aria-hidden="true" tabindex="-1"></a>    output_col <span class="ot">&lt;-</span> value_col</span>
-<span id="cb14-97"><a href="#cb14-97" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb14-98"><a href="#cb14-98" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-99"><a href="#cb14-99" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">length</span>(output_col) <span class="sc">!=</span> <span class="fu">length</span>(value_col)) {</span>
-<span id="cb14-100"><a href="#cb14-100" aria-hidden="true" tabindex="-1"></a>    <span class="fu">stop</span>(<span class="st">"output_col は value_col と同じ長さである必要があります。"</span>)</span>
-<span id="cb14-101"><a href="#cb14-101" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb14-102"><a href="#cb14-102" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-103"><a href="#cb14-103" aria-hidden="true" tabindex="-1"></a>  <span class="co"># lon, lat が直接与えられた場合</span></span>
-<span id="cb14-104"><a href="#cb14-104" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(lon) <span class="sc">&amp;&amp;</span> <span class="sc">!</span><span class="fu">is.null</span>(lat) <span class="sc">&amp;&amp;</span> <span class="fu">is.null</span>(df)) {</span>
-<span id="cb14-105"><a href="#cb14-105" aria-hidden="true" tabindex="-1"></a>    pt <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_sfc</span>(</span>
-<span id="cb14-106"><a href="#cb14-106" aria-hidden="true" tabindex="-1"></a>      sf<span class="sc">::</span><span class="fu">st_point</span>(<span class="fu">c</span>(lon, lat)),</span>
-<span id="cb14-107"><a href="#cb14-107" aria-hidden="true" tabindex="-1"></a>      <span class="at">crs =</span> sf<span class="sc">::</span><span class="fu">st_crs</span>(sf_clim)</span>
-<span id="cb14-108"><a href="#cb14-108" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb14-109"><a href="#cb14-109" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-110"><a href="#cb14-110" aria-hidden="true" tabindex="-1"></a>    idx <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_nearest_feature</span>(pt, sf_clim)</span>
-<span id="cb14-111"><a href="#cb14-111" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-112"><a href="#cb14-112" aria-hidden="true" tabindex="-1"></a>    out <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_drop_geometry</span>(sf_clim[idx, value_col, <span class="at">drop =</span> <span class="cn">FALSE</span>])</span>
-<span id="cb14-113"><a href="#cb14-113" aria-hidden="true" tabindex="-1"></a>    <span class="fu">names</span>(out) <span class="ot">&lt;-</span> output_col</span>
-<span id="cb14-114"><a href="#cb14-114" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-115"><a href="#cb14-115" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(out)</span>
-<span id="cb14-116"><a href="#cb14-116" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb14-117"><a href="#cb14-117" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-118"><a href="#cb14-118" aria-hidden="true" tabindex="-1"></a>  <span class="co"># data.frame が与えられた場合</span></span>
-<span id="cb14-119"><a href="#cb14-119" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="sc">!</span><span class="fu">is.null</span>(df) <span class="sc">&amp;&amp;</span> <span class="fu">is.null</span>(lon) <span class="sc">&amp;&amp;</span> <span class="fu">is.null</span>(lat)) {</span>
-<span id="cb14-120"><a href="#cb14-120" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span>lon_col <span class="sc">%in%</span> <span class="fu">names</span>(df)) {</span>
-<span id="cb14-121"><a href="#cb14-121" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"lon_col が df に存在しません: "</span>, lon_col)</span>
-<span id="cb14-122"><a href="#cb14-122" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb14-123"><a href="#cb14-123" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="sc">!</span>lat_col <span class="sc">%in%</span> <span class="fu">names</span>(df)) {</span>
-<span id="cb14-124"><a href="#cb14-124" aria-hidden="true" tabindex="-1"></a>      <span class="fu">stop</span>(<span class="st">"lat_col が df に存在しません: "</span>, lat_col)</span>
-<span id="cb14-125"><a href="#cb14-125" aria-hidden="true" tabindex="-1"></a>    }</span>
-<span id="cb14-126"><a href="#cb14-126" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-127"><a href="#cb14-127" aria-hidden="true" tabindex="-1"></a>    pts <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_as_sf</span>(</span>
-<span id="cb14-128"><a href="#cb14-128" aria-hidden="true" tabindex="-1"></a>      df,</span>
-<span id="cb14-129"><a href="#cb14-129" aria-hidden="true" tabindex="-1"></a>      <span class="at">coords =</span> <span class="fu">c</span>(lon_col, lat_col),</span>
-<span id="cb14-130"><a href="#cb14-130" aria-hidden="true" tabindex="-1"></a>      <span class="at">crs =</span> sf<span class="sc">::</span><span class="fu">st_crs</span>(sf_clim),</span>
-<span id="cb14-131"><a href="#cb14-131" aria-hidden="true" tabindex="-1"></a>      <span class="at">remove =</span> <span class="cn">FALSE</span></span>
-<span id="cb14-132"><a href="#cb14-132" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb14-133"><a href="#cb14-133" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-134"><a href="#cb14-134" aria-hidden="true" tabindex="-1"></a>    idx <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_nearest_feature</span>(pts, sf_clim)</span>
-<span id="cb14-135"><a href="#cb14-135" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-136"><a href="#cb14-136" aria-hidden="true" tabindex="-1"></a>    vals <span class="ot">&lt;-</span> sf<span class="sc">::</span><span class="fu">st_drop_geometry</span>(sf_clim[idx, value_col, <span class="at">drop =</span> <span class="cn">FALSE</span>])</span>
-<span id="cb14-137"><a href="#cb14-137" aria-hidden="true" tabindex="-1"></a>    <span class="fu">names</span>(vals) <span class="ot">&lt;-</span> output_col</span>
-<span id="cb14-138"><a href="#cb14-138" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-139"><a href="#cb14-139" aria-hidden="true" tabindex="-1"></a>    out <span class="ot">&lt;-</span> <span class="fu">cbind</span>(df, vals)</span>
-<span id="cb14-140"><a href="#cb14-140" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-141"><a href="#cb14-141" aria-hidden="true" tabindex="-1"></a>    <span class="fu">return</span>(out)</span>
-<span id="cb14-142"><a href="#cb14-142" aria-hidden="true" tabindex="-1"></a>  }</span>
-<span id="cb14-143"><a href="#cb14-143" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-144"><a href="#cb14-144" aria-hidden="true" tabindex="-1"></a>  <span class="fu">stop</span>(</span>
-<span id="cb14-145"><a href="#cb14-145" aria-hidden="true" tabindex="-1"></a>    <span class="st">"lon と lat の両方を指定するか、df を指定してください。両方同時には指定しないでください。"</span></span>
-<span id="cb14-146"><a href="#cb14-146" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb14-147"><a href="#cb14-147" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb14-148"><a href="#cb14-148" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-149"><a href="#cb14-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-150"><a href="#cb14-150" aria-hidden="true" tabindex="-1"></a><span class="fu">## 使い方</span></span>
-<span id="cb14-151"><a href="#cb14-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-152"><a href="#cb14-152" aria-hidden="true" tabindex="-1"></a>関数の使い方をいくつか例示します。</span>
-<span id="cb14-153"><a href="#cb14-153" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-154"><a href="#cb14-154" aria-hidden="true" tabindex="-1"></a><span class="fu">### 緯度経度を指定して最も近いaridity_indexを取得</span></span>
-<span id="cb14-155"><a href="#cb14-155" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-158"><a href="#cb14-158" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-159"><a href="#cb14-159" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">get_nearest_climate_value</span>(</span>
-<span id="cb14-160"><a href="#cb14-160" aria-hidden="true" tabindex="-1"></a>  sf_climate,</span>
-<span id="cb14-161"><a href="#cb14-161" aria-hidden="true" tabindex="-1"></a>  <span class="at">lon =</span> <span class="fl">139.6917</span>,</span>
-<span id="cb14-162"><a href="#cb14-162" aria-hidden="true" tabindex="-1"></a>  <span class="at">lat =</span> <span class="fl">35.6895</span>,</span>
-<span id="cb14-163"><a href="#cb14-163" aria-hidden="true" tabindex="-1"></a>  <span class="at">value_col =</span> <span class="st">"aridity_index"</span></span>
-<span id="cb14-164"><a href="#cb14-164" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-165"><a href="#cb14-165" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span>
-<span id="cb14-166"><a href="#cb14-166" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-167"><a href="#cb14-167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-168"><a href="#cb14-168" aria-hidden="true" tabindex="-1"></a><span class="in">```{.r filename="Result"}</span></span>
-<span id="cb14-169"><a href="#cb14-169" aria-hidden="true" tabindex="-1"></a>       aridity_index</span>
-<span id="cb14-170"><a href="#cb14-170" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>       <span class="fl">1.84528</span></span>
-<span id="cb14-171"><a href="#cb14-171" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-172"><a href="#cb14-172" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-173"><a href="#cb14-173" aria-hidden="true" tabindex="-1"></a><span class="fu">### 緯度経度を指定して、複数の気候変数を取得</span></span>
-<span id="cb14-174"><a href="#cb14-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-177"><a href="#cb14-177" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-178"><a href="#cb14-178" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">get_nearest_climate_value</span>(</span>
-<span id="cb14-179"><a href="#cb14-179" aria-hidden="true" tabindex="-1"></a>  sf_climate,</span>
-<span id="cb14-180"><a href="#cb14-180" aria-hidden="true" tabindex="-1"></a>  <span class="at">lon =</span> <span class="fl">139.6917</span>,</span>
-<span id="cb14-181"><a href="#cb14-181" aria-hidden="true" tabindex="-1"></a>  <span class="at">lat =</span> <span class="fl">35.6895</span>,</span>
-<span id="cb14-182"><a href="#cb14-182" aria-hidden="true" tabindex="-1"></a>  <span class="at">value_col =</span> <span class="fu">c</span>(<span class="st">"aridity_index"</span>, <span class="st">"precipitation_year"</span>)</span>
-<span id="cb14-183"><a href="#cb14-183" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-184"><a href="#cb14-184" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span>
-<span id="cb14-185"><a href="#cb14-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-186"><a href="#cb14-186" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-187"><a href="#cb14-187" aria-hidden="true" tabindex="-1"></a><span class="in">```{.r filename="Result"}</span></span>
-<span id="cb14-188"><a href="#cb14-188" aria-hidden="true" tabindex="-1"></a>       aridity_index precipitation_year</span>
-<span id="cb14-189"><a href="#cb14-189" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>       <span class="fl">1.84528</span>             <span class="fl">1553.8</span></span>
-<span id="cb14-190"><a href="#cb14-190" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-191"><a href="#cb14-191" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-192"><a href="#cb14-192" aria-hidden="true" tabindex="-1"></a><span class="fu">### データフレームを指定して最も近いaridity_indexを取得</span></span>
-<span id="cb14-193"><a href="#cb14-193" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-196"><a href="#cb14-196" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-197"><a href="#cb14-197" aria-hidden="true" tabindex="-1"></a>df_input <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb14-198"><a href="#cb14-198" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
-<span id="cb14-199"><a href="#cb14-199" aria-hidden="true" tabindex="-1"></a>  <span class="at">longitude =</span> <span class="fu">c</span>(<span class="fl">139.6917</span>, <span class="fl">135.5022</span>, <span class="fl">130.4181</span>),</span>
-<span id="cb14-200"><a href="#cb14-200" aria-hidden="true" tabindex="-1"></a>  <span class="at">latitude =</span> <span class="fu">c</span>(<span class="fl">35.6895</span>, <span class="fl">34.6937</span>, <span class="fl">33.5902</span>)</span>
-<span id="cb14-201"><a href="#cb14-201" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-202"><a href="#cb14-202" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">get_nearest_climate_value</span>(</span>
-<span id="cb14-203"><a href="#cb14-203" aria-hidden="true" tabindex="-1"></a>  sf_climate,</span>
-<span id="cb14-204"><a href="#cb14-204" aria-hidden="true" tabindex="-1"></a>  <span class="at">df =</span> df_input,</span>
-<span id="cb14-205"><a href="#cb14-205" aria-hidden="true" tabindex="-1"></a>  <span class="at">lon_col =</span> <span class="st">"longitude"</span>,</span>
-<span id="cb14-206"><a href="#cb14-206" aria-hidden="true" tabindex="-1"></a>  <span class="at">lat_col =</span> <span class="st">"latitude"</span>,</span>
-<span id="cb14-207"><a href="#cb14-207" aria-hidden="true" tabindex="-1"></a>  <span class="at">value_col =</span> <span class="st">"aridity_index"</span></span>
-<span id="cb14-208"><a href="#cb14-208" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-209"><a href="#cb14-209" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span>
-<span id="cb14-210"><a href="#cb14-210" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-211"><a href="#cb14-211" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-212"><a href="#cb14-212" aria-hidden="true" tabindex="-1"></a><span class="in">```{.r filename="Result"}</span></span>
-<span id="cb14-213"><a href="#cb14-213" aria-hidden="true" tabindex="-1"></a>       id longitude latitude aridity_index</span>
-<span id="cb14-214"><a href="#cb14-214" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>  <span class="dv">1</span>  <span class="fl">139.6917</span>  <span class="fl">35.6895</span>      <span class="fl">1.845280</span></span>
-<span id="cb14-215"><a href="#cb14-215" aria-hidden="true" tabindex="-1"></a><span class="dv">111106</span>  <span class="dv">2</span>  <span class="fl">135.5022</span>  <span class="fl">34.6937</span>      <span class="fl">1.442432</span></span>
-<span id="cb14-216"><a href="#cb14-216" aria-hidden="true" tabindex="-1"></a><span class="dv">44366</span>   <span class="dv">3</span>  <span class="fl">130.4181</span>  <span class="fl">33.5902</span>      <span class="fl">1.821206</span></span>
-<span id="cb14-217"><a href="#cb14-217" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-218"><a href="#cb14-218" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-219"><a href="#cb14-219" aria-hidden="true" tabindex="-1"></a><span class="fu">### データフレームを指定して、複数の気候変数を取得</span></span>
-<span id="cb14-220"><a href="#cb14-220" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-223"><a href="#cb14-223" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-224"><a href="#cb14-224" aria-hidden="true" tabindex="-1"></a>df_input <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb14-225"><a href="#cb14-225" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
-<span id="cb14-226"><a href="#cb14-226" aria-hidden="true" tabindex="-1"></a>  <span class="at">longitude =</span> <span class="fu">c</span>(<span class="fl">139.6917</span>, <span class="fl">135.5022</span>, <span class="fl">130.4181</span>),</span>
-<span id="cb14-227"><a href="#cb14-227" aria-hidden="true" tabindex="-1"></a>  <span class="at">latitude =</span> <span class="fu">c</span>(<span class="fl">35.6895</span>, <span class="fl">34.6937</span>, <span class="fl">33.5902</span>)</span>
-<span id="cb14-228"><a href="#cb14-228" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-229"><a href="#cb14-229" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">get_nearest_climate_value</span>(</span>
-<span id="cb14-230"><a href="#cb14-230" aria-hidden="true" tabindex="-1"></a>  sf_climate,</span>
-<span id="cb14-231"><a href="#cb14-231" aria-hidden="true" tabindex="-1"></a>  <span class="at">df =</span> df_input,</span>
-<span id="cb14-232"><a href="#cb14-232" aria-hidden="true" tabindex="-1"></a>  <span class="at">lon_col =</span> <span class="st">"longitude"</span>,</span>
-<span id="cb14-233"><a href="#cb14-233" aria-hidden="true" tabindex="-1"></a>  <span class="at">lat_col =</span> <span class="st">"latitude"</span>,</span>
-<span id="cb14-234"><a href="#cb14-234" aria-hidden="true" tabindex="-1"></a>  <span class="at">value_col =</span> <span class="fu">c</span>(<span class="st">"aridity_index"</span>, <span class="st">"precipitation_year"</span>)</span>
-<span id="cb14-235"><a href="#cb14-235" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-236"><a href="#cb14-236" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span>
-<span id="cb14-237"><a href="#cb14-237" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-238"><a href="#cb14-238" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-239"><a href="#cb14-239" aria-hidden="true" tabindex="-1"></a><span class="in">```{.r filename="Result"}</span></span>
-<span id="cb14-240"><a href="#cb14-240" aria-hidden="true" tabindex="-1"></a>       id longitude latitude aridity_index precipitation_year</span>
-<span id="cb14-241"><a href="#cb14-241" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>  <span class="dv">1</span>  <span class="fl">139.6917</span>  <span class="fl">35.6895</span>      <span class="fl">1.845280</span>             <span class="fl">1553.8</span></span>
-<span id="cb14-242"><a href="#cb14-242" aria-hidden="true" tabindex="-1"></a><span class="dv">111106</span>  <span class="dv">2</span>  <span class="fl">135.5022</span>  <span class="fl">34.6937</span>      <span class="fl">1.442432</span>             <span class="fl">1312.0</span></span>
-<span id="cb14-243"><a href="#cb14-243" aria-hidden="true" tabindex="-1"></a><span class="dv">44366</span>   <span class="dv">3</span>  <span class="fl">130.4181</span>  <span class="fl">33.5902</span>      <span class="fl">1.821206</span>             <span class="fl">1648.9</span></span>
-<span id="cb14-244"><a href="#cb14-244" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-245"><a href="#cb14-245" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-246"><a href="#cb14-246" aria-hidden="true" tabindex="-1"></a><span class="fu">## 緯度経度を指定して、全ての変数を取得</span></span>
-<span id="cb14-247"><a href="#cb14-247" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-248"><a href="#cb14-248" aria-hidden="true" tabindex="-1"></a><span class="in">`value_col = NULL`</span> とすることで、全ての変数を取得できます。</span>
-<span id="cb14-249"><a href="#cb14-249" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-252"><a href="#cb14-252" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb14-253"><a href="#cb14-253" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">get_nearest_climate_value</span>(</span>
-<span id="cb14-254"><a href="#cb14-254" aria-hidden="true" tabindex="-1"></a>  sf_climate,</span>
-<span id="cb14-255"><a href="#cb14-255" aria-hidden="true" tabindex="-1"></a>  <span class="at">lon =</span> <span class="fl">139.6917</span>,</span>
-<span id="cb14-256"><a href="#cb14-256" aria-hidden="true" tabindex="-1"></a>  <span class="at">lat =</span> <span class="fl">35.6895</span>,</span>
-<span id="cb14-257"><a href="#cb14-257" aria-hidden="true" tabindex="-1"></a>  <span class="at">value_col =</span> <span class="cn">NULL</span></span>
-<span id="cb14-258"><a href="#cb14-258" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb14-259"><a href="#cb14-259" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span>
-<span id="cb14-260"><a href="#cb14-260" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-261"><a href="#cb14-261" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-262"><a href="#cb14-262" aria-hidden="true" tabindex="-1"></a><span class="in">```{.r filename="Result"}</span></span>
-<span id="cb14-263"><a href="#cb14-263" aria-hidden="true" tabindex="-1"></a>       mesh_code_3rd precipitation_Jan precipitation_Feb precipitation_Mar</span>
-<span id="cb14-264"><a href="#cb14-264" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>      <span class="dv">53394525</span>              <span class="fl">55.8</span>              <span class="fl">53.6</span>             <span class="fl">112.5</span></span>
-<span id="cb14-265"><a href="#cb14-265" aria-hidden="true" tabindex="-1"></a>       precipitation_Apr precipitation_May precipitation_Jun precipitation_Jul</span>
-<span id="cb14-266"><a href="#cb14-266" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>             <span class="fl">124.9</span>             <span class="fl">133.8</span>             <span class="fl">166.1</span>             <span class="fl">158.4</span></span>
-<span id="cb14-267"><a href="#cb14-267" aria-hidden="true" tabindex="-1"></a>       precipitation_Aug precipitation_Sep precipitation_Oct precipitation_Nov</span>
-<span id="cb14-268"><a href="#cb14-268" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>             <span class="fl">154.9</span>             <span class="fl">222.4</span>             <span class="fl">225.1</span>              <span class="fl">90.6</span></span>
-<span id="cb14-269"><a href="#cb14-269" aria-hidden="true" tabindex="-1"></a>       precipitation_Dec precipitation_year maximum_temperature_Jan</span>
-<span id="cb14-270"><a href="#cb14-270" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>              <span class="fl">55.7</span>             <span class="fl">1553.8</span>                     <span class="fl">9.7</span></span>
-<span id="cb14-271"><a href="#cb14-271" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Jan mean_temperature_Jan maximum_temperature_Feb</span>
-<span id="cb14-272"><a href="#cb14-272" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                     <span class="fl">0.8</span>                  <span class="fl">5.2</span>                    <span class="fl">10.7</span></span>
-<span id="cb14-273"><a href="#cb14-273" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Feb mean_temperature_Feb maximum_temperature_Mar</span>
-<span id="cb14-274"><a href="#cb14-274" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                     <span class="fl">1.8</span>                    <span class="dv">6</span>                    <span class="fl">13.9</span></span>
-<span id="cb14-275"><a href="#cb14-275" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Mar mean_temperature_Mar maximum_temperature_Apr</span>
-<span id="cb14-276"><a href="#cb14-276" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                     <span class="fl">4.9</span>                  <span class="fl">9.3</span>                    <span class="fl">19.2</span></span>
-<span id="cb14-277"><a href="#cb14-277" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Apr mean_temperature_Apr maximum_temperature_May</span>
-<span id="cb14-278"><a href="#cb14-278" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                     <span class="fl">9.9</span>                 <span class="fl">14.3</span>                    <span class="fl">23.7</span></span>
-<span id="cb14-279"><a href="#cb14-279" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_May mean_temperature_May maximum_temperature_Jun</span>
-<span id="cb14-280"><a href="#cb14-280" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                    <span class="fl">14.8</span>                 <span class="fl">18.9</span>                    <span class="fl">26.3</span></span>
-<span id="cb14-281"><a href="#cb14-281" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Jun mean_temperature_Jun maximum_temperature_Jul</span>
-<span id="cb14-282"><a href="#cb14-282" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                    <span class="fl">18.7</span>                   <span class="dv">22</span>                    <span class="fl">30.2</span></span>
-<span id="cb14-283"><a href="#cb14-283" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Jul mean_temperature_Jul maximum_temperature_Aug</span>
-<span id="cb14-284"><a href="#cb14-284" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                    <span class="fl">22.5</span>                 <span class="fl">25.8</span>                    <span class="fl">31.5</span></span>
-<span id="cb14-285"><a href="#cb14-285" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Aug mean_temperature_Aug maximum_temperature_Sep</span>
-<span id="cb14-286"><a href="#cb14-286" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                    <span class="fl">23.7</span>                   <span class="dv">27</span>                    <span class="fl">27.5</span></span>
-<span id="cb14-287"><a href="#cb14-287" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Sep mean_temperature_Sep maximum_temperature_Oct</span>
-<span id="cb14-288"><a href="#cb14-288" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                    <span class="fl">20.4</span>                 <span class="fl">23.4</span>                      <span class="dv">22</span></span>
-<span id="cb14-289"><a href="#cb14-289" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Oct mean_temperature_Oct maximum_temperature_Nov</span>
-<span id="cb14-290"><a href="#cb14-290" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                    <span class="fl">14.8</span>                 <span class="fl">18.1</span>                    <span class="fl">16.6</span></span>
-<span id="cb14-291"><a href="#cb14-291" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Nov mean_temperature_Nov maximum_temperature_Dec</span>
-<span id="cb14-292"><a href="#cb14-292" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                     <span class="fl">8.7</span>                 <span class="fl">12.6</span>                      <span class="dv">12</span></span>
-<span id="cb14-293"><a href="#cb14-293" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_Dec mean_temperature_Dec maximum_temperature_year</span>
-<span id="cb14-294"><a href="#cb14-294" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                     <span class="fl">3.4</span>                  <span class="fl">7.6</span>                     <span class="fl">20.3</span></span>
-<span id="cb14-295"><a href="#cb14-295" aria-hidden="true" tabindex="-1"></a>       minimum_temperature_year mean_temperature_year maximum_snow_depth_Jan</span>
-<span id="cb14-296"><a href="#cb14-296" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                       <span class="dv">12</span>                  <span class="fl">15.9</span>                      <span class="dv">3</span></span>
-<span id="cb14-297"><a href="#cb14-297" aria-hidden="true" tabindex="-1"></a>       maximum_snow_depth_Feb maximum_snow_depth_Mar maximum_snow_depth_Dec</span>
-<span id="cb14-298"><a href="#cb14-298" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                      <span class="dv">3</span>                      <span class="dv">0</span>                      <span class="dv">0</span></span>
-<span id="cb14-299"><a href="#cb14-299" aria-hidden="true" tabindex="-1"></a>       maximum_snow_depth_year sunshine_duration_Jan sunshine_duration_Feb</span>
-<span id="cb14-300"><a href="#cb14-300" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                       <span class="dv">3</span>                 <span class="fl">198.4</span>                 <span class="fl">176.3</span></span>
-<span id="cb14-301"><a href="#cb14-301" aria-hidden="true" tabindex="-1"></a>       sunshine_duration_Mar sunshine_duration_Apr sunshine_duration_May</span>
-<span id="cb14-302"><a href="#cb14-302" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                 <span class="fl">176.8</span>                 <span class="fl">179.4</span>                 <span class="fl">180.4</span></span>
-<span id="cb14-303"><a href="#cb14-303" aria-hidden="true" tabindex="-1"></a>       sunshine_duration_Jun sunshine_duration_Jul sunshine_duration_Aug</span>
-<span id="cb14-304"><a href="#cb14-304" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                   <span class="dv">123</span>                 <span class="fl">147.7</span>                 <span class="fl">173.9</span></span>
-<span id="cb14-305"><a href="#cb14-305" aria-hidden="true" tabindex="-1"></a>       sunshine_duration_Sep sunshine_duration_Oct sunshine_duration_Nov</span>
-<span id="cb14-306"><a href="#cb14-306" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                 <span class="fl">129.1</span>                 <span class="fl">134.5</span>                   <span class="dv">156</span></span>
-<span id="cb14-307"><a href="#cb14-307" aria-hidden="true" tabindex="-1"></a>       sunshine_duration_Dec sunshine_duration_year global_solar_radiation_Jan</span>
-<span id="cb14-308"><a href="#cb14-308" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                 <span class="fl">178.5</span>                   <span class="dv">1954</span>                        <span class="fl">9.7</span></span>
-<span id="cb14-309"><a href="#cb14-309" aria-hidden="true" tabindex="-1"></a>       global_solar_radiation_Feb global_solar_radiation_Mar global_solar_radiation_Apr</span>
-<span id="cb14-310"><a href="#cb14-310" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                       <span class="fl">11.8</span>                       <span class="fl">13.8</span>                       <span class="fl">16.5</span></span>
-<span id="cb14-311"><a href="#cb14-311" aria-hidden="true" tabindex="-1"></a>       global_solar_radiation_May global_solar_radiation_Jun global_solar_radiation_Jul</span>
-<span id="cb14-312"><a href="#cb14-312" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                       <span class="fl">17.6</span>                       <span class="fl">15.3</span>                       <span class="fl">16.3</span></span>
-<span id="cb14-313"><a href="#cb14-313" aria-hidden="true" tabindex="-1"></a>       global_solar_radiation_Aug global_solar_radiation_Sep global_solar_radiation_Oct</span>
-<span id="cb14-314"><a href="#cb14-314" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                       <span class="fl">16.6</span>                       <span class="fl">12.8</span>                       <span class="fl">10.4</span></span>
-<span id="cb14-315"><a href="#cb14-315" aria-hidden="true" tabindex="-1"></a>       global_solar_radiation_Nov global_solar_radiation_Dec global_solar_radiation_year</span>
-<span id="cb14-316"><a href="#cb14-316" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>                          <span class="dv">9</span>                        <span class="fl">8.3</span>                        <span class="fl">13.2</span></span>
-<span id="cb14-317"><a href="#cb14-317" aria-hidden="true" tabindex="-1"></a>       longitude latitude     PET1     PET2     PET3    PET4     PET5     PET6     PET7</span>
-<span id="cb14-318"><a href="#cb14-318" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span>  <span class="fl">139.6937</span>  <span class="fl">35.6875</span> <span class="fl">7.319984</span> <span class="fl">9.144842</span> <span class="fl">23.23313</span> <span class="fl">51.1194</span> <span class="fl">90.94641</span> <span class="fl">118.0401</span> <span class="fl">157.3831</span></span>
-<span id="cb14-319"><a href="#cb14-319" aria-hidden="true" tabindex="-1"></a>           PET8     PET9    PET10    PET11    PET12 PET_year aridity_index</span>
-<span id="cb14-320"><a href="#cb14-320" aria-hidden="true" tabindex="-1"></a><span class="dv">165824</span> <span class="fl">159.9936</span> <span class="fl">111.3146</span> <span class="fl">67.64351</span> <span class="fl">32.34395</span> <span class="fl">13.55769</span> <span class="fl">842.0402</span>       <span class="fl">1.84528</span></span>
-<span id="cb14-321"><a href="#cb14-321" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb14-322"><a href="#cb14-322" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-323"><a href="#cb14-323" aria-hidden="true" tabindex="-1"></a><span class="fu">## データの出典</span></span>
-<span id="cb14-324"><a href="#cb14-324" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-325"><a href="#cb14-325" aria-hidden="true" tabindex="-1"></a>本ページで使用している気候データは、気象庁の<span class="co">[</span><span class="ot">メッシュ平年値2020</span><span class="co">](https://www.data.jma.go.jp/stats/etrn/view/atlas.html)</span>を元に加工したものです。</span>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb8" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Get Nearest Climate Value by Coordinates"</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">日本語版はこちら (Japanese version)</span><span class="co">](get_nearest_climate_value_ja.qmd)</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>This chapter introduces <span class="in">`get_nearest_climate_value()`</span>, which returns climate variable values from the nearest mesh cell to given coordinates.</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>The function source file is <span class="co">[</span><span class="ot">R/get_nearest_climate_value.R</span><span class="co">](../R/get_nearest_climate_value.R)</span>.</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a><span class="fu">## Load library</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sf)</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a><span class="fu">## Load data</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>data_dir <span class="ot">&lt;-</span> <span class="fu">Sys.getenv</span>(<span class="st">"PROJECT_DATA_DIR"</span>)</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>sf_climate <span class="ot">&lt;-</span> <span class="fu">readRDS</span>(<span class="fu">file.path</span>(</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>  data_dir,</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a>  <span class="st">"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.rds"</span></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a>))</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a><span class="fu">## Define the function</span></span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a><span class="fu">source</span>(<span class="st">"../R/get_nearest_climate_value.R"</span>)</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-38"><a href="#cb8-38" aria-hidden="true" tabindex="-1"></a><span class="fu">## Usage</span></span>
+<span id="cb8-39"><a href="#cb8-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-40"><a href="#cb8-40" aria-hidden="true" tabindex="-1"></a><span class="fu">### Get nearest `aridity_index` for one coordinate</span></span>
+<span id="cb8-41"><a href="#cb8-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-44"><a href="#cb8-44" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-45"><a href="#cb8-45" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">get_nearest_climate_value</span>(</span>
+<span id="cb8-46"><a href="#cb8-46" aria-hidden="true" tabindex="-1"></a>  sf_climate,</span>
+<span id="cb8-47"><a href="#cb8-47" aria-hidden="true" tabindex="-1"></a>  <span class="at">lon =</span> <span class="fl">139.6917</span>,</span>
+<span id="cb8-48"><a href="#cb8-48" aria-hidden="true" tabindex="-1"></a>  <span class="at">lat =</span> <span class="fl">35.6895</span>,</span>
+<span id="cb8-49"><a href="#cb8-49" aria-hidden="true" tabindex="-1"></a>  <span class="at">value_col =</span> <span class="st">"aridity_index"</span></span>
+<span id="cb8-50"><a href="#cb8-50" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-51"><a href="#cb8-51" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span>
+<span id="cb8-52"><a href="#cb8-52" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-53"><a href="#cb8-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-54"><a href="#cb8-54" aria-hidden="true" tabindex="-1"></a><span class="fu">### Get multiple variables for one coordinate</span></span>
+<span id="cb8-55"><a href="#cb8-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-58"><a href="#cb8-58" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-59"><a href="#cb8-59" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">get_nearest_climate_value</span>(</span>
+<span id="cb8-60"><a href="#cb8-60" aria-hidden="true" tabindex="-1"></a>  sf_climate,</span>
+<span id="cb8-61"><a href="#cb8-61" aria-hidden="true" tabindex="-1"></a>  <span class="at">lon =</span> <span class="fl">139.6917</span>,</span>
+<span id="cb8-62"><a href="#cb8-62" aria-hidden="true" tabindex="-1"></a>  <span class="at">lat =</span> <span class="fl">35.6895</span>,</span>
+<span id="cb8-63"><a href="#cb8-63" aria-hidden="true" tabindex="-1"></a>  <span class="at">value_col =</span> <span class="fu">c</span>(<span class="st">"aridity_index"</span>, <span class="st">"precipitation_year"</span>)</span>
+<span id="cb8-64"><a href="#cb8-64" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-65"><a href="#cb8-65" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span>
+<span id="cb8-66"><a href="#cb8-66" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-67"><a href="#cb8-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-68"><a href="#cb8-68" aria-hidden="true" tabindex="-1"></a><span class="fu">### Get nearest values for a data frame of coordinates</span></span>
+<span id="cb8-69"><a href="#cb8-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-72"><a href="#cb8-72" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-73"><a href="#cb8-73" aria-hidden="true" tabindex="-1"></a>df_input <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb8-74"><a href="#cb8-74" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb8-75"><a href="#cb8-75" aria-hidden="true" tabindex="-1"></a>  <span class="at">longitude =</span> <span class="fu">c</span>(<span class="fl">139.6917</span>, <span class="fl">135.5022</span>, <span class="fl">130.4181</span>),</span>
+<span id="cb8-76"><a href="#cb8-76" aria-hidden="true" tabindex="-1"></a>  <span class="at">latitude =</span> <span class="fu">c</span>(<span class="fl">35.6895</span>, <span class="fl">34.6937</span>, <span class="fl">33.5902</span>)</span>
+<span id="cb8-77"><a href="#cb8-77" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-78"><a href="#cb8-78" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">get_nearest_climate_value</span>(</span>
+<span id="cb8-79"><a href="#cb8-79" aria-hidden="true" tabindex="-1"></a>  sf_climate,</span>
+<span id="cb8-80"><a href="#cb8-80" aria-hidden="true" tabindex="-1"></a>  <span class="at">df =</span> df_input,</span>
+<span id="cb8-81"><a href="#cb8-81" aria-hidden="true" tabindex="-1"></a>  <span class="at">lon_col =</span> <span class="st">"longitude"</span>,</span>
+<span id="cb8-82"><a href="#cb8-82" aria-hidden="true" tabindex="-1"></a>  <span class="at">lat_col =</span> <span class="st">"latitude"</span>,</span>
+<span id="cb8-83"><a href="#cb8-83" aria-hidden="true" tabindex="-1"></a>  <span class="at">value_col =</span> <span class="fu">c</span>(<span class="st">"aridity_index"</span>, <span class="st">"precipitation_year"</span>)</span>
+<span id="cb8-84"><a href="#cb8-84" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-85"><a href="#cb8-85" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(result)</span>
+<span id="cb8-86"><a href="#cb8-86" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb8-87"><a href="#cb8-87" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-88"><a href="#cb8-88" aria-hidden="true" tabindex="-1"></a><span class="fu">### Get all attributes</span></span>
+<span id="cb8-89"><a href="#cb8-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-92"><a href="#cb8-92" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb8-93"><a href="#cb8-93" aria-hidden="true" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">get_nearest_climate_value</span>(</span>
+<span id="cb8-94"><a href="#cb8-94" aria-hidden="true" tabindex="-1"></a>  sf_climate,</span>
+<span id="cb8-95"><a href="#cb8-95" aria-hidden="true" tabindex="-1"></a>  <span class="at">lon =</span> <span class="fl">139.6917</span>,</span>
+<span id="cb8-96"><a href="#cb8-96" aria-hidden="true" tabindex="-1"></a>  <span class="at">lat =</span> <span class="fl">35.6895</span>,</span>
+<span id="cb8-97"><a href="#cb8-97" aria-hidden="true" tabindex="-1"></a>  <span class="at">value_col =</span> <span class="cn">NULL</span></span>
+<span id="cb8-98"><a href="#cb8-98" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb8-99"><a href="#cb8-99" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">head</span>(result))</span>
+<span id="cb8-100"><a href="#cb8-100" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

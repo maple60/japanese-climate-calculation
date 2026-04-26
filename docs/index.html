@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Climate Data Processing with Mesh Climatology 2020 (メッシュ平年値2020を用いた気候変数の処理)</title>
+<title>Climate Data Processing with Mesh Climatology 2020</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -80,11 +80,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
 <link href="site_libs/bootstrap/bootstrap-1c9137b7b1c0320e377730bf2be1742e.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
+  "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
+  "panel-placement": "end",
+  "type": "overlay",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
@@ -110,43 +110,55 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 </head>
 
-<body class="nav-sidebar floating quarto-light">
+<body class="nav-sidebar floating nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Climate Data Processing with Mesh Climatology 2020</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll ms-auto">
+  <li class="nav-item compact">
+    <a class="nav-link" href="https://github.com/maple60/japanese-climate-calculation"> <i class="bi bi-github" role="img" aria-label="GitHub">
+</i> 
+<span class="menu-text"></span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+    <a href="https://github.com/maple60/japanese-climate-calculation" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
   <nav class="quarto-secondary-nav">
     <div class="container-fluid d-flex">
       <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
         <i class="bi bi-layout-text-sidebar-reverse"></i>
       </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-title">Climate Data Processing with Mesh Climatology 2020</span></a></li></ol></nav>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html"><span class="chapter-title">Home</span></a></li></ol></nav>
         <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
         </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
     </div>
   </nav>
 </header>
 <!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
 <!-- sidebar -->
   <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
-    <div class="pt-lg-2 mt-2 text-left sidebar-header">
-    <div class="sidebar-title mb-0 py-0">
-      <a href="./">Climate Data Processing with Mesh Climatology 2020 (メッシュ平年値2020を用いた気候変数の処理)</a> 
-    </div>
-      </div>
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Search"></div>
-        </div>
-        </div>
     <div class="sidebar-menu-container"> 
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Climate Data Processing with Mesh Climatology 2020</span></a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link active"><span class="chapter-title">Home</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -156,7 +168,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./notebooks/calculate_PET.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Calculate Potential Evapotranspiration (PET)</span></a>
+  <a href="./notebooks/calculate_PET.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Calculate PET</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -183,6 +195,36 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <a href="./notebooks/plot_japan_climate_map.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">Plot Japan Climate Map</span></a>
   </div>
 </li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index_ja.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">日本語版: はじめに</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notebooks/prepare_climate_data_ja.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">日本語版: 気候データの準備</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notebooks/calculate_PET_ja.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">日本語版: PETの計算</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notebooks/calculate_aridity_index_ja.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">日本語版: 乾燥指数の計算</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notebooks/get_nearest_climate_value_ja.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">日本語版: 最近傍の気候値取得</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./notebooks/plot_japan_climate_map_ja.html" class="sidebar-item-text sidebar-link"><span class="chapter-title">日本語版: 気候マップの描画</span></a>
+  </div>
+</li>
       </ul>
   </li>
     </ul>
@@ -195,8 +237,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <h2 id="toc-title">Table of contents</h2>
    
   <ul>
-  <li><a href="#データについて" id="toc-データについて" class="nav-link active" data-scroll-target="#データについて">データについて</a></li>
-  <li><a href="#パッケージ管理について" id="toc-パッケージ管理について" class="nav-link" data-scroll-target="#パッケージ管理について">パッケージ管理について</a></li>
+  <li><a href="#about-the-data" id="toc-about-the-data" class="nav-link active" data-scroll-target="#about-the-data">About the data</a></li>
+  <li><a href="#package-management" id="toc-package-management" class="nav-link" data-scroll-target="#package-management">Package management</a></li>
   </ul>
 </nav>
     </div>
@@ -205,7 +247,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<div class="quarto-title-block"><div><h1 class="title">Climate Data Processing with Mesh Climatology 2020 (メッシュ平年値2020を用いた気候変数の処理)</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<div class="quarto-title-block"><div><h1 class="title">Climate Data Processing with Mesh Climatology 2020</h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
 </div>
 
 
@@ -222,9 +264,10 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<p>このドキュメントでは、気象庁の<a href="https://www.data.jma.go.jp/stats/etrn/view/atlas.html">メッシュ平年値2020</a>を用いて、気候変数を処理する方法を説明します。</p>
-<section id="データについて" class="level2">
-<h2 class="anchored" data-anchor-id="データについて">データについて</h2>
+<p><a href="./index_ja.html">日本語版はこちら (Japanese version)</a></p>
+<p>This documentation explains how to process climate variables using the Japan Meteorological Agency’s <a href="https://www.data.jma.go.jp/stats/etrn/view/atlas.html">Mesh Climatology 2020</a>.</p>
+<section id="about-the-data" class="level2">
+<h2 class="anchored" data-anchor-id="about-the-data">About the data</h2>
 <div class="callout callout-style-default callout-note callout-titled">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
@@ -235,17 +278,17 @@ Note
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>メッシュ平年値2020の概要については、<a href="https://www.jma.go.jp/jma/press/2204/04a/mesh2020.html">気象庁の報道発表資料</a>を参照してください。</p>
+<p>For an overview of Mesh Climatology 2020, see the <a href="https://www.jma.go.jp/jma/press/2204/04a/mesh2020.html">JMA press release</a>.</p>
 </div>
 </div>
-<p>データは、国土数値情報の<a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html">平均値メッシュデータ</a>を使用します。</p>
-<p>元データや加工データについてはこのリポジトリでは配布いたしません。 必要なデータは、ご自身でダウンロードいただくようお願いいたします。</p>
-<p>利用規約については、<a href="https://nlftp.mlit.go.jp/ksj/other/agreement.html">国土数値情報の利用規約</a>をご確認ください。 特に、<strong>出典の明記</strong>を忘れないようにお願いいたします。</p>
+<p>This project uses the National Land Numerical Information (MLIT) <a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html">Average Value Mesh Data</a>.</p>
+<p>This repository does not redistribute original or processed datasets. Please download required data on your own.</p>
+<p>Please review the <a href="https://nlftp.mlit.go.jp/ksj/other/agreement.html">NLNI terms of use</a>, especially the source attribution requirement.</p>
 </section>
-<section id="パッケージ管理について" class="level2">
-<h2 class="anchored" data-anchor-id="パッケージ管理について">パッケージ管理について</h2>
-<p>本リポジトリでは、Rのパッケージ管理に<a href="https://rstudio.github.io/renv/">renv</a>を使用しています。 リポジトリをクローンした場合、<code>renv::restore()</code>を実行することで、本リポジトリの環境を再現できます。</p>
-<p>もしrenvを使用しない場合、適宜必要なパッケージをインストールしてください。</p>
+<section id="package-management" class="level2">
+<h2 class="anchored" data-anchor-id="package-management">Package management</h2>
+<p>This repository uses <a href="https://rstudio.github.io/renv/">renv</a> for R package dependency management. After cloning, run <code>renv::restore()</code> to reproduce the package environment.</p>
+<p>If you do not use renv, install required packages manually.</p>
 
 
 <!-- -->
@@ -714,31 +757,31 @@ Note
   </div>
 </nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "メッシュ平年値2020を用いた気候変数の処理"</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Climate Data Processing with Mesh Climatology 2020"</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>このドキュメントでは、気象庁の<span class="co">[</span><span class="ot">メッシュ平年値2020</span><span class="co">](https://www.data.jma.go.jp/stats/etrn/view/atlas.html)</span>を用いて、気候変数を処理する方法を説明します。</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">日本語版はこちら (Japanese version)</span><span class="co">](index_ja.qmd)</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="fu">## データについて</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>This documentation explains how to process climate variables using the Japan Meteorological Agency's <span class="co">[</span><span class="ot">Mesh Climatology 2020</span><span class="co">](https://www.data.jma.go.jp/stats/etrn/view/atlas.html)</span>.</span>
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
-<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>メッシュ平年値2020の概要については、<span class="co">[</span><span class="ot">気象庁の報道発表資料</span><span class="co">](https://www.jma.go.jp/jma/press/2204/04a/mesh2020.html)</span>を参照してください。</span>
-<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>データは、国土数値情報の<span class="co">[</span><span class="ot">平均値メッシュデータ</span><span class="co">](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html)</span>を使用します。</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="fu">## About the data</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>::: {.callout-note}</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>For an overview of Mesh Climatology 2020, see the <span class="co">[</span><span class="ot">JMA press release</span><span class="co">](https://www.jma.go.jp/jma/press/2204/04a/mesh2020.html)</span>.</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>:::</span>
 <span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>元データや加工データについてはこのリポジトリでは配布いたしません。</span>
-<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>必要なデータは、ご自身でダウンロードいただくようお願いいたします。</span>
-<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>利用規約については、<span class="co">[</span><span class="ot">国土数値情報の利用規約</span><span class="co">](https://nlftp.mlit.go.jp/ksj/other/agreement.html)</span>をご確認ください。</span>
-<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>特に、**出典の明記**を忘れないようにお願いいたします。</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>This project uses the National Land Numerical Information (MLIT) <span class="co">[</span><span class="ot">Average Value Mesh Data</span><span class="co">](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html)</span>.</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>This repository does not redistribute original or processed datasets. Please download required data on your own.</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>Please review the <span class="co">[</span><span class="ot">NLNI terms of use</span><span class="co">](https://nlftp.mlit.go.jp/ksj/other/agreement.html)</span>, especially the source attribution requirement.</span>
 <span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## パッケージ管理について</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="fu">## Package management</span></span>
 <span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>本リポジトリでは、Rのパッケージ管理に<span class="co">[</span><span class="ot">renv</span><span class="co">](https://rstudio.github.io/renv/)</span>を使用しています。</span>
-<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>リポジトリをクローンした場合、<span class="in">`renv::restore()`</span>を実行することで、本リポジトリの環境を再現できます。</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>This repository uses <span class="co">[</span><span class="ot">renv</span><span class="co">](https://rstudio.github.io/renv/)</span> for R package dependency management.</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>After cloning, run <span class="in">`renv::restore()`</span> to reproduce the package environment.</span>
 <span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>もしrenvを使用しない場合、適宜必要なパッケージをインストールしてください。</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>If you do not use renv, install required packages manually.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 

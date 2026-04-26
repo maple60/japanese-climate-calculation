@@ -2,31 +2,31 @@
   {
     "objectID": "index.html",
     "href": "index.html",
-    "title": "Climate Data Processing with Mesh Climatology 2020 (メッシュ平年値2020を用いた気候変数の処理)",
+    "title": "Climate Data Processing with Mesh Climatology 2020",
     "section": "",
-    "text": "データについて\nこのドキュメントでは、気象庁のメッシュ平年値2020を用いて、気候変数を処理する方法を説明します。\nデータは、国土数値情報の平均値メッシュデータを使用します。\n元データや加工データについてはこのリポジトリでは配布いたしません。 必要なデータは、ご自身でダウンロードいただくようお願いいたします。\n利用規約については、国土数値情報の利用規約をご確認ください。 特に、出典の明記を忘れないようにお願いいたします。",
+    "text": "About the data\n日本語版はこちら (Japanese version)\nThis documentation explains how to process climate variables using the Japan Meteorological Agency’s Mesh Climatology 2020.\nThis project uses the National Land Numerical Information (MLIT) Average Value Mesh Data.\nThis repository does not redistribute original or processed datasets. Please download required data on your own.\nPlease review the NLNI terms of use, especially the source attribution requirement.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Climate Data Processing with Mesh Climatology 2020</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Home</span>"
     ]
   },
   {
-    "objectID": "index.html#データについて",
-    "href": "index.html#データについて",
-    "title": "Climate Data Processing with Mesh Climatology 2020 (メッシュ平年値2020を用いた気候変数の処理)",
+    "objectID": "index.html#about-the-data",
+    "href": "index.html#about-the-data",
+    "title": "Climate Data Processing with Mesh Climatology 2020",
     "section": "",
-    "text": "Note\n\n\n\nメッシュ平年値2020の概要については、気象庁の報道発表資料を参照してください。",
+    "text": "Note\n\n\n\nFor an overview of Mesh Climatology 2020, see the JMA press release.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Climate Data Processing with Mesh Climatology 2020</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Home</span>"
     ]
   },
   {
-    "objectID": "index.html#パッケージ管理について",
-    "href": "index.html#パッケージ管理について",
-    "title": "Climate Data Processing with Mesh Climatology 2020 (メッシュ平年値2020を用いた気候変数の処理)",
-    "section": "パッケージ管理について",
-    "text": "パッケージ管理について\n本リポジトリでは、Rのパッケージ管理にrenvを使用しています。 リポジトリをクローンした場合、renv::restore()を実行することで、本リポジトリの環境を再現できます。\nもしrenvを使用しない場合、適宜必要なパッケージをインストールしてください。",
+    "objectID": "index.html#package-management",
+    "href": "index.html#package-management",
+    "title": "Climate Data Processing with Mesh Climatology 2020",
+    "section": "Package management",
+    "text": "Package management\nThis repository uses renv for R package dependency management. After cloning, run renv::restore() to reproduce the package environment.\nIf you do not use renv, install required packages manually.",
     "crumbs": [
-      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Climate Data Processing with Mesh Climatology 2020</span>"
+      "<span class='chapter-number'>1</span>  <span class='chapter-title'>Home</span>"
     ]
   },
   {
@@ -34,97 +34,97 @@
     "href": "notebooks/prepare_climate_data.html",
     "title": "Prepare Climate Data",
     "section": "",
-    "text": "平均値メッシュデータのダウンロード\n平均値メッシュデータを用いて、気候変数を作成していきます。 データソースには、国土数値情報の 平均値メッシュデータ を使用します。\n平均値メッシュデータは、以下の国土数値情報のサイトからダウンロードできます。\n必要なデータをダウンロードします。 形式はzipファイルで提供されているので、展開して使用します。 筆者はすべてのデータをダウンロードしましたが、必要なデータだけをダウンロードしても問題ありません。\nデータは、任意のフォルダにまとめて保存してください。 なお、このリポジトリの解析では、環境変数 PROJECT_DATA_DIR にデータの保存先を指定しています。 具体的には、データ自体はDropboxに保存しており、ルートディレクトリに .Renviron ファイルを作成して、以下のように環境変数を設定しています。",
+    "text": "Download Average Value Mesh Data\n日本語版はこちら (Japanese version)\nThis chapter creates climate variables from Average Value Mesh Data. The data source is NLNI’s Average Value Mesh Data.\nDownload required data from:\nData files are distributed as ZIP files. Extract them after download.\nStore downloaded data in any folder. In this project, the path is set through the PROJECT_DATA_DIR environment variable.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Prepare Climate Data</span>"
     ]
   },
   {
-    "objectID": "notebooks/prepare_climate_data.html#平均値メッシュデータのダウンロード",
-    "href": "notebooks/prepare_climate_data.html#平均値メッシュデータのダウンロード",
+    "objectID": "notebooks/prepare_climate_data.html#download-average-value-mesh-data",
+    "href": "notebooks/prepare_climate_data.html#download-average-value-mesh-data",
     "title": "Prepare Climate Data",
     "section": "",
-    "text": "平均値メッシュデータ\n\n\n\n\n\n.Renviron\n\nPROJECT_DATA_DIR=C:/Users/Username/Dropbox/GitHub/japanese_climate_calculation\n\n\n\n\n\n\n\nNote利用規約について\n\n\n\n国土数値情報の利用規約については、こちらをご確認ください。",
+    "text": "Average Value Mesh Data\n\n\n\n\n\n.Renviron\n\nPROJECT_DATA_DIR=C:/Users/Username/Dropbox/GitHub/japanese_climate_calculation\n\n\n\n\n\n\n\nNoteTerms of use\n\n\n\nPlease check the NLNI terms of use here.",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Prepare Climate Data</span>"
     ]
   },
   {
-    "objectID": "notebooks/prepare_climate_data.html#ライブラリの読み込み",
-    "href": "notebooks/prepare_climate_data.html#ライブラリの読み込み",
+    "objectID": "notebooks/prepare_climate_data.html#load-libraries",
+    "href": "notebooks/prepare_climate_data.html#load-libraries",
     "title": "Prepare Climate Data",
-    "section": "ライブラリの読み込み",
-    "text": "ライブラリの読み込み\n使用するライブラリを読み込みます。\n\nlibrary(tools)\nlibrary(sf)",
+    "section": "Load libraries",
+    "text": "Load libraries\n\nlibrary(tools)\nlibrary(sf)",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Prepare Climate Data</span>"
     ]
   },
   {
-    "objectID": "notebooks/prepare_climate_data.html#データディレクトリの指定",
-    "href": "notebooks/prepare_climate_data.html#データディレクトリの指定",
+    "objectID": "notebooks/prepare_climate_data.html#set-the-data-directory",
+    "href": "notebooks/prepare_climate_data.html#set-the-data-directory",
     "title": "Prepare Climate Data",
-    "section": "データディレクトリの指定",
-    "text": "データディレクトリの指定\nここでは、環境変数 PROJECT_DATA_DIR を使用して、データの保存先を指定しています。 必要に応じて、適宜変更してください。\n\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\n# もし環境変数が設定されていない場合は、以下のように直接パスを指定してください。\n# data_dir &lt;- \"data\"",
+    "section": "Set the data directory",
+    "text": "Set the data directory\n\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\n# If the environment variable is not set:\n# data_dir &lt;- \"data\"",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Prepare Climate Data</span>"
     ]
   },
   {
-    "objectID": "notebooks/prepare_climate_data.html#zipファイルの展開",
-    "href": "notebooks/prepare_climate_data.html#zipファイルの展開",
+    "objectID": "notebooks/prepare_climate_data.html#extract-zip-files",
+    "href": "notebooks/prepare_climate_data.html#extract-zip-files",
     "title": "Prepare Climate Data",
-    "section": "zipファイルの展開",
-    "text": "zipファイルの展開\nデータはzipファイルで提供されているので、展開します。 ファイルパスには、zipファイルがまとめて保存してあるディレクトリを指定してください。\nzipファイルは、G02-22_5436-jgd_GML.zipのような形式で提供されているはずです。 G02は平均値メッシュデータの分類コード、22は2022年に更新されたデータであることを示しています。 12となっているファイルもありますが、これは2012年に更新されたデータであることを示しています。\n\nzip_output_dir &lt;- file.path(\"data\", \"climate_mesh_data\")\ndir.create(zip_output_dir, showWarnings = FALSE, recursive = TRUE)\n\nzip_files &lt;- list.files(\n  file.path(data_dir, \"climate_mesh_data_zip\"),\n  pattern = \"^G02-22_.*\\\\.zip$\",\n  full.names = TRUE\n)\nfile_names &lt;- tools::file_path_sans_ext(basename(zip_files))\nlapply(zip_files, unzip, overwrite = TRUE, exdir = zip_output_dir)",
+    "section": "Extract ZIP files",
+    "text": "Extract ZIP files\n\nzip_output_dir &lt;- file.path(\"data\", \"climate_mesh_data\")\ndir.create(zip_output_dir, showWarnings = FALSE, recursive = TRUE)\n\nzip_files &lt;- list.files(\n  file.path(data_dir, \"climate_mesh_data_zip\"),\n  pattern = \"^G02-22_.*\\\\.zip$\",\n  full.names = TRUE\n)\nfile_names &lt;- tools::file_path_sans_ext(basename(zip_files))\nlapply(zip_files, unzip, overwrite = TRUE, exdir = zip_output_dir)",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Prepare Climate Data</span>"
     ]
   },
   {
-    "objectID": "notebooks/prepare_climate_data.html#シェープファイルの読み込み",
-    "href": "notebooks/prepare_climate_data.html#シェープファイルの読み込み",
+    "objectID": "notebooks/prepare_climate_data.html#read-shapefiles",
+    "href": "notebooks/prepare_climate_data.html#read-shapefiles",
     "title": "Prepare Climate Data",
-    "section": "シェープファイルの読み込み",
-    "text": "シェープファイルの読み込み\nzipファイルが展開されたら、zipファイルのファイル名が名前の付いたフォルダができています。 その中に、G02-22_5436-jgd_GML.shpのようなシェープファイルがあります。 これを読み込んで、データフレームにまとめます。\nデータの列名はG02_001のように、コードで表されているので、別途用意したラベルファイルを使って、列名をわかりやすい名前に変換します。 data/manual/mesh_climate_data_labels.csvに、コードと対応する変数名を保存していますので、これをお使いください (クリックでダウンロードできます)。\n\ndata_list &lt;- list()\n# Shapefile のフルパスを取得\ndata_paths &lt;- list.files(\n  zip_output_dir,\n  pattern = \"^G02-22_.*\\\\.shp$\",\n  full.names = TRUE,\n  recursive = TRUE\n)\n# やや時間がかかるので注意\nfor (i in seq_along(data_paths)) {\n  path &lt;- data_paths[i] # file full path\n  name &lt;- file_path_sans_ext(basename(path)) # file name\n  data_list[[name]] &lt;- st_read(path) # add SpatVector to list\n  #cat(paste0(i, \"/\", length(data_paths), \" : \", name, \"\\n\"))\n}\nsf_climate &lt;- do.call(rbind, data_list) # 一つのオブジェクトにまとめる\ndf_label &lt;- read.csv(\n  file.path(data_dir, \"manual/mesh_climate_data_labels.csv\"),\n  fileEncoding = \"UTF-8\"\n)\nnames(sf_climate) &lt;- make.names(c(df_label$name_en, \"geometry\")) # 変数名の先頭が数字だとだめなので修正",
+    "section": "Read shapefiles",
+    "text": "Read shapefiles\n\ndata_list &lt;- list()\ndata_paths &lt;- list.files(\n  zip_output_dir,\n  pattern = \"^G02-22_.*\\\\.shp$\",\n  full.names = TRUE,\n  recursive = TRUE\n)\n\nfor (i in seq_along(data_paths)) {\n  path &lt;- data_paths[i]\n  name &lt;- file_path_sans_ext(basename(path))\n  data_list[[name]] &lt;- st_read(path)\n}\nsf_climate &lt;- do.call(rbind, data_list)\n\ndf_label &lt;- read.csv(\n  file.path(data_dir, \"manual/mesh_climate_data_labels.csv\"),\n  fileEncoding = \"UTF-8\"\n)\nnames(sf_climate) &lt;- make.names(c(df_label$name_en, \"geometry\"))",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Prepare Climate Data</span>"
     ]
   },
   {
-    "objectID": "notebooks/prepare_climate_data.html#値の変換",
-    "href": "notebooks/prepare_climate_data.html#値の変換",
+    "objectID": "notebooks/prepare_climate_data.html#convert-values",
+    "href": "notebooks/prepare_climate_data.html#convert-values",
     "title": "Prepare Climate Data",
-    "section": "値の変換",
-    "text": "値の変換\nデータの値は、小数を避けるために10倍されているので、元の値に戻すために10で割ります。\n降水量、気温、日照時間、全天日射量は10分の1にするとちゃんとした値になります。\n\n降水量は0.1mm単位\n\n気温は0.1℃単位\n\n日照時間は0.1時間単位\n\n全天日射量は0.1MJm-2単位\n\nまた、欠損値は999999で表されているので、これをNAに変換します。\n\n参考: 国土数値情報 平年値メッシュデータ\n\n\n\ncol_index &lt;- c(\n  grep(\"precipitation\", names(sf_climate)),\n  grep(\"temperature\", names(sf_climate)),\n  grep(\"sunshine_duration\", names(sf_climate)),\n  grep(\"global_solar_radiation\", names(sf_climate))\n)\nindices_snow &lt;- grep(\"maximum_snow_depth\", names(sf_climate))\n\nNA_value &lt;- 999999\ndf &lt;- st_drop_geometry(sf_climate)\ndf[, col_index][df[, col_index] == NA_value] &lt;- NA # 999999のときはNAに変換\ndf[, col_index] &lt;- df[, col_index] * 0.1\ndf[, indices_snow][df[, indices_snow] == NA_value] &lt;- 0 # 最深積雪が999999のときは0に変換\nsf_climate &lt;- st_set_geometry(df, st_geometry(sf_climate))",
+    "section": "Convert values",
+    "text": "Convert values\nValues are scaled by 10 in the source data; divide by 10 to recover original units. Missing values are encoded as 999999.\n\ncol_index &lt;- c(\n  grep(\"precipitation\", names(sf_climate)),\n  grep(\"temperature\", names(sf_climate)),\n  grep(\"sunshine_duration\", names(sf_climate)),\n  grep(\"global_solar_radiation\", names(sf_climate))\n)\nindices_snow &lt;- grep(\"maximum_snow_depth\", names(sf_climate))\n\nNA_value &lt;- 999999\ndf &lt;- st_drop_geometry(sf_climate)\ndf[, col_index][df[, col_index] == NA_value] &lt;- NA\ndf[, col_index] &lt;- df[, col_index] * 0.1\ndf[, indices_snow][df[, indices_snow] == NA_value] &lt;- 0\nsf_climate &lt;- st_set_geometry(df, st_geometry(sf_climate))",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Prepare Climate Data</span>"
     ]
   },
   {
-    "objectID": "notebooks/prepare_climate_data.html#緯度と経度の抽出",
-    "href": "notebooks/prepare_climate_data.html#緯度と経度の抽出",
+    "objectID": "notebooks/prepare_climate_data.html#extract-longitude-and-latitude",
+    "href": "notebooks/prepare_climate_data.html#extract-longitude-and-latitude",
     "title": "Prepare Climate Data",
-    "section": "緯度と経度の抽出",
-    "text": "緯度と経度の抽出\nst_centroid() を使うと、ポリゴンの重心を取得できます。\nメッシュは正方形のポリゴンで表されているので、重心はメッシュの中心点になります。\n\nsf_climate$longitude &lt;- st_coordinates(st_centroid(sf_climate))[, 1]\nsf_climate$latitude &lt;- st_coordinates(st_centroid(sf_climate))[, 2]",
+    "section": "Extract longitude and latitude",
+    "text": "Extract longitude and latitude\n\nsf_climate$longitude &lt;- st_coordinates(st_centroid(sf_climate))[, 1]\nsf_climate$latitude &lt;- st_coordinates(st_centroid(sf_climate))[, 2]",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Prepare Climate Data</span>"
     ]
   },
   {
-    "objectID": "notebooks/prepare_climate_data.html#データの保存",
-    "href": "notebooks/prepare_climate_data.html#データの保存",
+    "objectID": "notebooks/prepare_climate_data.html#save-data",
+    "href": "notebooks/prepare_climate_data.html#save-data",
     "title": "Prepare Climate Data",
-    "section": "データの保存",
-    "text": "データの保存\nデータは、RDSファイルとCSVファイルの両方で保存します。 Excelなどですぐに確認をしたい場合はCSVファイルを、Rで再利用したい場合はRDSファイルを使用するのが便利です。\nなお、CSVファイルはread.csv()で、RDSファイルはreadRDS()で読み込むことができます。\n\nsave_dir &lt;- file.path(data_dir, \"climate_mesh_data_joined\")\ndir.create(save_dir, showWarnings = FALSE, recursive = TRUE)\nsaveRDS(sf_climate, file.path(save_dir, \"climate_mesh_data.rds\"))",
+    "section": "Save data",
+    "text": "Save data\n\nsave_dir &lt;- file.path(data_dir, \"climate_mesh_data_joined\")\ndir.create(save_dir, showWarnings = FALSE, recursive = TRUE)\nsaveRDS(sf_climate, file.path(save_dir, \"climate_mesh_data.rds\"))",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Prepare Climate Data</span>"
     ]
   },
   {
-    "objectID": "notebooks/prepare_climate_data.html#csvファイルにして保存",
-    "href": "notebooks/prepare_climate_data.html#csvファイルにして保存",
+    "objectID": "notebooks/prepare_climate_data.html#save-as-csv",
+    "href": "notebooks/prepare_climate_data.html#save-as-csv",
     "title": "Prepare Climate Data",
-    "section": "CSVファイルにして保存",
-    "text": "CSVファイルにして保存\n\ndf_climate &lt;- st_drop_geometry(sf_climate)\nwrite.csv(\n  df_climate,\n  file.path(save_dir, \"climate_mesh_data.csv\"),\n  row.names = FALSE,\n  fileEncoding = \"UTF-8\"\n)",
+    "section": "Save as CSV",
+    "text": "Save as CSV\n\ndf_climate &lt;- st_drop_geometry(sf_climate)\nwrite.csv(\n  df_climate,\n  file.path(save_dir, \"climate_mesh_data.csv\"),\n  row.names = FALSE,\n  fileEncoding = \"UTF-8\"\n)",
     "crumbs": [
       "<span class='chapter-number'>2</span>  <span class='chapter-title'>Prepare Climate Data</span>"
     ]
@@ -134,69 +134,69 @@
     "href": "notebooks/calculate_PET.html",
     "title": "Calculate Potential Evapotranspiration (PET)",
     "section": "",
-    "text": "ライブラリの読み込み\n潜在蒸発散量 Potential evapotranspiration; PETを計算します。 方法はThornthwaite method(Thornthwaite 1948)です。 パッケージはSPEIを使用します(Beguería and Vicente-Serrano 2023)。\nlibrary(sf)\nlibrary(SPEI)",
+    "text": "Load libraries\n日本語版はこちら (Japanese version)\nThis chapter calculates potential evapotranspiration (PET) using the Thornthwaite method (Thornthwaite 1948) with the SPEI package (Beguería and Vicente-Serrano 2023).\nlibrary(sf)\nlibrary(SPEI)",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate Potential Evapotranspiration (PET)</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate PET</span>"
     ]
   },
   {
-    "objectID": "notebooks/calculate_PET.html#データの読み込み",
-    "href": "notebooks/calculate_PET.html#データの読み込み",
+    "objectID": "notebooks/calculate_PET.html#load-data",
+    "href": "notebooks/calculate_PET.html#load-data",
     "title": "Calculate Potential Evapotranspiration (PET)",
-    "section": "データの読み込み",
-    "text": "データの読み込み\nこのリポジトリの解析では、環境変数 PROJECT_DATA_DIR にデータの保存先を指定しています。 必要に応じて、適宜変更してください。\n\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\n# data_dir &lt;- \"data\" # もし環境変数が設定されていない場合は、直接パスを指定してください。\nsf_climate &lt;- readRDS(file.path(\n  data_dir,\n  \"climate_mesh_data_joined/climate_mesh_data.rds\"\n))",
+    "section": "Load data",
+    "text": "Load data\n\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\n# data_dir &lt;- \"data\" # if PROJECT_DATA_DIR is not set\nsf_climate &lt;- readRDS(file.path(\n  data_dir,\n  \"climate_mesh_data_joined/climate_mesh_data.rds\"\n))",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate Potential Evapotranspiration (PET)</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate PET</span>"
     ]
   },
   {
-    "objectID": "notebooks/calculate_PET.html#計算用データフレームの作成",
-    "href": "notebooks/calculate_PET.html#計算用データフレームの作成",
+    "objectID": "notebooks/calculate_PET.html#create-a-data-frame-for-pet-calculation",
+    "href": "notebooks/calculate_PET.html#create-a-data-frame-for-pet-calculation",
     "title": "Calculate Potential Evapotranspiration (PET)",
-    "section": "計算用データフレームの作成",
-    "text": "計算用データフレームの作成\n緯度、月平均気温を抽出します。\n\nlatitudes &lt;- sf_climate$latitude\ndf_temp &lt;- sf_climate[, grep(\"mean_temperature\", names(sf_climate))]\ndf_temp &lt;- st_drop_geometry(df_temp) # ジオメトリを削除\ndf_temp &lt;- df_temp[, 1:12] # 年平均気温を除外\n\nkeep &lt;- complete.cases(df_temp) # NAを含まない行\nremoved_rows &lt;- which(!keep) # 削除される元の行番号\n\ndf_temp_clean &lt;- df_temp[keep, ]\nsf_climate_clean &lt;- sf_climate[keep, ]\nrow.names(df_temp_clean) &lt;- sf_climate_clean$mesh_code_3rd",
+    "section": "Create a data frame for PET calculation",
+    "text": "Create a data frame for PET calculation\n\nlatitudes &lt;- sf_climate$latitude\ndf_temp &lt;- sf_climate[, grep(\"mean_temperature\", names(sf_climate))]\ndf_temp &lt;- st_drop_geometry(df_temp)\ndf_temp &lt;- df_temp[, 1:12]\n\nkeep &lt;- complete.cases(df_temp)\nremoved_rows &lt;- which(!keep)\n\ndf_temp_clean &lt;- df_temp[keep, ]\nsf_climate_clean &lt;- sf_climate[keep, ]\nrow.names(df_temp_clean) &lt;- sf_climate_clean$mesh_code_3rd",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate Potential Evapotranspiration (PET)</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate PET</span>"
     ]
   },
   {
-    "objectID": "notebooks/calculate_PET.html#petの計算",
-    "href": "notebooks/calculate_PET.html#petの計算",
+    "objectID": "notebooks/calculate_PET.html#calculate-pet",
+    "href": "notebooks/calculate_PET.html#calculate-pet",
     "title": "Calculate Potential Evapotranspiration (PET)",
-    "section": "PETの計算",
-    "text": "PETの計算\nSPEI::thornthwaite() 関数を使用してPETを計算します。 もしメッセージを抑制したい場合は、引数にverbose = FALSEを追加してください。\n\nn &lt;- nrow(df_temp_clean) # サンプル数\npet_month &lt;- matrix(NA, n, 12)\nfor (i in seq_len(n)) {\n  pet_month[i, ] &lt;- SPEI::thornthwaite(\n    Tave = as.numeric(df_temp_clean[i, ]),\n    lat = latitudes[i],\n    verbose = FALSE\n  )\n}",
+    "section": "Calculate PET",
+    "text": "Calculate PET\n\nn &lt;- nrow(df_temp_clean)\npet_month &lt;- matrix(NA, n, 12)\nfor (i in seq_len(n)) {\n  pet_month[i, ] &lt;- SPEI::thornthwaite(\n    Tave = as.numeric(df_temp_clean[i, ]),\n    lat = latitudes[i],\n    verbose = FALSE\n  )\n}",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate Potential Evapotranspiration (PET)</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate PET</span>"
     ]
   },
   {
-    "objectID": "notebooks/calculate_PET.html#petデータの整形",
-    "href": "notebooks/calculate_PET.html#petデータの整形",
+    "objectID": "notebooks/calculate_PET.html#shape-pet-data",
+    "href": "notebooks/calculate_PET.html#shape-pet-data",
     "title": "Calculate Potential Evapotranspiration (PET)",
-    "section": "PETデータの整形",
-    "text": "PETデータの整形\npet_monthマトリックスをデータフレームに変換し、列名を設定します また、年間PETも計算します。\n\ndf_pet &lt;- as.data.frame(pet_month)\nnames(df_pet) &lt;- paste0(\"PET\", 1:12)\ndf_pet$PET_year &lt;- rowSums(df_pet)",
+    "section": "Shape PET data",
+    "text": "Shape PET data\n\ndf_pet &lt;- as.data.frame(pet_month)\nnames(df_pet) &lt;- paste0(\"PET\", 1:12)\ndf_pet$PET_year &lt;- rowSums(df_pet)",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate Potential Evapotranspiration (PET)</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate PET</span>"
     ]
   },
   {
-    "objectID": "notebooks/calculate_PET.html#データの結合",
-    "href": "notebooks/calculate_PET.html#データの結合",
+    "objectID": "notebooks/calculate_PET.html#join-pet-to-climate-data",
+    "href": "notebooks/calculate_PET.html#join-pet-to-climate-data",
     "title": "Calculate Potential Evapotranspiration (PET)",
-    "section": "データの結合",
-    "text": "データの結合\nmesh_code_3rdをキーにして、PETデータを元の気候データと結合します。 結合後、ジオメトリを削除して、データフレームとして保存します。\n\ndf_pet$mesh_code_3rd &lt;- row.names(df_temp_clean)\nsf_merged &lt;- merge(\n  sf_climate,\n  df_pet,\n  by = \"mesh_code_3rd\",\n  all.x = TRUE,\n  sort = FALSE\n)\ndf_merged &lt;- st_drop_geometry(sf_merged)",
+    "section": "Join PET to climate data",
+    "text": "Join PET to climate data\n\ndf_pet$mesh_code_3rd &lt;- row.names(df_temp_clean)\nsf_merged &lt;- merge(\n  sf_climate,\n  df_pet,\n  by = \"mesh_code_3rd\",\n  all.x = TRUE,\n  sort = FALSE\n)\ndf_merged &lt;- st_drop_geometry(sf_merged)",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate Potential Evapotranspiration (PET)</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate PET</span>"
     ]
   },
   {
-    "objectID": "notebooks/calculate_PET.html#データの保存",
-    "href": "notebooks/calculate_PET.html#データの保存",
+    "objectID": "notebooks/calculate_PET.html#save-data",
+    "href": "notebooks/calculate_PET.html#save-data",
     "title": "Calculate Potential Evapotranspiration (PET)",
-    "section": "データの保存",
-    "text": "データの保存\nRDS形式とCSV形式で保存します。 必要に応じて、保存先のパスを変更してください。\n\nsave_dir &lt;- file.path(data_dir, \"climate_mesh_data_joined\")\nsaveRDS(sf_merged, file.path(save_dir, \"climate_mesh_data_with_pet.rds\"))\nwrite.csv(\n  df_merged,\n  file.path(save_dir, \"climate_mesh_data_with_pet.csv\"),\n  row.names = FALSE\n)",
+    "section": "Save data",
+    "text": "Save data\n\nsave_dir &lt;- file.path(data_dir, \"climate_mesh_data_joined\")\nsaveRDS(sf_merged, file.path(save_dir, \"climate_mesh_data_with_pet.rds\"))\nwrite.csv(\n  df_merged,\n  file.path(save_dir, \"climate_mesh_data_with_pet.csv\"),\n  row.names = FALSE\n)",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate Potential Evapotranspiration (PET)</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate PET</span>"
     ]
   },
   {
@@ -206,7 +206,7 @@
     "section": "References",
     "text": "References\n\n\n\n\n\n\nBeguería, Santiago, and Sergio M. Vicente-Serrano. 2023. SPEI: Calculation of the Standardized Precipitation-Evapotranspiration Index. https://doi.org/10.32614/CRAN.package.SPEI.\n\n\nThornthwaite, C. W. 1948. “An Approach Toward a Rational Classification of Climate.” Geographical Review 38 (1): 55–94. https://doi.org/10.2307/210739.",
     "crumbs": [
-      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate Potential Evapotranspiration (PET)</span>"
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate PET</span>"
     ]
   },
   {
@@ -214,37 +214,37 @@
     "href": "notebooks/calculate_aridity_index.html",
     "title": "Calculate Aridity Index",
     "section": "",
-    "text": "ライブラリの読み込み\nAridity Index (AI)を計算します。 AIは気候の乾燥度を表す指標で、降水量(precipitation)と蒸発散量(potential evapotranspication)の比率として定義されます (World Atlas of Desertification 1992)。\nほかにもいろいろな定義があるようですが、ここでは以下の式を用います。\n\\[AI = \\frac{P}{PET}\\]\nここで、\\(P\\) は降水量、\\(PET\\) は潜在蒸発散量です。\nlibrary(sf)",
+    "text": "Load libraries\n日本語版はこちら (Japanese version)\nThis chapter calculates the Aridity Index (AI), a dryness indicator defined as the ratio of precipitation to potential evapotranspiration (World Atlas of Desertification 1992).\n\\[AI = \\frac{P}{PET}\\]\nwhere \\(P\\) is precipitation and \\(PET\\) is potential evapotranspiration.\nlibrary(sf)",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Calculate Aridity Index</span>"
     ]
   },
   {
-    "objectID": "notebooks/calculate_aridity_index.html#データの読み込み",
-    "href": "notebooks/calculate_aridity_index.html#データの読み込み",
+    "objectID": "notebooks/calculate_aridity_index.html#load-data",
+    "href": "notebooks/calculate_aridity_index.html#load-data",
     "title": "Calculate Aridity Index",
-    "section": "データの読み込み",
-    "text": "データの読み込み\nこのリポジトリの解析では、環境変数 PROJECT_DATA_DIR にデータの保存先を指定しています。 必要に応じて、適宜変更してください。\n\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\nsf_climate &lt;- readRDS(file.path(\n  data_dir,\n  \"climate_mesh_data_joined/climate_mesh_data_with_pet.rds\"\n))",
+    "section": "Load data",
+    "text": "Load data\n\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\nsf_climate &lt;- readRDS(file.path(\n  data_dir,\n  \"climate_mesh_data_joined/climate_mesh_data_with_pet.rds\"\n))",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Calculate Aridity Index</span>"
     ]
   },
   {
-    "objectID": "notebooks/calculate_aridity_index.html#aridity-index-の計算",
-    "href": "notebooks/calculate_aridity_index.html#aridity-index-の計算",
+    "objectID": "notebooks/calculate_aridity_index.html#calculate-aridity-index",
+    "href": "notebooks/calculate_aridity_index.html#calculate-aridity-index",
     "title": "Calculate Aridity Index",
-    "section": "Aridity Index の計算",
-    "text": "Aridity Index の計算\nAridity Index を計算して、sf_climateオブジェクトに新しい列aridity_indexとして追加します。\n\nsf_climate$aridity_index &lt;- sf_climate$precipitation_year / sf_climate$PET_year",
+    "section": "Calculate Aridity Index",
+    "text": "Calculate Aridity Index\n\nsf_climate$aridity_index &lt;- sf_climate$precipitation_year / sf_climate$PET_year",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Calculate Aridity Index</span>"
     ]
   },
   {
-    "objectID": "notebooks/calculate_aridity_index.html#データの保存",
-    "href": "notebooks/calculate_aridity_index.html#データの保存",
+    "objectID": "notebooks/calculate_aridity_index.html#save-data",
+    "href": "notebooks/calculate_aridity_index.html#save-data",
     "title": "Calculate Aridity Index",
-    "section": "データの保存",
-    "text": "データの保存\nRDS形式とCSV形式で保存します。 必要に応じて、保存先のパスを変更してください。\n\nsaveRDS(\n  sf_climate,\n  file.path(\n    data_dir,\n    \"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.rds\"\n  )\n)\ndf_climate &lt;- st_drop_geometry(sf_climate)\nwrite.csv(\n  df_climate,\n  file.path(\n    data_dir,\n    \"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.csv\"\n  ),\n  row.names = FALSE\n)",
+    "section": "Save data",
+    "text": "Save data\n\nsaveRDS(\n  sf_climate,\n  file.path(\n    data_dir,\n    \"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.rds\"\n  )\n)\ndf_climate &lt;- st_drop_geometry(sf_climate)\nwrite.csv(\n  df_climate,\n  file.path(\n    data_dir,\n    \"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.csv\"\n  ),\n  row.names = FALSE\n)",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Calculate Aridity Index</span>"
     ]
@@ -262,59 +262,39 @@
   {
     "objectID": "notebooks/get_nearest_climate_value.html",
     "href": "notebooks/get_nearest_climate_value.html",
-    "title": "座標を与えたら最も近い気候変数の値を返す関数",
+    "title": "Get Nearest Climate Value by Coordinates",
     "section": "",
-    "text": "ライブラリの読み込み\nここまででデータを処理して、新たに潜在蒸発散量(PET)や乾燥指数(Aridity Index)を計算してきました。 これらのデータを簡単に利用できるように、座標を与えたら最も近い気候変数の値を返す関数 get_nearest_climate_value() を定義します。 この関数のファイルはR/get_nearest_climate_value.R にあります。 ファイルをダウンロードして、source(\"get_nearest_climate_value.R\") (ファイルパスは適宜変更してください)することで利用できます。\nlibrary(sf)",
+    "text": "Load library\n日本語版はこちら (Japanese version)\nThis chapter introduces get_nearest_climate_value(), which returns climate variable values from the nearest mesh cell to given coordinates. The function source file is R/get_nearest_climate_value.R.\nlibrary(sf)",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Get Nearest Climate Value</span>"
     ]
   },
   {
-    "objectID": "notebooks/get_nearest_climate_value.html#データの読み込み",
-    "href": "notebooks/get_nearest_climate_value.html#データの読み込み",
-    "title": "座標を与えたら最も近い気候変数の値を返す関数",
-    "section": "データの読み込み",
-    "text": "データの読み込み\nこのリポジトリの解析では、環境変数 PROJECT_DATA_DIR にデータの保存先を指定しています。 必要に応じて、適宜変更してください。\n\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\nsf_climate &lt;- readRDS(file.path(\n  data_dir,\n  \"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.rds\"\n))",
+    "objectID": "notebooks/get_nearest_climate_value.html#load-data",
+    "href": "notebooks/get_nearest_climate_value.html#load-data",
+    "title": "Get Nearest Climate Value by Coordinates",
+    "section": "Load data",
+    "text": "Load data\n\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\nsf_climate &lt;- readRDS(file.path(\n  data_dir,\n  \"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.rds\"\n))",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Get Nearest Climate Value</span>"
     ]
   },
   {
-    "objectID": "notebooks/get_nearest_climate_value.html#最も近い気候変数の値を返す関数の定義",
-    "href": "notebooks/get_nearest_climate_value.html#最も近い気候変数の値を返す関数の定義",
-    "title": "座標を与えたら最も近い気候変数の値を返す関数",
-    "section": "最も近い気候変数の値を返す関数の定義",
-    "text": "最も近い気候変数の値を返す関数の定義\n緯度経度やデータフレームを与えると、最も近い気候変数の値を返す関数 get_nearest_climate_value() を定義します。 この関数のファイルはR/get_nearest_climate_value.R にあります。 ファイルをダウンロードして、source(\"get_nearest_climate_value.R\") (ファイルパスは適宜変更してください)することで利用できます。\n\nget_nearest_climate_value &lt;- function(\n  sf_climate,\n  lon = NULL,\n  lat = NULL,\n  df = NULL,\n  lon_col = \"longitude\",\n  lat_col = \"latitude\",\n  value_col = \"aridity_index\",\n  output_col = NULL,\n  calc_by_centroid = TRUE,\n  climate_lon_col = \"longitude\",\n  climate_lat_col = \"latitude\"\n) {\n  if (!inherits(sf_climate, \"sf\")) {\n    stop(\"sf_climate は sf オブジェクトである必要があります。\")\n  }\n\n  # 最近傍検索に使う geometry を決める\n  # calc_by_centroid = TRUE の場合は、重心の座標を使う(こちらのほうが早い)\n  if (calc_by_centroid) {\n    if (!climate_lon_col %in% names(sf_climate)) {\n      stop(\"climate_lon_col が sf_climate に存在しません: \", climate_lon_col)\n    }\n    if (!climate_lat_col %in% names(sf_climate)) {\n      stop(\"climate_lat_col が sf_climate に存在しません: \", climate_lat_col)\n    }\n\n    sf_clim &lt;- sf::st_as_sf(\n      sf::st_drop_geometry(sf_climate),\n      coords = c(climate_lon_col, climate_lat_col),\n      crs = sf::st_crs(sf_climate),\n      remove = FALSE\n    )\n  } else {\n    # geometry をそのまま使う場合\n    sf_clim &lt;- sf_climate\n  }\n\n  # value_col = NULL の場合は、geometry 以外の全列を返す\n  if (is.null(value_col)) {\n    value_col &lt;- names(sf::st_drop_geometry(sf_clim))\n  }\n\n  # value_col の存在確認\n  missing_cols &lt;- setdiff(value_col, names(sf_clim))\n  if (length(missing_cols) &gt; 0) {\n    stop(\n      \"以下の value_col が sf_climate に存在しません: \",\n      paste(missing_cols, collapse = \", \")\n    )\n  }\n\n  # 出力列名の処理\n  if (is.null(output_col)) {\n    output_col &lt;- value_col\n  }\n\n  if (length(output_col) != length(value_col)) {\n    stop(\"output_col は value_col と同じ長さである必要があります。\")\n  }\n\n  # lon, lat が直接与えられた場合\n  if (!is.null(lon) && !is.null(lat) && is.null(df)) {\n    pt &lt;- sf::st_sfc(\n      sf::st_point(c(lon, lat)),\n      crs = sf::st_crs(sf_clim)\n    )\n\n    idx &lt;- sf::st_nearest_feature(pt, sf_clim)\n\n    out &lt;- sf::st_drop_geometry(sf_clim[idx, value_col, drop = FALSE])\n    names(out) &lt;- output_col\n\n    return(out)\n  }\n\n  # data.frame が与えられた場合\n  if (!is.null(df) && is.null(lon) && is.null(lat)) {\n    if (!lon_col %in% names(df)) {\n      stop(\"lon_col が df に存在しません: \", lon_col)\n    }\n    if (!lat_col %in% names(df)) {\n      stop(\"lat_col が df に存在しません: \", lat_col)\n    }\n\n    pts &lt;- sf::st_as_sf(\n      df,\n      coords = c(lon_col, lat_col),\n      crs = sf::st_crs(sf_clim),\n      remove = FALSE\n    )\n\n    idx &lt;- sf::st_nearest_feature(pts, sf_clim)\n\n    vals &lt;- sf::st_drop_geometry(sf_clim[idx, value_col, drop = FALSE])\n    names(vals) &lt;- output_col\n\n    out &lt;- cbind(df, vals)\n\n    return(out)\n  }\n\n  stop(\n    \"lon と lat の両方を指定するか、df を指定してください。両方同時には指定しないでください。\"\n  )\n}",
+    "objectID": "notebooks/get_nearest_climate_value.html#define-the-function",
+    "href": "notebooks/get_nearest_climate_value.html#define-the-function",
+    "title": "Get Nearest Climate Value by Coordinates",
+    "section": "Define the function",
+    "text": "Define the function\n\nsource(\"../R/get_nearest_climate_value.R\")",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Get Nearest Climate Value</span>"
     ]
   },
   {
-    "objectID": "notebooks/get_nearest_climate_value.html#使い方",
-    "href": "notebooks/get_nearest_climate_value.html#使い方",
-    "title": "座標を与えたら最も近い気候変数の値を返す関数",
-    "section": "使い方",
-    "text": "使い方\n関数の使い方をいくつか例示します。\n緯度経度を指定して最も近いaridity_indexを取得\n\nresult &lt;- get_nearest_climate_value(\n  sf_climate,\n  lon = 139.6917,\n  lat = 35.6895,\n  value_col = \"aridity_index\"\n)\nprint(result)\n\n\n\nResult\n\n       aridity_index\n165824       1.84528\n\n緯度経度を指定して、複数の気候変数を取得\n\nresult &lt;- get_nearest_climate_value(\n  sf_climate,\n  lon = 139.6917,\n  lat = 35.6895,\n  value_col = c(\"aridity_index\", \"precipitation_year\")\n)\nprint(result)\n\n\n\nResult\n\n       aridity_index precipitation_year\n165824       1.84528             1553.8\n\nデータフレームを指定して最も近いaridity_indexを取得\n\ndf_input &lt;- data.frame(\n  id = 1:3,\n  longitude = c(139.6917, 135.5022, 130.4181),\n  latitude = c(35.6895, 34.6937, 33.5902)\n)\nresult &lt;- get_nearest_climate_value(\n  sf_climate,\n  df = df_input,\n  lon_col = \"longitude\",\n  lat_col = \"latitude\",\n  value_col = \"aridity_index\"\n)\nprint(result)\n\n\n\nResult\n\n       id longitude latitude aridity_index\n165824  1  139.6917  35.6895      1.845280\n111106  2  135.5022  34.6937      1.442432\n44366   3  130.4181  33.5902      1.821206\n\nデータフレームを指定して、複数の気候変数を取得\n\ndf_input &lt;- data.frame(\n  id = 1:3,\n  longitude = c(139.6917, 135.5022, 130.4181),\n  latitude = c(35.6895, 34.6937, 33.5902)\n)\nresult &lt;- get_nearest_climate_value(\n  sf_climate,\n  df = df_input,\n  lon_col = \"longitude\",\n  lat_col = \"latitude\",\n  value_col = c(\"aridity_index\", \"precipitation_year\")\n)\nprint(result)\n\n\n\nResult\n\n       id longitude latitude aridity_index precipitation_year\n165824  1  139.6917  35.6895      1.845280             1553.8\n111106  2  135.5022  34.6937      1.442432             1312.0\n44366   3  130.4181  33.5902      1.821206             1648.9",
-    "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Get Nearest Climate Value</span>"
-    ]
-  },
-  {
-    "objectID": "notebooks/get_nearest_climate_value.html#緯度経度を指定して全ての変数を取得",
-    "href": "notebooks/get_nearest_climate_value.html#緯度経度を指定して全ての変数を取得",
-    "title": "座標を与えたら最も近い気候変数の値を返す関数",
-    "section": "緯度経度を指定して、全ての変数を取得",
-    "text": "緯度経度を指定して、全ての変数を取得\nvalue_col = NULL とすることで、全ての変数を取得できます。\n\nresult &lt;- get_nearest_climate_value(\n  sf_climate,\n  lon = 139.6917,\n  lat = 35.6895,\n  value_col = NULL\n)\nprint(result)\n\n\n\nResult\n\n       mesh_code_3rd precipitation_Jan precipitation_Feb precipitation_Mar\n165824      53394525              55.8              53.6             112.5\n       precipitation_Apr precipitation_May precipitation_Jun precipitation_Jul\n165824             124.9             133.8             166.1             158.4\n       precipitation_Aug precipitation_Sep precipitation_Oct precipitation_Nov\n165824             154.9             222.4             225.1              90.6\n       precipitation_Dec precipitation_year maximum_temperature_Jan\n165824              55.7             1553.8                     9.7\n       minimum_temperature_Jan mean_temperature_Jan maximum_temperature_Feb\n165824                     0.8                  5.2                    10.7\n       minimum_temperature_Feb mean_temperature_Feb maximum_temperature_Mar\n165824                     1.8                    6                    13.9\n       minimum_temperature_Mar mean_temperature_Mar maximum_temperature_Apr\n165824                     4.9                  9.3                    19.2\n       minimum_temperature_Apr mean_temperature_Apr maximum_temperature_May\n165824                     9.9                 14.3                    23.7\n       minimum_temperature_May mean_temperature_May maximum_temperature_Jun\n165824                    14.8                 18.9                    26.3\n       minimum_temperature_Jun mean_temperature_Jun maximum_temperature_Jul\n165824                    18.7                   22                    30.2\n       minimum_temperature_Jul mean_temperature_Jul maximum_temperature_Aug\n165824                    22.5                 25.8                    31.5\n       minimum_temperature_Aug mean_temperature_Aug maximum_temperature_Sep\n165824                    23.7                   27                    27.5\n       minimum_temperature_Sep mean_temperature_Sep maximum_temperature_Oct\n165824                    20.4                 23.4                      22\n       minimum_temperature_Oct mean_temperature_Oct maximum_temperature_Nov\n165824                    14.8                 18.1                    16.6\n       minimum_temperature_Nov mean_temperature_Nov maximum_temperature_Dec\n165824                     8.7                 12.6                      12\n       minimum_temperature_Dec mean_temperature_Dec maximum_temperature_year\n165824                     3.4                  7.6                     20.3\n       minimum_temperature_year mean_temperature_year maximum_snow_depth_Jan\n165824                       12                  15.9                      3\n       maximum_snow_depth_Feb maximum_snow_depth_Mar maximum_snow_depth_Dec\n165824                      3                      0                      0\n       maximum_snow_depth_year sunshine_duration_Jan sunshine_duration_Feb\n165824                       3                 198.4                 176.3\n       sunshine_duration_Mar sunshine_duration_Apr sunshine_duration_May\n165824                 176.8                 179.4                 180.4\n       sunshine_duration_Jun sunshine_duration_Jul sunshine_duration_Aug\n165824                   123                 147.7                 173.9\n       sunshine_duration_Sep sunshine_duration_Oct sunshine_duration_Nov\n165824                 129.1                 134.5                   156\n       sunshine_duration_Dec sunshine_duration_year global_solar_radiation_Jan\n165824                 178.5                   1954                        9.7\n       global_solar_radiation_Feb global_solar_radiation_Mar global_solar_radiation_Apr\n165824                       11.8                       13.8                       16.5\n       global_solar_radiation_May global_solar_radiation_Jun global_solar_radiation_Jul\n165824                       17.6                       15.3                       16.3\n       global_solar_radiation_Aug global_solar_radiation_Sep global_solar_radiation_Oct\n165824                       16.6                       12.8                       10.4\n       global_solar_radiation_Nov global_solar_radiation_Dec global_solar_radiation_year\n165824                          9                        8.3                        13.2\n       longitude latitude     PET1     PET2     PET3    PET4     PET5     PET6     PET7\n165824  139.6937  35.6875 7.319984 9.144842 23.23313 51.1194 90.94641 118.0401 157.3831\n           PET8     PET9    PET10    PET11    PET12 PET_year aridity_index\n165824 159.9936 111.3146 67.64351 32.34395 13.55769 842.0402       1.84528",
-    "crumbs": [
-      "<span class='chapter-number'>5</span>  <span class='chapter-title'>Get Nearest Climate Value</span>"
-    ]
-  },
-  {
-    "objectID": "notebooks/get_nearest_climate_value.html#データの出典",
-    "href": "notebooks/get_nearest_climate_value.html#データの出典",
-    "title": "座標を与えたら最も近い気候変数の値を返す関数",
-    "section": "データの出典",
-    "text": "データの出典\n本ページで使用している気候データは、気象庁のメッシュ平年値2020を元に加工したものです。",
+    "objectID": "notebooks/get_nearest_climate_value.html#usage",
+    "href": "notebooks/get_nearest_climate_value.html#usage",
+    "title": "Get Nearest Climate Value by Coordinates",
+    "section": "Usage",
+    "text": "Usage\nGet nearest aridity_index for one coordinate\n\nresult &lt;- get_nearest_climate_value(\n  sf_climate,\n  lon = 139.6917,\n  lat = 35.6895,\n  value_col = \"aridity_index\"\n)\nprint(result)\n\nGet multiple variables for one coordinate\n\nresult &lt;- get_nearest_climate_value(\n  sf_climate,\n  lon = 139.6917,\n  lat = 35.6895,\n  value_col = c(\"aridity_index\", \"precipitation_year\")\n)\nprint(result)\n\nGet nearest values for a data frame of coordinates\n\ndf_input &lt;- data.frame(\n  id = 1:3,\n  longitude = c(139.6917, 135.5022, 130.4181),\n  latitude = c(35.6895, 34.6937, 33.5902)\n)\nresult &lt;- get_nearest_climate_value(\n  sf_climate,\n  df = df_input,\n  lon_col = \"longitude\",\n  lat_col = \"latitude\",\n  value_col = c(\"aridity_index\", \"precipitation_year\")\n)\nprint(result)\n\nGet all attributes\n\nresult &lt;- get_nearest_climate_value(\n  sf_climate,\n  lon = 139.6917,\n  lat = 35.6895,\n  value_col = NULL\n)\nprint(head(result))",
     "crumbs": [
       "<span class='chapter-number'>5</span>  <span class='chapter-title'>Get Nearest Climate Value</span>"
     ]
@@ -324,32 +304,417 @@
     "href": "notebooks/plot_japan_climate_map.html",
     "title": "Appendix A — Plot Japan Climate Map",
     "section": "",
-    "text": "データの読み込み\ntmapパッケージを使用して、日本の気候マップを描画します。 rnaturalearthパッケージは、日本地図を描画するために使用します。\nこのリポジトリの解析では、環境変数 PROJECT_DATA_DIR にデータの保存先を指定しています。 必要に応じて、適宜変更してください。\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\nsf_climate &lt;- readRDS(file.path(\n  data_dir,\n  \"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.rds\"\n))",
+    "text": "Load data\n日本語版はこちら (Japanese version)\nThis chapter draws Japan climate maps using tmap and rnaturalearth.\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\nsf_climate &lt;- readRDS(file.path(\n  data_dir,\n  \"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.rds\"\n))",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>A</span>  <span class='chapter-title'>Plot Japan Climate Map</span>"
     ]
   },
   {
-    "objectID": "notebooks/plot_japan_climate_map.html#evapotranspiration-petの描画",
-    "href": "notebooks/plot_japan_climate_map.html#evapotranspiration-petの描画",
+    "objectID": "notebooks/plot_japan_climate_map.html#plot-pet",
+    "href": "notebooks/plot_japan_climate_map.html#plot-pet",
     "title": "Appendix A — Plot Japan Climate Map",
+    "section": "Plot PET",
+    "text": "Plot PET\n\n# renv::install(\"ropensci/rnaturalearthhires\")\nvariable &lt;- \"PET_year\"\njapan &lt;- ne_states(country = \"Japan\", returnclass = \"sf\")\nsf_plot &lt;- sf_climate[!is.na(sf_climate[[variable]]), ]\ntm &lt;- tm_shape(japan, crs = 4612) +\n  tm_polygons(col = \"gray90\") +\n  tm_shape(sf_plot[, variable], crs = 4612) +\n  tm_symbols(\n    shape = 20,\n    fill = variable,\n    size = 0.1,\n    fill_alpha = 0.9,\n    fill.scale = tm_scale_continuous(values = \"viridis\"),\n    fill.legend = tm_legend(\n      title = variable,\n      reverse = TRUE,\n      position = c(\"right\", \"bottom\"),\n      frame = FALSE,\n      bg.color = \"transparent\"\n    )\n  ) +\n  tm_layout(frame = FALSE, bg.color = \"transparent\")\nprint(tm)\n\noutput_dir &lt;- \"output\"\ndir.create(output_dir, showWarnings = FALSE, recursive = TRUE)\ntmap_save(\n  tm,\n  filename = file.path(output_dir, paste0(\"japan_climate_map_\", variable, \".png\")),\n  dpi = 300\n)\n\n\n\nPET map result",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Plot Japan Climate Map</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/plot_japan_climate_map.html#plot-aridity-index",
+    "href": "notebooks/plot_japan_climate_map.html#plot-aridity-index",
+    "title": "Appendix A — Plot Japan Climate Map",
+    "section": "Plot Aridity Index",
+    "text": "Plot Aridity Index\n\nvariable &lt;- \"aridity_index\"\njapan &lt;- ne_states(country = \"Japan\", returnclass = \"sf\")\nsf_plot &lt;- sf_climate[!is.na(sf_climate[[variable]]), ]\ntm &lt;- tm_shape(japan, crs = 4612) +\n  tm_polygons(col = \"gray90\") +\n  tm_shape(sf_plot[, variable], crs = 4612) +\n  tm_symbols(\n    shape = 20,\n    fill = variable,\n    size = 0.1,\n    fill_alpha = 0.9,\n    fill.scale = tm_scale_continuous(values = \"viridis\"),\n    fill.legend = tm_legend(\n      title = variable,\n      reverse = TRUE,\n      position = c(\"right\", \"bottom\"),\n      frame = FALSE,\n      bg.color = \"transparent\"\n    )\n  ) +\n  tm_layout(frame = FALSE, bg.color = \"transparent\")\nprint(tm)\n\ntmap_save(\n  tm,\n  filename = file.path(output_dir, paste0(\"japan_climate_map_\", variable, \".png\")),\n  dpi = 300\n)\n\n\n\nAridity Index map result",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Plot Japan Climate Map</span>"
+    ]
+  },
+  {
+    "objectID": "index_ja.html",
+    "href": "index_ja.html",
+    "title": "Appendix B — メッシュ平年値2020を用いた気候変数の処理",
+    "section": "",
+    "text": "データについて\nEnglish version\nこのドキュメントでは、気象庁のメッシュ平年値2020を用いて、気候変数を処理する方法を説明します。\nデータは、国土数値情報の平均値メッシュデータを使用します。\n元データや加工データについてはこのリポジトリでは配布いたしません。 必要なデータは、ご自身でダウンロードいただくようお願いいたします。\n利用規約については、国土数値情報の利用規約をご確認ください。 特に、出典の明記を忘れないようにお願いいたします。",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>日本語版: はじめに</span>"
+    ]
+  },
+  {
+    "objectID": "index_ja.html#データについて",
+    "href": "index_ja.html#データについて",
+    "title": "Appendix B — メッシュ平年値2020を用いた気候変数の処理",
+    "section": "",
+    "text": "Note\n\n\n\nメッシュ平年値2020の概要については、気象庁の報道発表資料を参照してください。",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>日本語版: はじめに</span>"
+    ]
+  },
+  {
+    "objectID": "index_ja.html#パッケージ管理について",
+    "href": "index_ja.html#パッケージ管理について",
+    "title": "Appendix B — メッシュ平年値2020を用いた気候変数の処理",
+    "section": "パッケージ管理について",
+    "text": "パッケージ管理について\n本リポジトリでは、Rのパッケージ管理にrenvを使用しています。 リポジトリをクローンした場合、renv::restore()を実行することで、本リポジトリの環境を再現できます。\nもしrenvを使用しない場合、適宜必要なパッケージをインストールしてください。",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>日本語版: はじめに</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/prepare_climate_data_ja.html",
+    "href": "notebooks/prepare_climate_data_ja.html",
+    "title": "Appendix C — Prepare Climate Data",
+    "section": "",
+    "text": "平均値メッシュデータのダウンロード\nEnglish version\n平均値メッシュデータを用いて、気候変数を作成していきます。 データソースには、国土数値情報の 平均値メッシュデータ を使用します。\n平均値メッシュデータは、以下の国土数値情報のサイトからダウンロードできます。\n必要なデータをダウンロードします。 形式はzipファイルで提供されているので、展開して使用します。 筆者はすべてのデータをダウンロードしましたが、必要なデータだけをダウンロードしても問題ありません。\nデータは、任意のフォルダにまとめて保存してください。 なお、このリポジトリの解析では、環境変数 PROJECT_DATA_DIR にデータの保存先を指定しています。 具体的には、データ自体はDropboxに保存しており、ルートディレクトリに .Renviron ファイルを作成して、以下のように環境変数を設定しています。",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>日本語版: 気候データの準備</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/prepare_climate_data_ja.html#平均値メッシュデータのダウンロード",
+    "href": "notebooks/prepare_climate_data_ja.html#平均値メッシュデータのダウンロード",
+    "title": "Appendix C — Prepare Climate Data",
+    "section": "",
+    "text": "平均値メッシュデータ\n\n\n\n\n\n.Renviron\n\nPROJECT_DATA_DIR=C:/Users/Username/Dropbox/GitHub/japanese_climate_calculation\n\n\n\n\n\n\n\nNote利用規約について\n\n\n\n国土数値情報の利用規約については、こちらをご確認ください。",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>日本語版: 気候データの準備</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/prepare_climate_data_ja.html#ライブラリの読み込み",
+    "href": "notebooks/prepare_climate_data_ja.html#ライブラリの読み込み",
+    "title": "Appendix C — Prepare Climate Data",
+    "section": "ライブラリの読み込み",
+    "text": "ライブラリの読み込み\n使用するライブラリを読み込みます。\n\nlibrary(tools)\nlibrary(sf)",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>日本語版: 気候データの準備</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/prepare_climate_data_ja.html#データディレクトリの指定",
+    "href": "notebooks/prepare_climate_data_ja.html#データディレクトリの指定",
+    "title": "Appendix C — Prepare Climate Data",
+    "section": "データディレクトリの指定",
+    "text": "データディレクトリの指定\nここでは、環境変数 PROJECT_DATA_DIR を使用して、データの保存先を指定しています。 必要に応じて、適宜変更してください。\n\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\n# もし環境変数が設定されていない場合は、以下のように直接パスを指定してください。\n# data_dir &lt;- \"data\"",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>日本語版: 気候データの準備</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/prepare_climate_data_ja.html#zipファイルの展開",
+    "href": "notebooks/prepare_climate_data_ja.html#zipファイルの展開",
+    "title": "Appendix C — Prepare Climate Data",
+    "section": "zipファイルの展開",
+    "text": "zipファイルの展開\nデータはzipファイルで提供されているので、展開します。 ファイルパスには、zipファイルがまとめて保存してあるディレクトリを指定してください。\nzipファイルは、G02-22_5436-jgd_GML.zipのような形式で提供されているはずです。 G02は平均値メッシュデータの分類コード、22は2022年に更新されたデータであることを示しています。 12となっているファイルもありますが、これは2012年に更新されたデータであることを示しています。\n\nzip_output_dir &lt;- file.path(\"data\", \"climate_mesh_data\")\ndir.create(zip_output_dir, showWarnings = FALSE, recursive = TRUE)\n\nzip_files &lt;- list.files(\n  file.path(data_dir, \"climate_mesh_data_zip\"),\n  pattern = \"^G02-22_.*\\\\.zip$\",\n  full.names = TRUE\n)\nfile_names &lt;- tools::file_path_sans_ext(basename(zip_files))\nlapply(zip_files, unzip, overwrite = TRUE, exdir = zip_output_dir)",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>日本語版: 気候データの準備</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/prepare_climate_data_ja.html#シェープファイルの読み込み",
+    "href": "notebooks/prepare_climate_data_ja.html#シェープファイルの読み込み",
+    "title": "Appendix C — Prepare Climate Data",
+    "section": "シェープファイルの読み込み",
+    "text": "シェープファイルの読み込み\nzipファイルが展開されたら、zipファイルのファイル名が名前の付いたフォルダができています。 その中に、G02-22_5436-jgd_GML.shpのようなシェープファイルがあります。 これを読み込んで、データフレームにまとめます。\nデータの列名はG02_001のように、コードで表されているので、別途用意したラベルファイルを使って、列名をわかりやすい名前に変換します。 data/manual/mesh_climate_data_labels.csvに、コードと対応する変数名を保存していますので、これをお使いください (クリックでダウンロードできます)。\n\ndata_list &lt;- list()\n# Shapefile のフルパスを取得\ndata_paths &lt;- list.files(\n  zip_output_dir,\n  pattern = \"^G02-22_.*\\\\.shp$\",\n  full.names = TRUE,\n  recursive = TRUE\n)\n# やや時間がかかるので注意\nfor (i in seq_along(data_paths)) {\n  path &lt;- data_paths[i] # file full path\n  name &lt;- file_path_sans_ext(basename(path)) # file name\n  data_list[[name]] &lt;- st_read(path) # add SpatVector to list\n  #cat(paste0(i, \"/\", length(data_paths), \" : \", name, \"\\n\"))\n}\nsf_climate &lt;- do.call(rbind, data_list) # 一つのオブジェクトにまとめる\ndf_label &lt;- read.csv(\n  file.path(data_dir, \"manual/mesh_climate_data_labels.csv\"),\n  fileEncoding = \"UTF-8\"\n)\nnames(sf_climate) &lt;- make.names(c(df_label$name_en, \"geometry\")) # 変数名の先頭が数字だとだめなので修正",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>日本語版: 気候データの準備</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/prepare_climate_data_ja.html#値の変換",
+    "href": "notebooks/prepare_climate_data_ja.html#値の変換",
+    "title": "Appendix C — Prepare Climate Data",
+    "section": "値の変換",
+    "text": "値の変換\nデータの値は、小数を避けるために10倍されているので、元の値に戻すために10で割ります。\n降水量、気温、日照時間、全天日射量は10分の1にするとちゃんとした値になります。\n\n降水量は0.1mm単位\n\n気温は0.1℃単位\n\n日照時間は0.1時間単位\n\n全天日射量は0.1MJm-2単位\n\nまた、欠損値は999999で表されているので、これをNAに変換します。\n\n参考: 国土数値情報 平年値メッシュデータ\n\n\n\ncol_index &lt;- c(\n  grep(\"precipitation\", names(sf_climate)),\n  grep(\"temperature\", names(sf_climate)),\n  grep(\"sunshine_duration\", names(sf_climate)),\n  grep(\"global_solar_radiation\", names(sf_climate))\n)\nindices_snow &lt;- grep(\"maximum_snow_depth\", names(sf_climate))\n\nNA_value &lt;- 999999\ndf &lt;- st_drop_geometry(sf_climate)\ndf[, col_index][df[, col_index] == NA_value] &lt;- NA # 999999のときはNAに変換\ndf[, col_index] &lt;- df[, col_index] * 0.1\ndf[, indices_snow][df[, indices_snow] == NA_value] &lt;- 0 # 最深積雪が999999のときは0に変換\nsf_climate &lt;- st_set_geometry(df, st_geometry(sf_climate))",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>日本語版: 気候データの準備</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/prepare_climate_data_ja.html#緯度と経度の抽出",
+    "href": "notebooks/prepare_climate_data_ja.html#緯度と経度の抽出",
+    "title": "Appendix C — Prepare Climate Data",
+    "section": "緯度と経度の抽出",
+    "text": "緯度と経度の抽出\nst_centroid() を使うと、ポリゴンの重心を取得できます。\nメッシュは正方形のポリゴンで表されているので、重心はメッシュの中心点になります。\n\nsf_climate$longitude &lt;- st_coordinates(st_centroid(sf_climate))[, 1]\nsf_climate$latitude &lt;- st_coordinates(st_centroid(sf_climate))[, 2]",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>日本語版: 気候データの準備</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/prepare_climate_data_ja.html#データの保存",
+    "href": "notebooks/prepare_climate_data_ja.html#データの保存",
+    "title": "Appendix C — Prepare Climate Data",
+    "section": "データの保存",
+    "text": "データの保存\nデータは、RDSファイルとCSVファイルの両方で保存します。 Excelなどですぐに確認をしたい場合はCSVファイルを、Rで再利用したい場合はRDSファイルを使用するのが便利です。\nなお、CSVファイルはread.csv()で、RDSファイルはreadRDS()で読み込むことができます。\n\nsave_dir &lt;- file.path(data_dir, \"climate_mesh_data_joined\")\ndir.create(save_dir, showWarnings = FALSE, recursive = TRUE)\nsaveRDS(sf_climate, file.path(save_dir, \"climate_mesh_data.rds\"))",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>日本語版: 気候データの準備</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/prepare_climate_data_ja.html#csvファイルにして保存",
+    "href": "notebooks/prepare_climate_data_ja.html#csvファイルにして保存",
+    "title": "Appendix C — Prepare Climate Data",
+    "section": "CSVファイルにして保存",
+    "text": "CSVファイルにして保存\n\ndf_climate &lt;- st_drop_geometry(sf_climate)\nwrite.csv(\n  df_climate,\n  file.path(save_dir, \"climate_mesh_data.csv\"),\n  row.names = FALSE,\n  fileEncoding = \"UTF-8\"\n)",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>C</span>  <span class='chapter-title'>日本語版: 気候データの準備</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/calculate_PET_ja.html",
+    "href": "notebooks/calculate_PET_ja.html",
+    "title": "Appendix D — Calculate Potential Evapotranspiration (PET)",
+    "section": "",
+    "text": "ライブラリの読み込み\nEnglish version\n潜在蒸発散量 Potential evapotranspiration; PETを計算します。 方法はThornthwaite method(Thornthwaite 1948)です。 パッケージはSPEIを使用します(Beguería and Vicente-Serrano 2023)。\nlibrary(sf)\nlibrary(SPEI)",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>D</span>  <span class='chapter-title'>日本語版: PETの計算</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/calculate_PET_ja.html#データの読み込み",
+    "href": "notebooks/calculate_PET_ja.html#データの読み込み",
+    "title": "Appendix D — Calculate Potential Evapotranspiration (PET)",
+    "section": "データの読み込み",
+    "text": "データの読み込み\nこのリポジトリの解析では、環境変数 PROJECT_DATA_DIR にデータの保存先を指定しています。 必要に応じて、適宜変更してください。\n\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\n# data_dir &lt;- \"data\" # もし環境変数が設定されていない場合は、直接パスを指定してください。\nsf_climate &lt;- readRDS(file.path(\n  data_dir,\n  \"climate_mesh_data_joined/climate_mesh_data.rds\"\n))",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>D</span>  <span class='chapter-title'>日本語版: PETの計算</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/calculate_PET_ja.html#計算用データフレームの作成",
+    "href": "notebooks/calculate_PET_ja.html#計算用データフレームの作成",
+    "title": "Appendix D — Calculate Potential Evapotranspiration (PET)",
+    "section": "計算用データフレームの作成",
+    "text": "計算用データフレームの作成\n緯度、月平均気温を抽出します。\n\nlatitudes &lt;- sf_climate$latitude\ndf_temp &lt;- sf_climate[, grep(\"mean_temperature\", names(sf_climate))]\ndf_temp &lt;- st_drop_geometry(df_temp) # ジオメトリを削除\ndf_temp &lt;- df_temp[, 1:12] # 年平均気温を除外\n\nkeep &lt;- complete.cases(df_temp) # NAを含まない行\nremoved_rows &lt;- which(!keep) # 削除される元の行番号\n\ndf_temp_clean &lt;- df_temp[keep, ]\nsf_climate_clean &lt;- sf_climate[keep, ]\nrow.names(df_temp_clean) &lt;- sf_climate_clean$mesh_code_3rd",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>D</span>  <span class='chapter-title'>日本語版: PETの計算</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/calculate_PET_ja.html#petの計算",
+    "href": "notebooks/calculate_PET_ja.html#petの計算",
+    "title": "Appendix D — Calculate Potential Evapotranspiration (PET)",
+    "section": "PETの計算",
+    "text": "PETの計算\nSPEI::thornthwaite() 関数を使用してPETを計算します。 もしメッセージを抑制したい場合は、引数にverbose = FALSEを追加してください。\n\nn &lt;- nrow(df_temp_clean) # サンプル数\npet_month &lt;- matrix(NA, n, 12)\nfor (i in seq_len(n)) {\n  pet_month[i, ] &lt;- SPEI::thornthwaite(\n    Tave = as.numeric(df_temp_clean[i, ]),\n    lat = latitudes[i],\n    verbose = FALSE\n  )\n}",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>D</span>  <span class='chapter-title'>日本語版: PETの計算</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/calculate_PET_ja.html#petデータの整形",
+    "href": "notebooks/calculate_PET_ja.html#petデータの整形",
+    "title": "Appendix D — Calculate Potential Evapotranspiration (PET)",
+    "section": "PETデータの整形",
+    "text": "PETデータの整形\npet_monthマトリックスをデータフレームに変換し、列名を設定します また、年間PETも計算します。\n\ndf_pet &lt;- as.data.frame(pet_month)\nnames(df_pet) &lt;- paste0(\"PET\", 1:12)\ndf_pet$PET_year &lt;- rowSums(df_pet)",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>D</span>  <span class='chapter-title'>日本語版: PETの計算</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/calculate_PET_ja.html#データの結合",
+    "href": "notebooks/calculate_PET_ja.html#データの結合",
+    "title": "Appendix D — Calculate Potential Evapotranspiration (PET)",
+    "section": "データの結合",
+    "text": "データの結合\nmesh_code_3rdをキーにして、PETデータを元の気候データと結合します。 結合後、ジオメトリを削除して、データフレームとして保存します。\n\ndf_pet$mesh_code_3rd &lt;- row.names(df_temp_clean)\nsf_merged &lt;- merge(\n  sf_climate,\n  df_pet,\n  by = \"mesh_code_3rd\",\n  all.x = TRUE,\n  sort = FALSE\n)\ndf_merged &lt;- st_drop_geometry(sf_merged)",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>D</span>  <span class='chapter-title'>日本語版: PETの計算</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/calculate_PET_ja.html#データの保存",
+    "href": "notebooks/calculate_PET_ja.html#データの保存",
+    "title": "Appendix D — Calculate Potential Evapotranspiration (PET)",
+    "section": "データの保存",
+    "text": "データの保存\nRDS形式とCSV形式で保存します。 必要に応じて、保存先のパスを変更してください。\n\nsave_dir &lt;- file.path(data_dir, \"climate_mesh_data_joined\")\nsaveRDS(sf_merged, file.path(save_dir, \"climate_mesh_data_with_pet.rds\"))\nwrite.csv(\n  df_merged,\n  file.path(save_dir, \"climate_mesh_data_with_pet.csv\"),\n  row.names = FALSE\n)",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>D</span>  <span class='chapter-title'>日本語版: PETの計算</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/calculate_PET_ja.html#references",
+    "href": "notebooks/calculate_PET_ja.html#references",
+    "title": "Appendix D — Calculate Potential Evapotranspiration (PET)",
+    "section": "References",
+    "text": "References\n\n\n\n\n\n\nBeguería, Santiago, and Sergio M. Vicente-Serrano. 2023. SPEI: Calculation of the Standardized Precipitation-Evapotranspiration Index. https://doi.org/10.32614/CRAN.package.SPEI.\n\n\nThornthwaite, C. W. 1948. “An Approach Toward a Rational Classification of Climate.” Geographical Review 38 (1): 55–94. https://doi.org/10.2307/210739.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>D</span>  <span class='chapter-title'>日本語版: PETの計算</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/calculate_aridity_index_ja.html",
+    "href": "notebooks/calculate_aridity_index_ja.html",
+    "title": "Appendix E — Calculate Aridity Index",
+    "section": "",
+    "text": "ライブラリの読み込み\nEnglish version\nAridity Index (AI)を計算します。 AIは気候の乾燥度を表す指標で、降水量(precipitation)と蒸発散量(potential evapotranspiration)の比率として定義されます (World Atlas of Desertification 1992)。\nほかにもいろいろな定義があるようですが、ここでは以下の式を用います。\n\\[AI = \\frac{P}{PET}\\]\nここで、\\(P\\) は降水量、\\(PET\\) は潜在蒸発散量です。\nlibrary(sf)",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>E</span>  <span class='chapter-title'>日本語版: 乾燥指数の計算</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/calculate_aridity_index_ja.html#データの読み込み",
+    "href": "notebooks/calculate_aridity_index_ja.html#データの読み込み",
+    "title": "Appendix E — Calculate Aridity Index",
+    "section": "データの読み込み",
+    "text": "データの読み込み\nこのリポジトリの解析では、環境変数 PROJECT_DATA_DIR にデータの保存先を指定しています。 必要に応じて、適宜変更してください。\n\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\nsf_climate &lt;- readRDS(file.path(\n  data_dir,\n  \"climate_mesh_data_joined/climate_mesh_data_with_pet.rds\"\n))",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>E</span>  <span class='chapter-title'>日本語版: 乾燥指数の計算</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/calculate_aridity_index_ja.html#aridity-index-の計算",
+    "href": "notebooks/calculate_aridity_index_ja.html#aridity-index-の計算",
+    "title": "Appendix E — Calculate Aridity Index",
+    "section": "Aridity Index の計算",
+    "text": "Aridity Index の計算\nAridity Index を計算して、sf_climateオブジェクトに新しい列aridity_indexとして追加します。\n\nsf_climate$aridity_index &lt;- sf_climate$precipitation_year / sf_climate$PET_year",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>E</span>  <span class='chapter-title'>日本語版: 乾燥指数の計算</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/calculate_aridity_index_ja.html#データの保存",
+    "href": "notebooks/calculate_aridity_index_ja.html#データの保存",
+    "title": "Appendix E — Calculate Aridity Index",
+    "section": "データの保存",
+    "text": "データの保存\nRDS形式とCSV形式で保存します。 必要に応じて、保存先のパスを変更してください。\n\nsaveRDS(\n  sf_climate,\n  file.path(\n    data_dir,\n    \"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.rds\"\n  )\n)\ndf_climate &lt;- st_drop_geometry(sf_climate)\nwrite.csv(\n  df_climate,\n  file.path(\n    data_dir,\n    \"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.csv\"\n  ),\n  row.names = FALSE\n)",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>E</span>  <span class='chapter-title'>日本語版: 乾燥指数の計算</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/calculate_aridity_index_ja.html#references",
+    "href": "notebooks/calculate_aridity_index_ja.html#references",
+    "title": "Appendix E — Calculate Aridity Index",
+    "section": "References",
+    "text": "References\n\n\n\n\n\n\nWorld Atlas of Desertification. 1992. UNEP.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>E</span>  <span class='chapter-title'>日本語版: 乾燥指数の計算</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/get_nearest_climate_value_ja.html",
+    "href": "notebooks/get_nearest_climate_value_ja.html",
+    "title": "Appendix F — 座標を与えたら最も近い気候変数の値を返す関数",
+    "section": "",
+    "text": "ライブラリの読み込み\nEnglish version\nここまででデータを処理して、新たに潜在蒸発散量(PET)や乾燥指数(Aridity Index)を計算してきました。 これらのデータを簡単に利用できるように、座標を与えたら最も近い気候変数の値を返す関数 get_nearest_climate_value() を定義します。 この関数のファイルはR/get_nearest_climate_value.R にあります。 ファイルをダウンロードして、source(\"get_nearest_climate_value.R\") (ファイルパスは適宜変更してください)することで利用できます。\nlibrary(sf)",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>F</span>  <span class='chapter-title'>日本語版: 最近傍の気候値取得</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/get_nearest_climate_value_ja.html#データの読み込み",
+    "href": "notebooks/get_nearest_climate_value_ja.html#データの読み込み",
+    "title": "Appendix F — 座標を与えたら最も近い気候変数の値を返す関数",
+    "section": "データの読み込み",
+    "text": "データの読み込み\nこのリポジトリの解析では、環境変数 PROJECT_DATA_DIR にデータの保存先を指定しています。 必要に応じて、適宜変更してください。\n\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\nsf_climate &lt;- readRDS(file.path(\n  data_dir,\n  \"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.rds\"\n))",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>F</span>  <span class='chapter-title'>日本語版: 最近傍の気候値取得</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/get_nearest_climate_value_ja.html#最も近い気候変数の値を返す関数の定義",
+    "href": "notebooks/get_nearest_climate_value_ja.html#最も近い気候変数の値を返す関数の定義",
+    "title": "Appendix F — 座標を与えたら最も近い気候変数の値を返す関数",
+    "section": "最も近い気候変数の値を返す関数の定義",
+    "text": "最も近い気候変数の値を返す関数の定義\n緯度経度やデータフレームを与えると、最も近い気候変数の値を返す関数 get_nearest_climate_value() を定義します。 この関数のファイルはR/get_nearest_climate_value.R にあります。 ファイルをダウンロードして、source(\"get_nearest_climate_value.R\") (ファイルパスは適宜変更してください)することで利用できます。\n\nget_nearest_climate_value &lt;- function(\n  sf_climate,\n  lon = NULL,\n  lat = NULL,\n  df = NULL,\n  lon_col = \"longitude\",\n  lat_col = \"latitude\",\n  value_col = \"aridity_index\",\n  output_col = NULL,\n  calc_by_centroid = TRUE,\n  climate_lon_col = \"longitude\",\n  climate_lat_col = \"latitude\"\n) {\n  if (!inherits(sf_climate, \"sf\")) {\n    stop(\"sf_climate は sf オブジェクトである必要があります。\")\n  }\n\n  # 最近傍検索に使う geometry を決める\n  # calc_by_centroid = TRUE の場合は、重心の座標を使う(こちらのほうが早い)\n  if (calc_by_centroid) {\n    if (!climate_lon_col %in% names(sf_climate)) {\n      stop(\"climate_lon_col が sf_climate に存在しません: \", climate_lon_col)\n    }\n    if (!climate_lat_col %in% names(sf_climate)) {\n      stop(\"climate_lat_col が sf_climate に存在しません: \", climate_lat_col)\n    }\n\n    sf_clim &lt;- sf::st_as_sf(\n      sf::st_drop_geometry(sf_climate),\n      coords = c(climate_lon_col, climate_lat_col),\n      crs = sf::st_crs(sf_climate),\n      remove = FALSE\n    )\n  } else {\n    # geometry をそのまま使う場合\n    sf_clim &lt;- sf_climate\n  }\n\n  # value_col = NULL の場合は、geometry 以外の全列を返す\n  if (is.null(value_col)) {\n    value_col &lt;- names(sf::st_drop_geometry(sf_clim))\n  }\n\n  # value_col の存在確認\n  missing_cols &lt;- setdiff(value_col, names(sf_clim))\n  if (length(missing_cols) &gt; 0) {\n    stop(\n      \"以下の value_col が sf_climate に存在しません: \",\n      paste(missing_cols, collapse = \", \")\n    )\n  }\n\n  # 出力列名の処理\n  if (is.null(output_col)) {\n    output_col &lt;- value_col\n  }\n\n  if (length(output_col) != length(value_col)) {\n    stop(\"output_col は value_col と同じ長さである必要があります。\")\n  }\n\n  # lon, lat が直接与えられた場合\n  if (!is.null(lon) && !is.null(lat) && is.null(df)) {\n    pt &lt;- sf::st_sfc(\n      sf::st_point(c(lon, lat)),\n      crs = sf::st_crs(sf_clim)\n    )\n\n    idx &lt;- sf::st_nearest_feature(pt, sf_clim)\n\n    out &lt;- sf::st_drop_geometry(sf_clim[idx, value_col, drop = FALSE])\n    names(out) &lt;- output_col\n\n    return(out)\n  }\n\n  # data.frame が与えられた場合\n  if (!is.null(df) && is.null(lon) && is.null(lat)) {\n    if (!lon_col %in% names(df)) {\n      stop(\"lon_col が df に存在しません: \", lon_col)\n    }\n    if (!lat_col %in% names(df)) {\n      stop(\"lat_col が df に存在しません: \", lat_col)\n    }\n\n    pts &lt;- sf::st_as_sf(\n      df,\n      coords = c(lon_col, lat_col),\n      crs = sf::st_crs(sf_clim),\n      remove = FALSE\n    )\n\n    idx &lt;- sf::st_nearest_feature(pts, sf_clim)\n\n    vals &lt;- sf::st_drop_geometry(sf_clim[idx, value_col, drop = FALSE])\n    names(vals) &lt;- output_col\n\n    out &lt;- cbind(df, vals)\n\n    return(out)\n  }\n\n  stop(\n    \"lon と lat の両方を指定するか、df を指定してください。両方同時には指定しないでください。\"\n  )\n}",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>F</span>  <span class='chapter-title'>日本語版: 最近傍の気候値取得</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/get_nearest_climate_value_ja.html#使い方",
+    "href": "notebooks/get_nearest_climate_value_ja.html#使い方",
+    "title": "Appendix F — 座標を与えたら最も近い気候変数の値を返す関数",
+    "section": "使い方",
+    "text": "使い方\n関数の使い方をいくつか例示します。\n緯度経度を指定して最も近いaridity_indexを取得\n\nresult &lt;- get_nearest_climate_value(\n  sf_climate,\n  lon = 139.6917,\n  lat = 35.6895,\n  value_col = \"aridity_index\"\n)\nprint(result)\n\n\n\nResult\n\n       aridity_index\n165824       1.84528\n\n緯度経度を指定して、複数の気候変数を取得\n\nresult &lt;- get_nearest_climate_value(\n  sf_climate,\n  lon = 139.6917,\n  lat = 35.6895,\n  value_col = c(\"aridity_index\", \"precipitation_year\")\n)\nprint(result)\n\n\n\nResult\n\n       aridity_index precipitation_year\n165824       1.84528             1553.8\n\nデータフレームを指定して最も近いaridity_indexを取得\n\ndf_input &lt;- data.frame(\n  id = 1:3,\n  longitude = c(139.6917, 135.5022, 130.4181),\n  latitude = c(35.6895, 34.6937, 33.5902)\n)\nresult &lt;- get_nearest_climate_value(\n  sf_climate,\n  df = df_input,\n  lon_col = \"longitude\",\n  lat_col = \"latitude\",\n  value_col = \"aridity_index\"\n)\nprint(result)\n\n\n\nResult\n\n       id longitude latitude aridity_index\n165824  1  139.6917  35.6895      1.845280\n111106  2  135.5022  34.6937      1.442432\n44366   3  130.4181  33.5902      1.821206\n\nデータフレームを指定して、複数の気候変数を取得\n\ndf_input &lt;- data.frame(\n  id = 1:3,\n  longitude = c(139.6917, 135.5022, 130.4181),\n  latitude = c(35.6895, 34.6937, 33.5902)\n)\nresult &lt;- get_nearest_climate_value(\n  sf_climate,\n  df = df_input,\n  lon_col = \"longitude\",\n  lat_col = \"latitude\",\n  value_col = c(\"aridity_index\", \"precipitation_year\")\n)\nprint(result)\n\n\n\nResult\n\n       id longitude latitude aridity_index precipitation_year\n165824  1  139.6917  35.6895      1.845280             1553.8\n111106  2  135.5022  34.6937      1.442432             1312.0\n44366   3  130.4181  33.5902      1.821206             1648.9",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>F</span>  <span class='chapter-title'>日本語版: 最近傍の気候値取得</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/get_nearest_climate_value_ja.html#緯度経度を指定して全ての変数を取得",
+    "href": "notebooks/get_nearest_climate_value_ja.html#緯度経度を指定して全ての変数を取得",
+    "title": "Appendix F — 座標を与えたら最も近い気候変数の値を返す関数",
+    "section": "緯度経度を指定して、全ての変数を取得",
+    "text": "緯度経度を指定して、全ての変数を取得\nvalue_col = NULL とすることで、全ての変数を取得できます。\n\nresult &lt;- get_nearest_climate_value(\n  sf_climate,\n  lon = 139.6917,\n  lat = 35.6895,\n  value_col = NULL\n)\nprint(result)\n\n\n\nResult\n\n       mesh_code_3rd precipitation_Jan precipitation_Feb precipitation_Mar\n165824      53394525              55.8              53.6             112.5\n       precipitation_Apr precipitation_May precipitation_Jun precipitation_Jul\n165824             124.9             133.8             166.1             158.4\n       precipitation_Aug precipitation_Sep precipitation_Oct precipitation_Nov\n165824             154.9             222.4             225.1              90.6\n       precipitation_Dec precipitation_year maximum_temperature_Jan\n165824              55.7             1553.8                     9.7\n       minimum_temperature_Jan mean_temperature_Jan maximum_temperature_Feb\n165824                     0.8                  5.2                    10.7\n       minimum_temperature_Feb mean_temperature_Feb maximum_temperature_Mar\n165824                     1.8                    6                    13.9\n       minimum_temperature_Mar mean_temperature_Mar maximum_temperature_Apr\n165824                     4.9                  9.3                    19.2\n       minimum_temperature_Apr mean_temperature_Apr maximum_temperature_May\n165824                     9.9                 14.3                    23.7\n       minimum_temperature_May mean_temperature_May maximum_temperature_Jun\n165824                    14.8                 18.9                    26.3\n       minimum_temperature_Jun mean_temperature_Jun maximum_temperature_Jul\n165824                    18.7                   22                    30.2\n       minimum_temperature_Jul mean_temperature_Jul maximum_temperature_Aug\n165824                    22.5                 25.8                    31.5\n       minimum_temperature_Aug mean_temperature_Aug maximum_temperature_Sep\n165824                    23.7                   27                    27.5\n       minimum_temperature_Sep mean_temperature_Sep maximum_temperature_Oct\n165824                    20.4                 23.4                      22\n       minimum_temperature_Oct mean_temperature_Oct maximum_temperature_Nov\n165824                    14.8                 18.1                    16.6\n       minimum_temperature_Nov mean_temperature_Nov maximum_temperature_Dec\n165824                     8.7                 12.6                      12\n       minimum_temperature_Dec mean_temperature_Dec maximum_temperature_year\n165824                     3.4                  7.6                     20.3\n       minimum_temperature_year mean_temperature_year maximum_snow_depth_Jan\n165824                       12                  15.9                      3\n       maximum_snow_depth_Feb maximum_snow_depth_Mar maximum_snow_depth_Dec\n165824                      3                      0                      0\n       maximum_snow_depth_year sunshine_duration_Jan sunshine_duration_Feb\n165824                       3                 198.4                 176.3\n       sunshine_duration_Mar sunshine_duration_Apr sunshine_duration_May\n165824                 176.8                 179.4                 180.4\n       sunshine_duration_Jun sunshine_duration_Jul sunshine_duration_Aug\n165824                   123                 147.7                 173.9\n       sunshine_duration_Sep sunshine_duration_Oct sunshine_duration_Nov\n165824                 129.1                 134.5                   156\n       sunshine_duration_Dec sunshine_duration_year global_solar_radiation_Jan\n165824                 178.5                   1954                        9.7\n       global_solar_radiation_Feb global_solar_radiation_Mar global_solar_radiation_Apr\n165824                       11.8                       13.8                       16.5\n       global_solar_radiation_May global_solar_radiation_Jun global_solar_radiation_Jul\n165824                       17.6                       15.3                       16.3\n       global_solar_radiation_Aug global_solar_radiation_Sep global_solar_radiation_Oct\n165824                       16.6                       12.8                       10.4\n       global_solar_radiation_Nov global_solar_radiation_Dec global_solar_radiation_year\n165824                          9                        8.3                        13.2\n       longitude latitude     PET1     PET2     PET3    PET4     PET5     PET6     PET7\n165824  139.6937  35.6875 7.319984 9.144842 23.23313 51.1194 90.94641 118.0401 157.3831\n           PET8     PET9    PET10    PET11    PET12 PET_year aridity_index\n165824 159.9936 111.3146 67.64351 32.34395 13.55769 842.0402       1.84528",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>F</span>  <span class='chapter-title'>日本語版: 最近傍の気候値取得</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/get_nearest_climate_value_ja.html#データの出典",
+    "href": "notebooks/get_nearest_climate_value_ja.html#データの出典",
+    "title": "Appendix F — 座標を与えたら最も近い気候変数の値を返す関数",
+    "section": "データの出典",
+    "text": "データの出典\n本ページで使用している気候データは、気象庁のメッシュ平年値2020を元に加工したものです。",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>F</span>  <span class='chapter-title'>日本語版: 最近傍の気候値取得</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/plot_japan_climate_map_ja.html",
+    "href": "notebooks/plot_japan_climate_map_ja.html",
+    "title": "Appendix G — Plot Japan Climate Map",
+    "section": "",
+    "text": "データの読み込み\nEnglish version\ntmapパッケージを使用して、日本の気候マップを描画します。 rnaturalearthパッケージは、日本地図を描画するために使用します。\nこのリポジトリの解析では、環境変数 PROJECT_DATA_DIR にデータの保存先を指定しています。 必要に応じて、適宜変更してください。\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\nsf_climate &lt;- readRDS(file.path(\n  data_dir,\n  \"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.rds\"\n))",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>G</span>  <span class='chapter-title'>日本語版: 気候マップの描画</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/plot_japan_climate_map_ja.html#evapotranspiration-petの描画",
+    "href": "notebooks/plot_japan_climate_map_ja.html#evapotranspiration-petの描画",
+    "title": "Appendix G — Plot Japan Climate Map",
     "section": "Evapotranspiration (PET)の描画",
     "text": "Evapotranspiration (PET)の描画\n日本地図を描画するには、rnaturalearthhiresパッケージが必要です。\ntmapの描画は、ggplot2の描画のように、レイヤを重ねる形で行います。 まず、日本地図を描画し、その上に気候変数を描画します。 その後、レイアウトを調整して完成です。\n保存したい場合は、tmオブジェクトをtmap_save()関数に渡すことで、描画を保存できます。\n\n#renv::install(\"ropensci/rnaturalearthhires\")\nvariable &lt;- \"PET_year\"\njapan &lt;- ne_states(country = \"Japan\", returnclass = \"sf\")\nsf_plot &lt;- sf_climate[!is.na(sf_climate[[variable]]), ]\ntm &lt;- tm_shape(japan, crs = 4612) +\n  tm_polygons(col = \"gray90\") +\n  tm_shape(sf_plot[, variable], crs = 4612) +\n  tm_symbols(\n    shape = 20,\n    fill = variable,\n    size = 0.1,\n    fill_alpha = 0.9,\n    fill.scale = tm_scale_continuous(\n      values = \"viridis\"\n    ),\n    fill.legend = tm_legend(\n      title = variable,\n      reverse = TRUE,\n      position = c(\"right\", \"bottom\"),\n      frame = FALSE,\n      bg.color = \"transparent\"\n    )\n  ) +\n  tm_layout(\n    frame = FALSE,\n    bg.color = \"transparent\"\n  )\nprint(tm)\n\noutput_dir &lt;- \"output\"\ndir.create(output_dir, showWarnings = FALSE, recursive = TRUE)\ntmap_save(\n  tm,\n  filename = file.path(\n    output_dir,\n    paste0(\"japan_climate_map_\", variable, \".png\")\n  ),\n  dpi = 300\n)\n\n結果は以下のようになります。\n\n\nPETの描画結果｜出典：国土交通省国土数値情報ダウンロードサイト URL: https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html\n\n\n\n\n\n\n\nNote描画関数\n\n\n\n\n\ntm_polygons()は、ポリゴンを描画するための関数です。境界線と塗りつぶしの両方を描画します。\n\ntm_fill()は、塗りつぶしのみを描画するための関数です。境界線は描画しません。\n\ntm_borders()は、境界線のみを描画するための関数です。塗りつぶしは描画しません。\n\n今回のようにポリゴンが小さく、多い場合は、境界線を書いてしまうと塗りつぶしが見えなくなってしまうことがあります。 そのため、今回はtm_fill()を使用して、塗りつぶしのみを描画します。",
     "crumbs": [
       "Appendices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Plot Japan Climate Map</span>"
+      "<span class='chapter-number'>G</span>  <span class='chapter-title'>日本語版: 気候マップの描画</span>"
     ]
   },
   {
-    "objectID": "notebooks/plot_japan_climate_map.html#aridity-indexの描画",
-    "href": "notebooks/plot_japan_climate_map.html#aridity-indexの描画",
-    "title": "Appendix A — Plot Japan Climate Map",
+    "objectID": "notebooks/plot_japan_climate_map_ja.html#aridity-indexの描画",
+    "href": "notebooks/plot_japan_climate_map_ja.html#aridity-indexの描画",
+    "title": "Appendix G — Plot Japan Climate Map",
     "section": "Aridity Indexの描画",
     "text": "Aridity Indexの描画\n次に、Aridity Indexを描画します。\n\nvariable &lt;- \"aridity_index\"\njapan &lt;- ne_states(country = \"Japan\", returnclass = \"sf\")\nsf_plot &lt;- sf_climate[!is.na(sf_climate[[variable]]), ]\ntm &lt;- tm_shape(japan, crs = 4612) +\n  tm_polygons(col = \"gray90\") +\n  tm_shape(sf_plot[, variable], crs = 4612) +\n  tm_symbols(\n    shape = 20,\n    fill = variable,\n    size = 0.1,\n    fill_alpha = 0.9,\n    fill.scale = tm_scale_continuous(\n      values = \"viridis\"\n    ),\n    fill.legend = tm_legend(\n      title = variable,\n      reverse = TRUE,\n      position = c(\"right\", \"bottom\"),\n      frame = FALSE,\n      bg.color = \"transparent\"\n    )\n  ) +\n  tm_layout(\n    frame = FALSE,\n    bg.color = \"transparent\"\n  )\nprint(tm)\n\ntmap_save(\n  tm,\n  filename = file.path(\n    output_dir,\n    paste0(\"japan_climate_map_\", variable, \".png\")\n  ),\n  dpi = 300\n)\n\n結果は以下のようになります。\n\n\nAridity Indexの描画結果｜出典：国土交通省国土数値情報ダウンロードサイト URL: https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html",
     "crumbs": [
       "Appendices",
-      "<span class='chapter-number'>A</span>  <span class='chapter-title'>Plot Japan Climate Map</span>"
+      "<span class='chapter-number'>G</span>  <span class='chapter-title'>日本語版: 気候マップの描画</span>"
     ]
   }
 ]
