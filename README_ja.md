@@ -4,6 +4,11 @@
 
 [ドキュメント全体はこちら](https://maple60.github.io/japanese-climate-calculation/)
 
+<p align="center">
+  <img src="output/japan_climate_map_PET_year.png" width="48%" />
+  <img src="output/japan_climate_map_aridity_index.png" width="48%" />
+</p>
+
 日本の気候メッシュデータを処理し、潜在蒸発散量（PET）や乾燥度指数（Aridity Index）などの追加的な気候指標を導出するための、再現可能な R + [Quarto](https://quarto.org/) プロジェクトです。
 
 ## 概要
