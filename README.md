@@ -7,8 +7,13 @@
 <p align="center">
   <img src="output/japan_climate_map_PET_year.png" width="48%" />
   <img src="output/japan_climate_map_aridity_index.png" width="48%" />
+  <sub>
+    Data source:
+    <a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html">
+      National Land Numerical Information Download Site, Ministry of Land, Infrastructure, Transport and Tourism, Japan.
+    </a>
+  </sub>
 </p>
-
 
 A reproducible R + [Quarto](https://quarto.org/) project for processing climate mesh data in Japan and deriving additional climate indicators such as Potential Evapotranspiration (PET) and Aridity Index.
 

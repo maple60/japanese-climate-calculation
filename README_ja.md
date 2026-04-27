@@ -7,6 +7,14 @@
 <p align="center">
   <img src="output/japan_climate_map_PET_year.png" width="48%" />
   <img src="output/japan_climate_map_aridity_index.png" width="48%" />
+  <br />
+  <br />
+  <sub>
+    出典：
+    <a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html">
+      国土交通省国土数値情報ダウンロードサイト
+    </a>
+  </sub>
 </p>
 
 日本の気候メッシュデータを処理し、潜在蒸発散量（PET）や乾燥度指数（Aridity Index）などの追加的な気候指標を導出するための、再現可能な R + [Quarto](https://quarto.org/) プロジェクトです。
