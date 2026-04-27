@@ -8,7 +8,6 @@
   <img src="output/japan_climate_map_PET_year.png" width="48%" />
   <img src="output/japan_climate_map_aridity_index.png" width="48%" />
   <br />
-  <br />
   <sub>
     出典：
     <a href="https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html">
