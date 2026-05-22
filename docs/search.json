@@ -214,7 +214,7 @@
     "href": "notebooks/calculate_aridity_index.html",
     "title": "Calculate Aridity Index",
     "section": "",
-    "text": "Load libraries\n日本語版はこちら (Japanese version)\nThis chapter calculates the Aridity Index (AI), a dryness indicator defined as the ratio of precipitation to potential evapotranspiration (World Atlas of Desertification 1992).\n\\[AI = \\frac{P}{PET}\\]\nwhere \\(P\\) is precipitation and \\(PET\\) is potential evapotranspiration.\nlibrary(sf)",
+    "text": "Load libraries\n日本語版はこちら (Japanese version)\nThis chapter calculates the Aridity Index (AI). AI is a dryness indicator defined here as precipitation (\\(P\\)) divided by potential evapotranspiration (\\(PET\\)) (World Atlas of Desertification 1992). Lower values indicate drier conditions because potential evapotranspiration is larger relative to precipitation.\nSeveral definitions of aridity index are used in the literature. In this chapter, the following equation is used:\n\\[AI = \\frac{P}{PET}\\]\nwhere \\(P\\) is precipitation and \\(PET\\) is potential evapotranspiration.\nlibrary(sf)",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Calculate Aridity Index</span>"
     ]
@@ -224,7 +224,7 @@
     "href": "notebooks/calculate_aridity_index.html#load-data",
     "title": "Calculate Aridity Index",
     "section": "Load data",
-    "text": "Load data\n\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\nsf_climate &lt;- readRDS(file.path(\n  data_dir,\n  \"climate_mesh_data_joined/climate_mesh_data_with_pet.rds\"\n))",
+    "text": "Load data\nIn this repository, the PROJECT_DATA_DIR environment variable points to the directory where input and output data are stored. Change it as needed for your local environment.\n\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\nsf_climate &lt;- readRDS(file.path(\n  data_dir,\n  \"climate_mesh_data_joined/climate_mesh_data_with_pet.rds\"\n))",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Calculate Aridity Index</span>"
     ]
@@ -234,7 +234,7 @@
     "href": "notebooks/calculate_aridity_index.html#calculate-aridity-index",
     "title": "Calculate Aridity Index",
     "section": "Calculate Aridity Index",
-    "text": "Calculate Aridity Index\n\nsf_climate$aridity_index &lt;- sf_climate$precipitation_year / sf_climate$PET_year",
+    "text": "Calculate Aridity Index\nFirst, calculate the annual Aridity Index and add it to the sf_climate object as a new aridity_index column. When PET is zero, negative, or missing, the Aridity Index is undefined, so the value is set to NA.\n\nsf_climate$aridity_index &lt;- ifelse(\n  is.na(sf_climate$PET_year) | sf_climate$PET_year &lt;= 0,\n  NA_real_,\n  sf_climate$precipitation_year / sf_climate$PET_year\n)\n\nThen, calculate monthly Aridity Index values. The monthly columns are named from aridity_index_Jan to aridity_index_Dec.\n\nmonth_labels &lt;- month.abb\nfor (month in seq_along(month_labels)) {\n  month_label &lt;- month_labels[month]\n  precipitation_col &lt;- paste0(\"precipitation_\", month_label)\n  pet_col &lt;- paste0(\"PET\", month)\n  aridity_index_col &lt;- paste0(\"aridity_index_\", month_label)\n  pet_values &lt;- sf_climate[[pet_col]]\n\n  sf_climate[[aridity_index_col]] &lt;- ifelse(\n    is.na(pet_values) | pet_values &lt;= 0,\n    NA_real_,\n    sf_climate[[precipitation_col]] / pet_values\n  )\n}",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Calculate Aridity Index</span>"
     ]
@@ -244,7 +244,7 @@
     "href": "notebooks/calculate_aridity_index.html#save-data",
     "title": "Calculate Aridity Index",
     "section": "Save data",
-    "text": "Save data\n\nsaveRDS(\n  sf_climate,\n  file.path(\n    data_dir,\n    \"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.rds\"\n  )\n)\ndf_climate &lt;- st_drop_geometry(sf_climate)\nwrite.csv(\n  df_climate,\n  file.path(\n    data_dir,\n    \"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.csv\"\n  ),\n  row.names = FALSE\n)",
+    "text": "Save data\nSave the result in both RDS and CSV formats. Change the output path as needed.\n\nsaveRDS(\n  sf_climate,\n  file.path(\n    data_dir,\n    \"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.rds\"\n  )\n)\ndf_climate &lt;- st_drop_geometry(sf_climate)\nwrite.csv(\n  df_climate,\n  file.path(\n    data_dir,\n    \"climate_mesh_data_joined/climate_mesh_data_with_aridity_index.csv\"\n  ),\n  row.names = FALSE\n)",
     "crumbs": [
       "<span class='chapter-number'>4</span>  <span class='chapter-title'>Calculate Aridity Index</span>"
     ]
@@ -568,7 +568,7 @@
     "href": "notebooks/calculate_aridity_index_ja.html",
     "title": "Appendix E — Calculate Aridity Index",
     "section": "",
-    "text": "ライブラリの読み込み\nEnglish version\nAridity Index (AI)を計算します。 AIは気候の乾燥度を表す指標で、降水量(precipitation)と蒸発散量(potential evapotranspiration)の比率として定義されます (World Atlas of Desertification 1992)。\nほかにもいろいろな定義があるようですが、ここでは以下の式を用います。\n\\[AI = \\frac{P}{PET}\\]\nここで、\\(P\\) は降水量、\\(PET\\) は潜在蒸発散量です。\nlibrary(sf)",
+    "text": "ライブラリの読み込み\nEnglish version\nこの章では、Aridity Index (AI; 乾燥指数) を計算します。 AI は気候の乾燥度を表す指標で、降水量 (precipitation; \\(P\\)) を潜在蒸発散量 (potential evapotranspiration; \\(PET\\)) で割った値として定義します (World Atlas of Desertification 1992)。 値が小さいほど、降水量に対して潜在蒸発散量が大きく、乾燥した条件を示します。\n乾燥指数には複数の定義がありますが、ここでは以下の式を用います。\n\\[AI = \\frac{P}{PET}\\]\nここで、\\(P\\) は降水量、\\(PET\\) は潜在蒸発散量です。\nlibrary(sf)",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>E</span>  <span class='chapter-title'>日本語版: 乾燥指数の計算</span>"
@@ -579,7 +579,7 @@
     "href": "notebooks/calculate_aridity_index_ja.html#データの読み込み",
     "title": "Appendix E — Calculate Aridity Index",
     "section": "データの読み込み",
-    "text": "データの読み込み\nこのリポジトリの解析では、環境変数 PROJECT_DATA_DIR にデータの保存先を指定しています。 必要に応じて、適宜変更してください。\n\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\nsf_climate &lt;- readRDS(file.path(\n  data_dir,\n  \"climate_mesh_data_joined/climate_mesh_data_with_pet.rds\"\n))",
+    "text": "データの読み込み\nこのリポジトリの解析では、環境変数 PROJECT_DATA_DIR に入力・出力データの保存先を指定しています。 必要に応じて、適宜変更してください。\n\ndata_dir &lt;- Sys.getenv(\"PROJECT_DATA_DIR\")\nsf_climate &lt;- readRDS(file.path(\n  data_dir,\n  \"climate_mesh_data_joined/climate_mesh_data_with_pet.rds\"\n))",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>E</span>  <span class='chapter-title'>日本語版: 乾燥指数の計算</span>"
@@ -590,7 +590,7 @@
     "href": "notebooks/calculate_aridity_index_ja.html#aridity-index-の計算",
     "title": "Appendix E — Calculate Aridity Index",
     "section": "Aridity Index の計算",
-    "text": "Aridity Index の計算\nAridity Index を計算して、sf_climateオブジェクトに新しい列aridity_indexとして追加します。\n\nsf_climate$aridity_index &lt;- sf_climate$precipitation_year / sf_climate$PET_year",
+    "text": "Aridity Index の計算\n年単位の Aridity Index を計算し、sf_climate オブジェクトに新しい列 aridity_index として追加します。 PET が 0 以下または欠損している場合は、Aridity Index を定義できないため NA とします。\n\nsf_climate$aridity_index &lt;- ifelse(\n  is.na(sf_climate$PET_year) | sf_climate$PET_year &lt;= 0,\n  NA_real_,\n  sf_climate$precipitation_year / sf_climate$PET_year\n)\n\n同様に、月ごとの Aridity Index も計算します。 列名は aridity_index_Jan から aridity_index_Dec までの形式にします。\n\nmonth_labels &lt;- month.abb\nfor (month in seq_along(month_labels)) {\n  month_label &lt;- month_labels[month]\n  precipitation_col &lt;- paste0(\"precipitation_\", month_label)\n  pet_col &lt;- paste0(\"PET\", month)\n  aridity_index_col &lt;- paste0(\"aridity_index_\", month_label)\n  pet_values &lt;- sf_climate[[pet_col]]\n\n  sf_climate[[aridity_index_col]] &lt;- ifelse(\n    is.na(pet_values) | pet_values &lt;= 0,\n    NA_real_,\n    sf_climate[[precipitation_col]] / pet_values\n  )\n}",
     "crumbs": [
       "Appendices",
       "<span class='chapter-number'>E</span>  <span class='chapter-title'>日本語版: 乾燥指数の計算</span>"
