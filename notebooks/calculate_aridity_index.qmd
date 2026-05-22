@@ -5,7 +5,11 @@ bibliography: references.bib
 
 [日本語版はこちら (Japanese version)](calculate_aridity_index_ja.qmd)
 
-This chapter calculates the Aridity Index (AI), a dryness indicator defined as the ratio of precipitation to potential evapotranspiration [@UNEP1992].
+This chapter calculates the Aridity Index (AI).
+AI is a dryness indicator defined here as precipitation ($P$) divided by potential evapotranspiration ($PET$) [@UNEP1992].
+Lower values indicate drier conditions because potential evapotranspiration is larger relative to precipitation.
+
+Several definitions of aridity index are used in the literature. In this chapter, the following equation is used:
 
 $$AI = \frac{P}{PET}$$
 
@@ -19,6 +23,9 @@ library(sf)
 
 ## Load data
 
+In this repository, the `PROJECT_DATA_DIR` environment variable points to the directory where input and output data are stored.
+Change it as needed for your local environment.
+
 ```{r}
 data_dir <- Sys.getenv("PROJECT_DATA_DIR")
 sf_climate <- readRDS(file.path(
@@ -29,11 +36,41 @@ sf_climate <- readRDS(file.path(
 
 ## Calculate Aridity Index
 
+First, calculate the annual Aridity Index and add it to the `sf_climate` object as a new `aridity_index` column.
+When PET is zero, negative, or missing, the Aridity Index is undefined, so the value is set to `NA`.
+
 ```{r}
-sf_climate$aridity_index <- sf_climate$precipitation_year / sf_climate$PET_year
+sf_climate$aridity_index <- ifelse(
+  is.na(sf_climate$PET_year) | sf_climate$PET_year <= 0,
+  NA_real_,
+  sf_climate$precipitation_year / sf_climate$PET_year
+)
+```
+
+Then, calculate monthly Aridity Index values.
+The monthly columns are named from `aridity_index_Jan` to `aridity_index_Dec`.
+
+```{r}
+month_labels <- month.abb
+for (month in seq_along(month_labels)) {
+  month_label <- month_labels[month]
+  precipitation_col <- paste0("precipitation_", month_label)
+  pet_col <- paste0("PET", month)
+  aridity_index_col <- paste0("aridity_index_", month_label)
+  pet_values <- sf_climate[[pet_col]]
+
+  sf_climate[[aridity_index_col]] <- ifelse(
+    is.na(pet_values) | pet_values <= 0,
+    NA_real_,
+    sf_climate[[precipitation_col]] / pet_values
+  )
+}
 ```
 
 ## Save data
+
+Save the result in both RDS and CSV formats.
+Change the output path as needed.
 
 ```{r}
 saveRDS(
