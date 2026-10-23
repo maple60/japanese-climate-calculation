@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://maple60.github.io/japanese-climate-calculation/index.html</loc>
+    <lastmod>2026-10-23T00:20:22.698Z</lastmod>
+  </url>
+  <url>
+    <loc>https://maple60.github.io/japanese-climate-calculation/notebooks/prepare_climate_data.html</loc>
+    <lastmod>2026-10-23T00:20:22.719Z</lastmod>
+  </url>
+  <url>
+    <loc>https://maple60.github.io/japanese-climate-calculation/notebooks/calculate_PET.html</loc>
+    <lastmod>2026-10-23T00:20:22.709Z</lastmod>
+  </url>
+  <url>
+    <loc>https://maple60.github.io/japanese-climate-calculation/notebooks/calculate_aridity_index.html</loc>
+    <lastmod>2026-10-23T00:20:22.702Z</lastmod>
+  </url>
+  <url>
+    <loc>https://maple60.github.io/japanese-climate-calculation/notebooks/calculate_ET0.html</loc>
+    <lastmod>2026-10-23T00:20:22.707Z</lastmod>
+  </url>
+  <url>
+    <loc>https://maple60.github.io/japanese-climate-calculation/notebooks/get_nearest_climate_value.html</loc>
+    <lastmod>2026-10-23T00:20:22.712Z</lastmod>
+  </url>
+  <url>
+    <loc>https://maple60.github.io/japanese-climate-calculation/notebooks/plot_japan_climate_map.html</loc>
+    <lastmod>2026-10-23T00:20:22.715Z</lastmod>
+  </url>
+</urlset>

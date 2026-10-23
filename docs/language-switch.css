@@ -1,0 +1,11 @@
+/* Use an SVG rather than a flag emoji, which Windows may show as letters. */
+.navbar-nav a[href*="ja/"] .menu-text::before {
+  content: "";
+  display: inline-block;
+  width: 1.35rem;
+  height: 0.9rem;
+  margin-right: 0.4rem;
+  vertical-align: -0.1rem;
+  border: 1px solid #b8b8b8;
+  background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 20'%3E%3Crect width='30' height='20' fill='white'/%3E%3Ccircle cx='15' cy='10' r='6' fill='%23bc002d'/%3E%3C/svg%3E") center / contain no-repeat;
+}
