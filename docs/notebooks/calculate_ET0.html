@@ -409,7 +409,16 @@ ET_0 = \frac{0.408\Delta(R_n-G)
 </div>
 <p>Base R reads gzip CSVs directly. <code>read_monthly_csv()</code> keeps <code>mesh3_code</code> as character. <code>et0_data_dir()</code> fails if the environment variable is unset. Monthly columns are <code>et0_fao56_Jan</code> through <code>et0_fao56_Dec</code> and <code>precipitation_Jan</code> through <code>precipitation_Dec</code>, in mm/month. See the bundle’s <code>data-dictionary.csv</code> and <code>STATUS.md</code>. Annual totals in the means table sum its 12 months. <code>et0_filled_days</code> is the maximum of separate RH and wind filled-day counts per cell/year, summed across 11 years in the means table. It is not their union or a count of missing days in all input variables.</p>
 </section><section id="month-windows-and-ai" class="level2"><h2 class="anchored" data-anchor-id="month-windows-and-ai">Month windows and AI</h2>
-<p>Sum monthly totals; do not multiply them by days again. ET0 and precipitation become depths in mm per selected period. AI is <strong>sum(P)/sum(ET0)</strong> over identical months, rather than the mean of monthly AI. Missing months propagate and non-positive or missing ET0 denominators give <code>NA</code>. P−ET0 is a climatic water balance, not a soil-water balance model.</p>
+<p>For July–September, add the three monthly ET₀ totals and the three precipitation totals:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mtable><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mi>E</mi><msub><mi>T</mi><mrow><mn>0</mn><mo>,</mo><mn>7</mn><mo>:</mo><mn>9</mn></mrow></msub></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><munderover><mo>∑</mo><mrow><mi>m</mi><mo>=</mo><mn>7</mn></mrow><mn>9</mn></munderover><mi>E</mi><msub><mi>T</mi><mrow><mn>0</mn><mo>,</mo><mi>m</mi></mrow></msub><mo>=</mo><mi>E</mi><msub><mi>T</mi><mrow><mn>0</mn><mo>,</mo><mn>7</mn></mrow></msub><mo>+</mo><mi>E</mi><msub><mi>T</mi><mrow><mn>0</mn><mo>,</mo><mn>8</mn></mrow></msub><mo>+</mo><mi>E</mi><msub><mi>T</mi><mrow><mn>0</mn><mo>,</mo><mn>9</mn></mrow></msub><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><msub><mi>P</mi><mrow><mn>7</mn><mo>:</mo><mn>9</mn></mrow></msub></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><munderover><mo>∑</mo><mrow><mi>m</mi><mo>=</mo><mn>7</mn></mrow><mn>9</mn></munderover><msub><mi>P</mi><mi>m</mi></msub><mo>=</mo><msub><mi>P</mi><mn>7</mn></msub><mo>+</mo><msub><mi>P</mi><mn>8</mn></msub><mo>+</mo><msub><mi>P</mi><mn>9</mn></msub><mo>,</mo></mtd></mtr><mtr><mtd columnalign="right" style="text-align: right; padding-right: 0"><mi>A</mi><msub><mi>I</mi><mrow><mn>7</mn><mo>:</mo><mn>9</mn></mrow></msub></mtd><mtd columnalign="left" style="text-align: left; padding-left: 0"><mo>=</mo><mfrac><msub><mi>P</mi><mrow><mn>7</mn><mo>:</mo><mn>9</mn></mrow></msub><mrow><mi>E</mi><msub><mi>T</mi><mrow><mn>0</mn><mo>,</mo><mn>7</mn><mo>:</mo><mn>9</mn></mrow></msub></mrow></mfrac><mo>=</mo><mfrac><mrow><msub><mi>P</mi><mn>7</mn></msub><mo>+</mo><msub><mi>P</mi><mn>8</mn></msub><mo>+</mo><msub><mi>P</mi><mn>9</mn></msub></mrow><mrow><mi>E</mi><msub><mi>T</mi><mrow><mn>0</mn><mo>,</mo><mn>7</mn></mrow></msub><mo>+</mo><mi>E</mi><msub><mi>T</mi><mrow><mn>0</mn><mo>,</mo><mn>8</mn></mrow></msub><mo>+</mo><mi>E</mi><msub><mi>T</mi><mrow><mn>0</mn><mo>,</mo><mn>9</mn></mrow></msub></mrow></mfrac><mi>.</mi></mtd></mtr></mtable><annotation encoding="application/x-tex">
+\begin{aligned}
+ET_{0,7:9} &amp;= \sum_{m=7}^{9} ET_{0,m} = ET_{0,7} + ET_{0,8} + ET_{0,9}, \\
+P_{7:9} &amp;= \sum_{m=7}^{9} P_m = P_7 + P_8 + P_9, \\
+AI_{7:9} &amp;= \frac{P_{7:9}}{ET_{0,7:9}}
+         = \frac{P_7 + P_8 + P_9}{ET_{0,7} + ET_{0,8} + ET_{0,9}}.
+\end{aligned}
+</annotation></semantics></math></p>
+<p>Here, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>m</mi><annotation encoding="application/x-tex">m</annotation></semantics></math> is the month number, <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>E</mi><msub><mi>T</mi><mrow><mn>0</mn><mo>,</mo><mi>m</mi></mrow></msub></mrow><annotation encoding="application/x-tex">ET_{0,m}</annotation></semantics></math> and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>P</mi><mi>m</mi></msub><annotation encoding="application/x-tex">P_m</annotation></semantics></math> are the monthly totals in mm, and <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mn>7</mn><mo>:</mo><mn>9</mn></mrow><annotation encoding="application/x-tex">7:9</annotation></semantics></math> denotes July–September. AI is dimensionless. Do not multiply the monthly totals by days again. AI is <strong>sum(P)/sum(ET0)</strong> over identical months, rather than the mean of monthly AI. Missing months propagate and non-positive or missing ET0 denominators give <code>NA</code>. P−ET0 is a climatic water balance, not a soil-water balance model.</p>
 <p>The synthetic CSV below has two invented identifiers and three years of illustrative monthly totals, independent of the daily example above.</p>
 <div class="cell">
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb7"><pre class="downlit sourceCode r code-with-copy"><code class="sourceCode R"><span><span class="va">yearly</span> <span class="op">&lt;-</span> <span class="fu">read_monthly_csv</span><span class="op">(</span><span class="st">"data/examples/et0_monthly_synthetic.csv"</span><span class="op">)</span></span>
@@ -1076,7 +1085,7 @@ document.addEventListener("DOMContentLoaded", () => {
 <span id="cb16-64"><a href="#cb16-64" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-65"><a href="#cb16-65" aria-hidden="true" tabindex="-1"></a><span class="fu">## 対象範囲とPETとの違い</span></span>
 <span id="cb16-66"><a href="#cb16-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a>この章では、農研機構メッシュ農業気象データを使って、1日ごとの基準蒸発散量（ET₀）を計算し、</span>
+<span id="cb16-67"><a href="#cb16-67" aria-hidden="true" tabindex="-1"></a>この章では、農研機構メッシュ農業気象データを使って、1日ごとの**基準蒸発散量（ET₀）**を計算し、</span>
 <span id="cb16-68"><a href="#cb16-68" aria-hidden="true" tabindex="-1"></a>月や季節ごとに集計する方法を説明します。</span>
 <span id="cb16-69"><a href="#cb16-69" aria-hidden="true" tabindex="-1"></a>実データの利用には申請が必要なため、ページ内で実行する例には**架空データまたはFAOの公開計算例**を使います。</span>
 <span id="cb16-70"><a href="#cb16-70" aria-hidden="true" tabindex="-1"></a>NAROの実データや、それを使った地図は掲載していません。</span>
@@ -1391,246 +1400,271 @@ document.addEventListener("DOMContentLoaded", () => {
 <span id="cb16-387"><a href="#cb16-387" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb16-388"><a href="#cb16-388" aria-hidden="true" tabindex="-1"></a><span class="fu">## Month windows and AI</span></span>
 <span id="cb16-389"><a href="#cb16-389" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-390"><a href="#cb16-390" aria-hidden="true" tabindex="-1"></a>Sum monthly totals; do not multiply them by days again. ET0 and precipitation</span>
-<span id="cb16-391"><a href="#cb16-391" aria-hidden="true" tabindex="-1"></a>become depths in mm per selected period. AI is **sum(P)/sum(ET0)** over identical</span>
-<span id="cb16-392"><a href="#cb16-392" aria-hidden="true" tabindex="-1"></a>months, rather than the mean of monthly AI. Missing months propagate and</span>
-<span id="cb16-393"><a href="#cb16-393" aria-hidden="true" tabindex="-1"></a>non-positive or missing ET0 denominators give <span class="in">`NA`</span>. P−ET0 is a climatic water</span>
-<span id="cb16-394"><a href="#cb16-394" aria-hidden="true" tabindex="-1"></a>balance, not a soil-water balance model.</span>
-<span id="cb16-395"><a href="#cb16-395" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-396"><a href="#cb16-396" aria-hidden="true" tabindex="-1"></a>The synthetic CSV below has two invented identifiers and three years of</span>
-<span id="cb16-397"><a href="#cb16-397" aria-hidden="true" tabindex="-1"></a>illustrative monthly totals, independent of the daily example above.</span>
-<span id="cb16-398"><a href="#cb16-398" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-399"><a href="#cb16-399" aria-hidden="true" tabindex="-1"></a>:::::</span>
+<span id="cb16-390"><a href="#cb16-390" aria-hidden="true" tabindex="-1"></a>For July–September, add the three monthly ET₀ totals and the three precipitation totals:</span>
+<span id="cb16-391"><a href="#cb16-391" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-392"><a href="#cb16-392" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb16-393"><a href="#cb16-393" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
+<span id="cb16-394"><a href="#cb16-394" aria-hidden="true" tabindex="-1"></a>ET_{0,7:9} &amp;= \sum_{m=7}^{9} ET_{0,m} = ET_{0,7} + ET_{0,8} + ET_{0,9}, <span class="sc">\\</span></span>
+<span id="cb16-395"><a href="#cb16-395" aria-hidden="true" tabindex="-1"></a>P_{7:9} &amp;= \sum_{m=7}^{9} P_m = P_7 + P_8 + P_9, <span class="sc">\\</span></span>
+<span id="cb16-396"><a href="#cb16-396" aria-hidden="true" tabindex="-1"></a>AI_{7:9} &amp;= \frac{P_{7:9}}{ET_{0,7:9}}</span>
+<span id="cb16-397"><a href="#cb16-397" aria-hidden="true" tabindex="-1"></a>         = \frac{P_7 + P_8 + P_9}{ET_{0,7} + ET_{0,8} + ET_{0,9}}.</span>
+<span id="cb16-398"><a href="#cb16-398" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
+<span id="cb16-399"><a href="#cb16-399" aria-hidden="true" tabindex="-1"></a>$$</span>
 <span id="cb16-400"><a href="#cb16-400" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-401"><a href="#cb16-401" aria-hidden="true" tabindex="-1"></a>::::: {.content-visible when-profile="ja"}</span>
-<span id="cb16-402"><a href="#cb16-402" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-403"><a href="#cb16-403" aria-hidden="true" tabindex="-1"></a>base Rでgzip圧縮CSVを直接読めます。<span class="in">`read_monthly_csv()`</span>は<span class="in">`mesh3_code`</span>を文字列として保持します。</span>
-<span id="cb16-404"><a href="#cb16-404" aria-hidden="true" tabindex="-1"></a>環境変数が未設定の場合、<span class="in">`et0_data_dir()`</span>は停止します。</span>
-<span id="cb16-405"><a href="#cb16-405" aria-hidden="true" tabindex="-1"></a>月別列は<span class="in">`et0_fao56_Jan`</span>〜<span class="in">`et0_fao56_Dec`</span>と<span class="in">`precipitation_Jan`</span>〜<span class="in">`precipitation_Dec`</span>で、</span>
-<span id="cb16-406"><a href="#cb16-406" aria-hidden="true" tabindex="-1"></a>単位はmm/月です。ローカル一式の<span class="in">`data-dictionary.csv`</span>と<span class="in">`STATUS.md`</span>も参照してください。</span>
-<span id="cb16-407"><a href="#cb16-407" aria-hidden="true" tabindex="-1"></a>平均表の年合計は、12か月の値を足したものです。</span>
-<span id="cb16-408"><a href="#cb16-408" aria-hidden="true" tabindex="-1"></a><span class="in">`et0_filled_days`</span>は、各メッシュ・年について、湿度を補った日数と風速を補った日数のうち大きい方です。</span>
-<span id="cb16-409"><a href="#cb16-409" aria-hidden="true" tabindex="-1"></a>平均表では、この日数を11年分足しています。湿度か風速のどちらかを補った日の総数や、</span>
-<span id="cb16-410"><a href="#cb16-410" aria-hidden="true" tabindex="-1"></a>すべての入力変数の欠測日数を表す値ではありません。</span>
-<span id="cb16-411"><a href="#cb16-411" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-412"><a href="#cb16-412" aria-hidden="true" tabindex="-1"></a><span class="fu">## 集計する月の選び方と乾燥指数AI</span></span>
-<span id="cb16-413"><a href="#cb16-413" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-414"><a href="#cb16-414" aria-hidden="true" tabindex="-1"></a>例えば7〜9月を集計する場合は、その3か月のET₀と降水量をそれぞれ足します。</span>
-<span id="cb16-415"><a href="#cb16-415" aria-hidden="true" tabindex="-1"></a>もとの値はすでに月合計なので、日数をもう一度掛ける必要はありません。単位は、選んだ期間の合計mmです。</span>
-<span id="cb16-416"><a href="#cb16-416" aria-hidden="true" tabindex="-1"></a>乾燥指数AIは、**同じ期間の降水量の合計をET₀の合計で割った値**（<span class="in">`sum(P) / sum(ET0)`</span>）とします。</span>
-<span id="cb16-417"><a href="#cb16-417" aria-hidden="true" tabindex="-1"></a>月ごとのAIを平均する方法とは区別してください。</span>
-<span id="cb16-418"><a href="#cb16-418" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-419"><a href="#cb16-419" aria-hidden="true" tabindex="-1"></a>選んだ月に欠測があれば集計結果も欠測とし、ET₀の合計が0以下、または欠測の場合はAIを<span class="in">`NA`</span>とします。</span>
-<span id="cb16-420"><a href="#cb16-420" aria-hidden="true" tabindex="-1"></a>降水量からET₀を引いたP−ET₀も計算できますが、これは気候上の水の過不足を表す目安です。</span>
-<span id="cb16-421"><a href="#cb16-421" aria-hidden="true" tabindex="-1"></a>土壌の保水量や流出を計算しているわけではないので、土壌水分そのものとは異なります。</span>
-<span id="cb16-422"><a href="#cb16-422" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-423"><a href="#cb16-423" aria-hidden="true" tabindex="-1"></a>次の架空CSVは、実在メッシュを表さない2個の識別子と3年分の月合計を持ちます。</span>
-<span id="cb16-424"><a href="#cb16-424" aria-hidden="true" tabindex="-1"></a>上の日別CSVとは独立した説明用の数値です。</span>
+<span id="cb16-401"><a href="#cb16-401" aria-hidden="true" tabindex="-1"></a>Here, $m$ is the month number, $ET_{0,m}$ and $P_m$ are the monthly totals in mm,</span>
+<span id="cb16-402"><a href="#cb16-402" aria-hidden="true" tabindex="-1"></a>and $7:9$ denotes July–September. AI is dimensionless.</span>
+<span id="cb16-403"><a href="#cb16-403" aria-hidden="true" tabindex="-1"></a>Do not multiply the monthly totals by days again. AI is **sum(P)/sum(ET0)** over identical</span>
+<span id="cb16-404"><a href="#cb16-404" aria-hidden="true" tabindex="-1"></a>months, rather than the mean of monthly AI. Missing months propagate and</span>
+<span id="cb16-405"><a href="#cb16-405" aria-hidden="true" tabindex="-1"></a>non-positive or missing ET0 denominators give <span class="in">`NA`</span>. P−ET0 is a climatic water</span>
+<span id="cb16-406"><a href="#cb16-406" aria-hidden="true" tabindex="-1"></a>balance, not a soil-water balance model.</span>
+<span id="cb16-407"><a href="#cb16-407" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-408"><a href="#cb16-408" aria-hidden="true" tabindex="-1"></a>The synthetic CSV below has two invented identifiers and three years of</span>
+<span id="cb16-409"><a href="#cb16-409" aria-hidden="true" tabindex="-1"></a>illustrative monthly totals, independent of the daily example above.</span>
+<span id="cb16-410"><a href="#cb16-410" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-411"><a href="#cb16-411" aria-hidden="true" tabindex="-1"></a>:::::</span>
+<span id="cb16-412"><a href="#cb16-412" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-413"><a href="#cb16-413" aria-hidden="true" tabindex="-1"></a>::::: {.content-visible when-profile="ja"}</span>
+<span id="cb16-414"><a href="#cb16-414" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-415"><a href="#cb16-415" aria-hidden="true" tabindex="-1"></a>base Rでgzip圧縮CSVを直接読めます。<span class="in">`read_monthly_csv()`</span>は<span class="in">`mesh3_code`</span>を文字列として保持します。</span>
+<span id="cb16-416"><a href="#cb16-416" aria-hidden="true" tabindex="-1"></a>環境変数が未設定の場合、<span class="in">`et0_data_dir()`</span>は停止します。</span>
+<span id="cb16-417"><a href="#cb16-417" aria-hidden="true" tabindex="-1"></a>月別列は<span class="in">`et0_fao56_Jan`</span>〜<span class="in">`et0_fao56_Dec`</span>と<span class="in">`precipitation_Jan`</span>〜<span class="in">`precipitation_Dec`</span>で、</span>
+<span id="cb16-418"><a href="#cb16-418" aria-hidden="true" tabindex="-1"></a>単位はmm/月です。ローカル一式の<span class="in">`data-dictionary.csv`</span>と<span class="in">`STATUS.md`</span>も参照してください。</span>
+<span id="cb16-419"><a href="#cb16-419" aria-hidden="true" tabindex="-1"></a>平均表の年合計は、12か月の値を足したものです。</span>
+<span id="cb16-420"><a href="#cb16-420" aria-hidden="true" tabindex="-1"></a><span class="in">`et0_filled_days`</span>は、各メッシュ・年について、湿度を補った日数と風速を補った日数のうち大きい方です。</span>
+<span id="cb16-421"><a href="#cb16-421" aria-hidden="true" tabindex="-1"></a>平均表では、この日数を11年分足しています。湿度か風速のどちらかを補った日の総数や、</span>
+<span id="cb16-422"><a href="#cb16-422" aria-hidden="true" tabindex="-1"></a>すべての入力変数の欠測日数を表す値ではありません。</span>
+<span id="cb16-423"><a href="#cb16-423" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-424"><a href="#cb16-424" aria-hidden="true" tabindex="-1"></a><span class="fu">## 集計する月の選び方と乾燥指数AI</span></span>
 <span id="cb16-425"><a href="#cb16-425" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-426"><a href="#cb16-426" aria-hidden="true" tabindex="-1"></a>:::::</span>
+<span id="cb16-426"><a href="#cb16-426" aria-hidden="true" tabindex="-1"></a>例えば7〜9月を集計する場合は、その3か月のET₀と降水量をそれぞれ足します。</span>
 <span id="cb16-427"><a href="#cb16-427" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-430"><a href="#cb16-430" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb16-431"><a href="#cb16-431" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: et0-synthetic-monthly</span></span>
-<span id="cb16-432"><a href="#cb16-432" aria-hidden="true" tabindex="-1"></a>yearly <span class="ot">&lt;-</span> <span class="fu">read_monthly_csv</span>(<span class="st">"data/examples/et0_monthly_synthetic.csv"</span>)</span>
-<span id="cb16-433"><a href="#cb16-433" aria-hidden="true" tabindex="-1"></a>jas <span class="ot">&lt;-</span> <span class="fu">period_summary</span>(yearly, <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>, <span class="st">"Jul-Sep"</span>)</span>
-<span id="cb16-434"><a href="#cb16-434" aria-hidden="true" tabindex="-1"></a>jas</span>
-<span id="cb16-435"><a href="#cb16-435" aria-hidden="true" tabindex="-1"></a>columns <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
-<span id="cb16-436"><a href="#cb16-436" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="st">"et0_fao56_"</span>, month.abb),</span>
-<span id="cb16-437"><a href="#cb16-437" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="st">"precipitation_"</span>, month.abb)</span>
-<span id="cb16-438"><a href="#cb16-438" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb16-439"><a href="#cb16-439" aria-hidden="true" tabindex="-1"></a>normal <span class="ot">&lt;-</span> yearly[yearly<span class="sc">$</span>year <span class="sc">==</span> <span class="dv">2008</span>, <span class="st">"mesh3_code"</span>, drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
-<span id="cb16-440"><a href="#cb16-440" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (column <span class="cf">in</span> columns) {</span>
-<span id="cb16-441"><a href="#cb16-441" aria-hidden="true" tabindex="-1"></a>  normal[[column]] <span class="ot">&lt;-</span> <span class="fu">vapply</span>(</span>
-<span id="cb16-442"><a href="#cb16-442" aria-hidden="true" tabindex="-1"></a>    normal<span class="sc">$</span>mesh3_code,</span>
-<span id="cb16-443"><a href="#cb16-443" aria-hidden="true" tabindex="-1"></a>    <span class="cf">function</span>(key) {</span>
-<span id="cb16-444"><a href="#cb16-444" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mean</span>(yearly[yearly<span class="sc">$</span>mesh3_code <span class="sc">==</span> key, column]) <span class="co"># no na.rm</span></span>
-<span id="cb16-445"><a href="#cb16-445" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb16-446"><a href="#cb16-446" aria-hidden="true" tabindex="-1"></a>    <span class="fu">numeric</span>(<span class="dv">1</span>)</span>
-<span id="cb16-447"><a href="#cb16-447" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb16-448"><a href="#cb16-448" aria-hidden="true" tabindex="-1"></a>}</span>
-<span id="cb16-449"><a href="#cb16-449" aria-hidden="true" tabindex="-1"></a>climate_jas <span class="ot">&lt;-</span> <span class="fu">period_summary</span>(normal, <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>, <span class="st">"Jul-Sep"</span>)</span>
-<span id="cb16-450"><a href="#cb16-450" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
-<span id="cb16-451"><a href="#cb16-451" aria-hidden="true" tabindex="-1"></a>  <span class="at">mesh3_code =</span> normal<span class="sc">$</span>mesh3_code,</span>
-<span id="cb16-452"><a href="#cb16-452" aria-hidden="true" tabindex="-1"></a>  <span class="at">ratio_of_climatological_sums =</span> climate_jas<span class="sc">$</span>aridity_index,</span>
-<span id="cb16-453"><a href="#cb16-453" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean_yearly_ai =</span> <span class="fu">vapply</span>(</span>
-<span id="cb16-454"><a href="#cb16-454" aria-hidden="true" tabindex="-1"></a>    normal<span class="sc">$</span>mesh3_code,</span>
-<span id="cb16-455"><a href="#cb16-455" aria-hidden="true" tabindex="-1"></a>    <span class="cf">function</span>(key) {</span>
-<span id="cb16-456"><a href="#cb16-456" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mean</span>(jas<span class="sc">$</span>aridity_index[jas<span class="sc">$</span>mesh3_code <span class="sc">==</span> key])</span>
-<span id="cb16-457"><a href="#cb16-457" aria-hidden="true" tabindex="-1"></a>    },</span>
-<span id="cb16-458"><a href="#cb16-458" aria-hidden="true" tabindex="-1"></a>    <span class="fu">numeric</span>(<span class="dv">1</span>)</span>
-<span id="cb16-459"><a href="#cb16-459" aria-hidden="true" tabindex="-1"></a>  )</span>
-<span id="cb16-460"><a href="#cb16-460" aria-hidden="true" tabindex="-1"></a>)</span>
-<span id="cb16-461"><a href="#cb16-461" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-462"><a href="#cb16-462" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-463"><a href="#cb16-463" aria-hidden="true" tabindex="-1"></a>::::: {.content-visible unless-profile="ja"}</span>
-<span id="cb16-464"><a href="#cb16-464" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-465"><a href="#cb16-465" aria-hidden="true" tabindex="-1"></a>A ratio of climatological sums (the original production definition) generally</span>
-<span id="cb16-466"><a href="#cb16-466" aria-hidden="true" tabindex="-1"></a>differs from the mean yearly AI. Averaging monthly AI also changes the weighting:</span>
-<span id="cb16-467"><a href="#cb16-467" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-468"><a href="#cb16-468" aria-hidden="true" tabindex="-1"></a>:::::</span>
-<span id="cb16-469"><a href="#cb16-469" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-470"><a href="#cb16-470" aria-hidden="true" tabindex="-1"></a>::::: {.content-visible when-profile="ja"}</span>
-<span id="cb16-471"><a href="#cb16-471" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-472"><a href="#cb16-472" aria-hidden="true" tabindex="-1"></a>この章のAIは、11年平均の月別値を足してから比を求めます。</span>
-<span id="cb16-473"><a href="#cb16-473" aria-hidden="true" tabindex="-1"></a>各年のAIを先に求めてから平均した値とは、一般に一致しません。</span>
-<span id="cb16-474"><a href="#cb16-474" aria-hidden="true" tabindex="-1"></a>月別AIの平均も、合計同士の比とは異なります。次の例で違いを確認できます。</span>
-<span id="cb16-475"><a href="#cb16-475" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-476"><a href="#cb16-476" aria-hidden="true" tabindex="-1"></a>:::::</span>
-<span id="cb16-477"><a href="#cb16-477" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-480"><a href="#cb16-480" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb16-481"><a href="#cb16-481" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: et0-ai-weighting</span></span>
-<span id="cb16-482"><a href="#cb16-482" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">200</span>)</span>
-<span id="cb16-483"><a href="#cb16-483" aria-hidden="true" tabindex="-1"></a>et0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">50</span>)</span>
-<span id="cb16-484"><a href="#cb16-484" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">ratio_of_sums =</span> <span class="fu">sum</span>(p) <span class="sc">/</span> <span class="fu">sum</span>(et0), <span class="at">mean_monthly_ai =</span> <span class="fu">mean</span>(p <span class="sc">/</span> et0))</span>
-<span id="cb16-485"><a href="#cb16-485" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-486"><a href="#cb16-486" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-487"><a href="#cb16-487" aria-hidden="true" tabindex="-1"></a>::::: {.content-visible unless-profile="ja"}</span>
-<span id="cb16-488"><a href="#cb16-488" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-489"><a href="#cb16-489" aria-hidden="true" tabindex="-1"></a><span class="fu">### Winter crosses years</span></span>
-<span id="cb16-490"><a href="#cb16-490" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-491"><a href="#cb16-491" aria-hidden="true" tabindex="-1"></a>Winter Y combines December Y−1 with January-February Y.</span>
-<span id="cb16-492"><a href="#cb16-492" aria-hidden="true" tabindex="-1"></a><span class="in">`period_summary(data, c(12, 1, 2))`</span> only selects months within the same row.</span>
-<span id="cb16-493"><a href="#cb16-493" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`winter_summary()`</span> on year-specific rows for a chronological winter.</span>
-<span id="cb16-494"><a href="#cb16-494" aria-hidden="true" tabindex="-1"></a>It aligns by mesh and year, preserves input rows, and labels winter by the</span>
-<span id="cb16-495"><a href="#cb16-495" aria-hidden="true" tabindex="-1"></a>year of January-February. Missing prior December yields <span class="in">`NA`</span>.</span>
+<span id="cb16-428"><a href="#cb16-428" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb16-429"><a href="#cb16-429" aria-hidden="true" tabindex="-1"></a>\begin{aligned}</span>
+<span id="cb16-430"><a href="#cb16-430" aria-hidden="true" tabindex="-1"></a>ET_{0,7:9} &amp;= \sum_{m=7}^{9} ET_{0,m} = ET_{0,7} + ET_{0,8} + ET_{0,9}, <span class="sc">\\</span></span>
+<span id="cb16-431"><a href="#cb16-431" aria-hidden="true" tabindex="-1"></a>P_{7:9} &amp;= \sum_{m=7}^{9} P_m = P_7 + P_8 + P_9, <span class="sc">\\</span></span>
+<span id="cb16-432"><a href="#cb16-432" aria-hidden="true" tabindex="-1"></a>AI_{7:9} &amp;= \frac{P_{7:9}}{ET_{0,7:9}}</span>
+<span id="cb16-433"><a href="#cb16-433" aria-hidden="true" tabindex="-1"></a>         = \frac{P_7 + P_8 + P_9}{ET_{0,7} + ET_{0,8} + ET_{0,9}}.</span>
+<span id="cb16-434"><a href="#cb16-434" aria-hidden="true" tabindex="-1"></a>\end{aligned}</span>
+<span id="cb16-435"><a href="#cb16-435" aria-hidden="true" tabindex="-1"></a>$$</span>
+<span id="cb16-436"><a href="#cb16-436" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-437"><a href="#cb16-437" aria-hidden="true" tabindex="-1"></a>ここで、$m$は月の番号、$ET_{0,m}$と$P_m$はそれぞれ$m$月のET₀と降水量の月合計（mm）です。</span>
+<span id="cb16-438"><a href="#cb16-438" aria-hidden="true" tabindex="-1"></a>添字の$7:9$は7〜9月を表します。AIには単位がありません。</span>
+<span id="cb16-439"><a href="#cb16-439" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-440"><a href="#cb16-440" aria-hidden="true" tabindex="-1"></a>もとの値はすでに月合計なので、日数をもう一度掛ける必要はありません。単位は、選んだ期間の合計mmです。</span>
+<span id="cb16-441"><a href="#cb16-441" aria-hidden="true" tabindex="-1"></a>乾燥指数AIは、**同じ期間の降水量の合計をET₀の合計で割った値**（<span class="in">`sum(P) / sum(ET0)`</span>）とします。</span>
+<span id="cb16-442"><a href="#cb16-442" aria-hidden="true" tabindex="-1"></a>月ごとのAIを平均する方法とは区別してください。</span>
+<span id="cb16-443"><a href="#cb16-443" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-444"><a href="#cb16-444" aria-hidden="true" tabindex="-1"></a>選んだ月に欠測があれば集計結果も欠測とし、ET₀の合計が0以下、または欠測の場合はAIを<span class="in">`NA`</span>とします。</span>
+<span id="cb16-445"><a href="#cb16-445" aria-hidden="true" tabindex="-1"></a>降水量からET₀を引いたP−ET₀も計算できますが、これは気候上の水の過不足を表す目安です。</span>
+<span id="cb16-446"><a href="#cb16-446" aria-hidden="true" tabindex="-1"></a>土壌の保水量や流出を計算しているわけではないので、土壌水分そのものとは異なります。</span>
+<span id="cb16-447"><a href="#cb16-447" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-448"><a href="#cb16-448" aria-hidden="true" tabindex="-1"></a>次の架空CSVは、実在メッシュを表さない2個の識別子と3年分の月合計を持ちます。</span>
+<span id="cb16-449"><a href="#cb16-449" aria-hidden="true" tabindex="-1"></a>上の日別CSVとは独立した説明用の数値です。</span>
+<span id="cb16-450"><a href="#cb16-450" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-451"><a href="#cb16-451" aria-hidden="true" tabindex="-1"></a>:::::</span>
+<span id="cb16-452"><a href="#cb16-452" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-455"><a href="#cb16-455" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-456"><a href="#cb16-456" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: et0-synthetic-monthly</span></span>
+<span id="cb16-457"><a href="#cb16-457" aria-hidden="true" tabindex="-1"></a>yearly <span class="ot">&lt;-</span> <span class="fu">read_monthly_csv</span>(<span class="st">"data/examples/et0_monthly_synthetic.csv"</span>)</span>
+<span id="cb16-458"><a href="#cb16-458" aria-hidden="true" tabindex="-1"></a>jas <span class="ot">&lt;-</span> <span class="fu">period_summary</span>(yearly, <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>, <span class="st">"Jul-Sep"</span>)</span>
+<span id="cb16-459"><a href="#cb16-459" aria-hidden="true" tabindex="-1"></a>jas</span>
+<span id="cb16-460"><a href="#cb16-460" aria-hidden="true" tabindex="-1"></a>columns <span class="ot">&lt;-</span> <span class="fu">c</span>(</span>
+<span id="cb16-461"><a href="#cb16-461" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="st">"et0_fao56_"</span>, month.abb),</span>
+<span id="cb16-462"><a href="#cb16-462" aria-hidden="true" tabindex="-1"></a>  <span class="fu">paste0</span>(<span class="st">"precipitation_"</span>, month.abb)</span>
+<span id="cb16-463"><a href="#cb16-463" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-464"><a href="#cb16-464" aria-hidden="true" tabindex="-1"></a>normal <span class="ot">&lt;-</span> yearly[yearly<span class="sc">$</span>year <span class="sc">==</span> <span class="dv">2008</span>, <span class="st">"mesh3_code"</span>, drop <span class="ot">=</span> <span class="cn">FALSE</span>]</span>
+<span id="cb16-465"><a href="#cb16-465" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> (column <span class="cf">in</span> columns) {</span>
+<span id="cb16-466"><a href="#cb16-466" aria-hidden="true" tabindex="-1"></a>  normal[[column]] <span class="ot">&lt;-</span> <span class="fu">vapply</span>(</span>
+<span id="cb16-467"><a href="#cb16-467" aria-hidden="true" tabindex="-1"></a>    normal<span class="sc">$</span>mesh3_code,</span>
+<span id="cb16-468"><a href="#cb16-468" aria-hidden="true" tabindex="-1"></a>    <span class="cf">function</span>(key) {</span>
+<span id="cb16-469"><a href="#cb16-469" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mean</span>(yearly[yearly<span class="sc">$</span>mesh3_code <span class="sc">==</span> key, column]) <span class="co"># no na.rm</span></span>
+<span id="cb16-470"><a href="#cb16-470" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb16-471"><a href="#cb16-471" aria-hidden="true" tabindex="-1"></a>    <span class="fu">numeric</span>(<span class="dv">1</span>)</span>
+<span id="cb16-472"><a href="#cb16-472" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-473"><a href="#cb16-473" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb16-474"><a href="#cb16-474" aria-hidden="true" tabindex="-1"></a>climate_jas <span class="ot">&lt;-</span> <span class="fu">period_summary</span>(normal, <span class="dv">7</span><span class="sc">:</span><span class="dv">9</span>, <span class="st">"Jul-Sep"</span>)</span>
+<span id="cb16-475"><a href="#cb16-475" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(</span>
+<span id="cb16-476"><a href="#cb16-476" aria-hidden="true" tabindex="-1"></a>  <span class="at">mesh3_code =</span> normal<span class="sc">$</span>mesh3_code,</span>
+<span id="cb16-477"><a href="#cb16-477" aria-hidden="true" tabindex="-1"></a>  <span class="at">ratio_of_climatological_sums =</span> climate_jas<span class="sc">$</span>aridity_index,</span>
+<span id="cb16-478"><a href="#cb16-478" aria-hidden="true" tabindex="-1"></a>  <span class="at">mean_yearly_ai =</span> <span class="fu">vapply</span>(</span>
+<span id="cb16-479"><a href="#cb16-479" aria-hidden="true" tabindex="-1"></a>    normal<span class="sc">$</span>mesh3_code,</span>
+<span id="cb16-480"><a href="#cb16-480" aria-hidden="true" tabindex="-1"></a>    <span class="cf">function</span>(key) {</span>
+<span id="cb16-481"><a href="#cb16-481" aria-hidden="true" tabindex="-1"></a>      <span class="fu">mean</span>(jas<span class="sc">$</span>aridity_index[jas<span class="sc">$</span>mesh3_code <span class="sc">==</span> key])</span>
+<span id="cb16-482"><a href="#cb16-482" aria-hidden="true" tabindex="-1"></a>    },</span>
+<span id="cb16-483"><a href="#cb16-483" aria-hidden="true" tabindex="-1"></a>    <span class="fu">numeric</span>(<span class="dv">1</span>)</span>
+<span id="cb16-484"><a href="#cb16-484" aria-hidden="true" tabindex="-1"></a>  )</span>
+<span id="cb16-485"><a href="#cb16-485" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb16-486"><a href="#cb16-486" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-487"><a href="#cb16-487" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-488"><a href="#cb16-488" aria-hidden="true" tabindex="-1"></a>::::: {.content-visible unless-profile="ja"}</span>
+<span id="cb16-489"><a href="#cb16-489" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-490"><a href="#cb16-490" aria-hidden="true" tabindex="-1"></a>A ratio of climatological sums (the original production definition) generally</span>
+<span id="cb16-491"><a href="#cb16-491" aria-hidden="true" tabindex="-1"></a>differs from the mean yearly AI. Averaging monthly AI also changes the weighting:</span>
+<span id="cb16-492"><a href="#cb16-492" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-493"><a href="#cb16-493" aria-hidden="true" tabindex="-1"></a>:::::</span>
+<span id="cb16-494"><a href="#cb16-494" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-495"><a href="#cb16-495" aria-hidden="true" tabindex="-1"></a>::::: {.content-visible when-profile="ja"}</span>
 <span id="cb16-496"><a href="#cb16-496" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-497"><a href="#cb16-497" aria-hidden="true" tabindex="-1"></a>:::::</span>
-<span id="cb16-498"><a href="#cb16-498" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-499"><a href="#cb16-499" aria-hidden="true" tabindex="-1"></a>::::: {.content-visible when-profile="ja"}</span>
+<span id="cb16-497"><a href="#cb16-497" aria-hidden="true" tabindex="-1"></a>この章のAIは、11年平均の月別値を足してから比を求めます。</span>
+<span id="cb16-498"><a href="#cb16-498" aria-hidden="true" tabindex="-1"></a>各年のAIを先に求めてから平均した値とは、一般に一致しません。</span>
+<span id="cb16-499"><a href="#cb16-499" aria-hidden="true" tabindex="-1"></a>月別AIの平均も、合計同士の比とは異なります。次の例で違いを確認できます。</span>
 <span id="cb16-500"><a href="#cb16-500" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-501"><a href="#cb16-501" aria-hidden="true" tabindex="-1"></a><span class="fu">### 年をまたぐ冬季</span></span>
+<span id="cb16-501"><a href="#cb16-501" aria-hidden="true" tabindex="-1"></a>:::::</span>
 <span id="cb16-502"><a href="#cb16-502" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-503"><a href="#cb16-503" aria-hidden="true" tabindex="-1"></a>例えば2009年の冬季は、2008年12月と2009年1〜2月を合わせた期間とします。</span>
-<span id="cb16-504"><a href="#cb16-504" aria-hidden="true" tabindex="-1"></a><span class="in">`period_summary(data, c(12, 1, 2))`</span>では、同じ行にある同じ年の12月・1月・2月を選んでしまいます。</span>
-<span id="cb16-505"><a href="#cb16-505" aria-hidden="true" tabindex="-1"></a>連続した冬の3か月を集計するには、年別表に<span class="in">`winter_summary()`</span>を使ってください。</span>
-<span id="cb16-506"><a href="#cb16-506" aria-hidden="true" tabindex="-1"></a>この関数は同じメッシュの前年12月を探し、1〜2月が属する年を冬季の年として表示します。</span>
-<span id="cb16-507"><a href="#cb16-507" aria-hidden="true" tabindex="-1"></a>入力行は削除せず、前年12月がない場合は<span class="in">`NA`</span>を返します。</span>
-<span id="cb16-508"><a href="#cb16-508" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-509"><a href="#cb16-509" aria-hidden="true" tabindex="-1"></a>:::::</span>
-<span id="cb16-510"><a href="#cb16-510" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-513"><a href="#cb16-513" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
-<span id="cb16-514"><a href="#cb16-514" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: et0-synthetic-winter</span></span>
-<span id="cb16-515"><a href="#cb16-515" aria-hidden="true" tabindex="-1"></a><span class="fu">winter_summary</span>(yearly)</span>
-<span id="cb16-516"><a href="#cb16-516" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-517"><a href="#cb16-517" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-518"><a href="#cb16-518" aria-hidden="true" tabindex="-1"></a>::::: {.content-visible unless-profile="ja"}</span>
-<span id="cb16-519"><a href="#cb16-519" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-520"><a href="#cb16-520" aria-hidden="true" tabindex="-1"></a>For the complete real export, winters ending in 2009–2018 are available.</span>
-<span id="cb16-521"><a href="#cb16-521" aria-hidden="true" tabindex="-1"></a>Winter 2008 lacks December 2007; winter 2019 lacks January-February 2019 and</span>
-<span id="cb16-522"><a href="#cb16-522" aria-hidden="true" tabindex="-1"></a>has no anchor row. Summing December, January and February **means** describes</span>
-<span id="cb16-523"><a href="#cb16-523" aria-hidden="true" tabindex="-1"></a>an average seasonal window, not a specific winter or its variability.</span>
-<span id="cb16-524"><a href="#cb16-524" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-525"><a href="#cb16-525" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reproduction and verification</span></span>
-<span id="cb16-526"><a href="#cb16-526" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-527"><a href="#cb16-527" aria-hidden="true" tabindex="-1"></a><span class="in">`R/pipeline_p0_et0.R`</span> is unchanged from the standalone bundle, originating at</span>
-<span id="cb16-528"><a href="#cb16-528" aria-hidden="true" tabindex="-1"></a><span class="in">`japanese-trees-sdms`</span> commit <span class="in">`1731a9e9fcaba87d718168e5eed0aeaed68b2acd`</span>.</span>
-<span id="cb16-529"><a href="#cb16-529" aria-hidden="true" tabindex="-1"></a>The gap helper is extracted unchanged from its <span class="in">`R/pipeline_p0_naro.R`</span>.</span>
-<span id="cb16-530"><a href="#cb16-530" aria-hidden="true" tabindex="-1"></a><span class="in">`R/et0_support.R`</span> adds CSV reading, paths and seasonal summaries. No new package</span>
-<span id="cb16-531"><a href="#cb16-531" aria-hidden="true" tabindex="-1"></a>dependency is required. The export environment was R 4.5.3 and terra 1.8.86,</span>
-<span id="cb16-532"><a href="#cb16-532" aria-hidden="true" tabindex="-1"></a>as recorded in the bundle's <span class="in">`build-environment.csv`</span>. Optional regeneration</span>
-<span id="cb16-533"><a href="#cb16-533" aria-hidden="true" tabindex="-1"></a>from authorized NetCDFs uses terra and the local bundle scripts. Raw inputs</span>
-<span id="cb16-534"><a href="#cb16-534" aria-hidden="true" tabindex="-1"></a>remain immutable. This integration does not retrain an SDM.</span>
+<span id="cb16-505"><a href="#cb16-505" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-506"><a href="#cb16-506" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: et0-ai-weighting</span></span>
+<span id="cb16-507"><a href="#cb16-507" aria-hidden="true" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">50</span>, <span class="dv">200</span>)</span>
+<span id="cb16-508"><a href="#cb16-508" aria-hidden="true" tabindex="-1"></a>et0 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">100</span>, <span class="dv">50</span>)</span>
+<span id="cb16-509"><a href="#cb16-509" aria-hidden="true" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">ratio_of_sums =</span> <span class="fu">sum</span>(p) <span class="sc">/</span> <span class="fu">sum</span>(et0), <span class="at">mean_monthly_ai =</span> <span class="fu">mean</span>(p <span class="sc">/</span> et0))</span>
+<span id="cb16-510"><a href="#cb16-510" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-511"><a href="#cb16-511" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-512"><a href="#cb16-512" aria-hidden="true" tabindex="-1"></a>::::: {.content-visible unless-profile="ja"}</span>
+<span id="cb16-513"><a href="#cb16-513" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-514"><a href="#cb16-514" aria-hidden="true" tabindex="-1"></a><span class="fu">### Winter crosses years</span></span>
+<span id="cb16-515"><a href="#cb16-515" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-516"><a href="#cb16-516" aria-hidden="true" tabindex="-1"></a>Winter Y combines December Y−1 with January-February Y.</span>
+<span id="cb16-517"><a href="#cb16-517" aria-hidden="true" tabindex="-1"></a><span class="in">`period_summary(data, c(12, 1, 2))`</span> only selects months within the same row.</span>
+<span id="cb16-518"><a href="#cb16-518" aria-hidden="true" tabindex="-1"></a>Use <span class="in">`winter_summary()`</span> on year-specific rows for a chronological winter.</span>
+<span id="cb16-519"><a href="#cb16-519" aria-hidden="true" tabindex="-1"></a>It aligns by mesh and year, preserves input rows, and labels winter by the</span>
+<span id="cb16-520"><a href="#cb16-520" aria-hidden="true" tabindex="-1"></a>year of January-February. Missing prior December yields <span class="in">`NA`</span>.</span>
+<span id="cb16-521"><a href="#cb16-521" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-522"><a href="#cb16-522" aria-hidden="true" tabindex="-1"></a>:::::</span>
+<span id="cb16-523"><a href="#cb16-523" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-524"><a href="#cb16-524" aria-hidden="true" tabindex="-1"></a>::::: {.content-visible when-profile="ja"}</span>
+<span id="cb16-525"><a href="#cb16-525" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-526"><a href="#cb16-526" aria-hidden="true" tabindex="-1"></a><span class="fu">### 年をまたぐ冬季</span></span>
+<span id="cb16-527"><a href="#cb16-527" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-528"><a href="#cb16-528" aria-hidden="true" tabindex="-1"></a>例えば2009年の冬季は、2008年12月と2009年1〜2月を合わせた期間とします。</span>
+<span id="cb16-529"><a href="#cb16-529" aria-hidden="true" tabindex="-1"></a><span class="in">`period_summary(data, c(12, 1, 2))`</span>では、同じ行にある同じ年の12月・1月・2月を選んでしまいます。</span>
+<span id="cb16-530"><a href="#cb16-530" aria-hidden="true" tabindex="-1"></a>連続した冬の3か月を集計するには、年別表に<span class="in">`winter_summary()`</span>を使ってください。</span>
+<span id="cb16-531"><a href="#cb16-531" aria-hidden="true" tabindex="-1"></a>この関数は同じメッシュの前年12月を探し、1〜2月が属する年を冬季の年として表示します。</span>
+<span id="cb16-532"><a href="#cb16-532" aria-hidden="true" tabindex="-1"></a>入力行は削除せず、前年12月がない場合は<span class="in">`NA`</span>を返します。</span>
+<span id="cb16-533"><a href="#cb16-533" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-534"><a href="#cb16-534" aria-hidden="true" tabindex="-1"></a>:::::</span>
 <span id="cb16-535"><a href="#cb16-535" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-536"><a href="#cb16-536" aria-hidden="true" tabindex="-1"></a>Download the <span class="co">[</span><span class="ot">calculation functions</span><span class="co">](../R/pipeline_p0_et0.R)</span>,</span>
-<span id="cb16-537"><a href="#cb16-537" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">support functions</span><span class="co">](../R/et0_support.R)</span>, <span class="co">[</span><span class="ot">synthetic daily CSV</span><span class="co">](../data/examples/et0_daily_synthetic.csv)</span></span>
-<span id="cb16-538"><a href="#cb16-538" aria-hidden="true" tabindex="-1"></a>and <span class="co">[</span><span class="ot">synthetic monthly CSV</span><span class="co">](../data/examples/et0_monthly_synthetic.csv)</span>.</span>
-<span id="cb16-539"><a href="#cb16-539" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-540"><a href="#cb16-540" aria-hidden="true" tabindex="-1"></a>From the project root:</span>
-<span id="cb16-541"><a href="#cb16-541" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-542"><a href="#cb16-542" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb16-543"><a href="#cb16-543" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> tests/test_et0.R</span>
-<span id="cb16-544"><a href="#cb16-544" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> tests/verify_et0_local.R</span>
-<span id="cb16-545"><a href="#cb16-545" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render notebooks/calculate_ET0.qmd <span class="at">--profile</span> en</span>
-<span id="cb16-546"><a href="#cb16-546" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render notebooks/calculate_ET0.qmd <span class="at">--profile</span> ja</span>
-<span id="cb16-547"><a href="#cb16-547" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-548"><a href="#cb16-548" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-549"><a href="#cb16-549" aria-hidden="true" tabindex="-1"></a>The first script uses base R and synthetic inputs. The second reads all local</span>
-<span id="cb16-550"><a href="#cb16-550" aria-hidden="true" tabindex="-1"></a>yearly tables via <span class="in">`PROJECT_DATA_DIR`</span>, validates keys and coverage, and compares</span>
-<span id="cb16-551"><a href="#cb16-551" aria-hidden="true" tabindex="-1"></a>their means with the supplied table. It prints aggregate statistics only.</span>
-<span id="cb16-552"><a href="#cb16-552" aria-hidden="true" tabindex="-1"></a>Rendering this chapter never reads NARO tables.</span>
-<span id="cb16-553"><a href="#cb16-553" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-554"><a href="#cb16-554" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
-<span id="cb16-555"><a href="#cb16-555" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-556"><a href="#cb16-556" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Allen et al. (1998), *Crop evapotranspiration*, FAO Paper 56:</span>
-<span id="cb16-557"><a href="#cb16-557" aria-hidden="true" tabindex="-1"></a>  <span class="co">[</span><span class="ot">equation and surface</span><span class="co">](https://www.fao.org/4/x0490e/x0490e06.htm)</span>,</span>
-<span id="cb16-558"><a href="#cb16-558" aria-hidden="true" tabindex="-1"></a>  <span class="co">[</span><span class="ot">inputs</span><span class="co">](https://www.fao.org/4/x0490e/x0490e07.htm)</span>,</span>
-<span id="cb16-559"><a href="#cb16-559" aria-hidden="true" tabindex="-1"></a>  <span class="co">[</span><span class="ot">worked examples</span><span class="co">](https://www.fao.org/4/x0490e/x0490e08.htm)</span>.</span>
-<span id="cb16-560"><a href="#cb16-560" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">NARO Agro-Meteorological Grid Square Data System</span><span class="co">](https://amu.rd.naro.go.jp/)</span>,</span>
-<span id="cb16-561"><a href="#cb16-561" aria-hidden="true" tabindex="-1"></a>  obtained using <span class="co">[</span><span class="ot">agrmesh (Murakami and Nagasaki, 2023)</span><span class="co">](https://github.com/KeachMurakami/agrmesh)</span>.</span>
-<span id="cb16-562"><a href="#cb16-562" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">NARO usage terms and application guide</span><span class="co">](https://amu.rd.naro.go.jp/wiki_open/doku.php?id=subscription)</span>:</span>
-<span id="cb16-563"><a href="#cb16-563" aria-hidden="true" tabindex="-1"></a>  apply for access yourself and check the conditions before using the data.</span>
+<span id="cb16-538"><a href="#cb16-538" aria-hidden="true" tabindex="-1"></a><span class="in">```{r}</span></span>
+<span id="cb16-539"><a href="#cb16-539" aria-hidden="true" tabindex="-1"></a><span class="co">#| label: et0-synthetic-winter</span></span>
+<span id="cb16-540"><a href="#cb16-540" aria-hidden="true" tabindex="-1"></a><span class="fu">winter_summary</span>(yearly)</span>
+<span id="cb16-541"><a href="#cb16-541" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-542"><a href="#cb16-542" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-543"><a href="#cb16-543" aria-hidden="true" tabindex="-1"></a>::::: {.content-visible unless-profile="ja"}</span>
+<span id="cb16-544"><a href="#cb16-544" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-545"><a href="#cb16-545" aria-hidden="true" tabindex="-1"></a>For the complete real export, winters ending in 2009–2018 are available.</span>
+<span id="cb16-546"><a href="#cb16-546" aria-hidden="true" tabindex="-1"></a>Winter 2008 lacks December 2007; winter 2019 lacks January-February 2019 and</span>
+<span id="cb16-547"><a href="#cb16-547" aria-hidden="true" tabindex="-1"></a>has no anchor row. Summing December, January and February **means** describes</span>
+<span id="cb16-548"><a href="#cb16-548" aria-hidden="true" tabindex="-1"></a>an average seasonal window, not a specific winter or its variability.</span>
+<span id="cb16-549"><a href="#cb16-549" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-550"><a href="#cb16-550" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reproduction and verification</span></span>
+<span id="cb16-551"><a href="#cb16-551" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-552"><a href="#cb16-552" aria-hidden="true" tabindex="-1"></a><span class="in">`R/pipeline_p0_et0.R`</span> is unchanged from the standalone bundle, originating at</span>
+<span id="cb16-553"><a href="#cb16-553" aria-hidden="true" tabindex="-1"></a><span class="in">`japanese-trees-sdms`</span> commit <span class="in">`1731a9e9fcaba87d718168e5eed0aeaed68b2acd`</span>.</span>
+<span id="cb16-554"><a href="#cb16-554" aria-hidden="true" tabindex="-1"></a>The gap helper is extracted unchanged from its <span class="in">`R/pipeline_p0_naro.R`</span>.</span>
+<span id="cb16-555"><a href="#cb16-555" aria-hidden="true" tabindex="-1"></a><span class="in">`R/et0_support.R`</span> adds CSV reading, paths and seasonal summaries. No new package</span>
+<span id="cb16-556"><a href="#cb16-556" aria-hidden="true" tabindex="-1"></a>dependency is required. The export environment was R 4.5.3 and terra 1.8.86,</span>
+<span id="cb16-557"><a href="#cb16-557" aria-hidden="true" tabindex="-1"></a>as recorded in the bundle's <span class="in">`build-environment.csv`</span>. Optional regeneration</span>
+<span id="cb16-558"><a href="#cb16-558" aria-hidden="true" tabindex="-1"></a>from authorized NetCDFs uses terra and the local bundle scripts. Raw inputs</span>
+<span id="cb16-559"><a href="#cb16-559" aria-hidden="true" tabindex="-1"></a>remain immutable. This integration does not retrain an SDM.</span>
+<span id="cb16-560"><a href="#cb16-560" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-561"><a href="#cb16-561" aria-hidden="true" tabindex="-1"></a>Download the <span class="co">[</span><span class="ot">calculation functions</span><span class="co">](../R/pipeline_p0_et0.R)</span>,</span>
+<span id="cb16-562"><a href="#cb16-562" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">support functions</span><span class="co">](../R/et0_support.R)</span>, <span class="co">[</span><span class="ot">synthetic daily CSV</span><span class="co">](../data/examples/et0_daily_synthetic.csv)</span></span>
+<span id="cb16-563"><a href="#cb16-563" aria-hidden="true" tabindex="-1"></a>and <span class="co">[</span><span class="ot">synthetic monthly CSV</span><span class="co">](../data/examples/et0_monthly_synthetic.csv)</span>.</span>
 <span id="cb16-564"><a href="#cb16-564" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-565"><a href="#cb16-565" aria-hidden="true" tabindex="-1"></a>For further reading:</span>
+<span id="cb16-565"><a href="#cb16-565" aria-hidden="true" tabindex="-1"></a>From the project root:</span>
 <span id="cb16-566"><a href="#cb16-566" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-567"><a href="#cb16-567" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Global ET₀ and AI:** Zomer et al. (2022) describe the global database</span>
-<span id="cb16-568"><a href="#cb16-568" aria-hidden="true" tabindex="-1"></a>  introduced above <span class="co">[</span><span class="ot">@zomerVersion3Global2022</span><span class="co">]</span>.</span>
-<span id="cb16-569"><a href="#cb16-569" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**How NARO temperature and precipitation data are made:** Ohno et al. (2016)</span>
-<span id="cb16-570"><a href="#cb16-570" aria-hidden="true" tabindex="-1"></a>  explain how observations, numerical forecasts and climate normals</span>
-<span id="cb16-571"><a href="#cb16-571" aria-hidden="true" tabindex="-1"></a>  are combined to produce daily 1 km grid data <span class="co">[</span><span class="ot">@ohno2016mesh</span><span class="co">]</span>.</span>
-<span id="cb16-572"><a href="#cb16-572" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Snow modelling with NARO data:** Kominami et al. (2015) describe a snow</span>
-<span id="cb16-573"><a href="#cb16-573" aria-hidden="true" tabindex="-1"></a>  water equivalent model using grid weather data <span class="co">[</span><span class="ot">@kominami2015snow</span><span class="co">]</span>.</span>
-<span id="cb16-574"><a href="#cb16-574" aria-hidden="true" tabindex="-1"></a>  This is background reading on NARO data applications; snow water equivalent</span>
-<span id="cb16-575"><a href="#cb16-575" aria-hidden="true" tabindex="-1"></a>  is not an input to the ET₀ calculation in this chapter.</span>
-<span id="cb16-576"><a href="#cb16-576" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-577"><a href="#cb16-577" aria-hidden="true" tabindex="-1"></a>:::::</span>
+<span id="cb16-567"><a href="#cb16-567" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb16-568"><a href="#cb16-568" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> tests/test_et0.R</span>
+<span id="cb16-569"><a href="#cb16-569" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> tests/verify_et0_local.R</span>
+<span id="cb16-570"><a href="#cb16-570" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render notebooks/calculate_ET0.qmd <span class="at">--profile</span> en</span>
+<span id="cb16-571"><a href="#cb16-571" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render notebooks/calculate_ET0.qmd <span class="at">--profile</span> ja</span>
+<span id="cb16-572"><a href="#cb16-572" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-573"><a href="#cb16-573" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-574"><a href="#cb16-574" aria-hidden="true" tabindex="-1"></a>The first script uses base R and synthetic inputs. The second reads all local</span>
+<span id="cb16-575"><a href="#cb16-575" aria-hidden="true" tabindex="-1"></a>yearly tables via <span class="in">`PROJECT_DATA_DIR`</span>, validates keys and coverage, and compares</span>
+<span id="cb16-576"><a href="#cb16-576" aria-hidden="true" tabindex="-1"></a>their means with the supplied table. It prints aggregate statistics only.</span>
+<span id="cb16-577"><a href="#cb16-577" aria-hidden="true" tabindex="-1"></a>Rendering this chapter never reads NARO tables.</span>
 <span id="cb16-578"><a href="#cb16-578" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-579"><a href="#cb16-579" aria-hidden="true" tabindex="-1"></a>::::: {.content-visible when-profile="ja"}</span>
+<span id="cb16-579"><a href="#cb16-579" aria-hidden="true" tabindex="-1"></a><span class="fu">## References</span></span>
 <span id="cb16-580"><a href="#cb16-580" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-581"><a href="#cb16-581" aria-hidden="true" tabindex="-1"></a>対象期間のうち、冬の3か月が揃うのは2009〜2018年の冬季です。</span>
-<span id="cb16-582"><a href="#cb16-582" aria-hidden="true" tabindex="-1"></a>2008年の冬季に必要な2007年12月と、2019年の冬季に必要な2019年1〜2月は含まれていません。</span>
-<span id="cb16-583"><a href="#cb16-583" aria-hidden="true" tabindex="-1"></a>一方、11年平均表の12月・1月・2月を足すと、平均的な冬の値を求められます。</span>
-<span id="cb16-584"><a href="#cb16-584" aria-hidden="true" tabindex="-1"></a>ただし、それは特定の年の冬を表す値ではなく、年ごとのばらつきも分かりません。</span>
-<span id="cb16-585"><a href="#cb16-585" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-586"><a href="#cb16-586" aria-hidden="true" tabindex="-1"></a><span class="fu">## 再現と検証</span></span>
-<span id="cb16-587"><a href="#cb16-587" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-588"><a href="#cb16-588" aria-hidden="true" tabindex="-1"></a>計算を担うのは<span class="in">`R/pipeline_p0_et0.R`</span>、CSVの読込や季節集計を担うのは<span class="in">`R/et0_support.R`</span>です。</span>
-<span id="cb16-589"><a href="#cb16-589" aria-hidden="true" tabindex="-1"></a>このページの例はbase Rで動き、新しいパッケージの追加は不要です。</span>
-<span id="cb16-590"><a href="#cb16-590" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-591"><a href="#cb16-591" aria-hidden="true" tabindex="-1"></a>計算コードは、<span class="in">`japanese-trees-sdms`</span>のコミット<span class="in">`1731a9e9fcaba87d718168e5eed0aeaed68b2acd`</span>を元に、</span>
-<span id="cb16-592"><a href="#cb16-592" aria-hidden="true" tabindex="-1"></a>変更せず取り込んでいます。欠測を補う関数も、同じ版の<span class="in">`R/pipeline_p0_naro.R`</span>から取り出しています。</span>
-<span id="cb16-593"><a href="#cb16-593" aria-hidden="true" tabindex="-1"></a>手元の実データを出力した環境はR 4.5.3・terra 1.8.86で、<span class="in">`build-environment.csv`</span>に記録しています。</span>
-<span id="cb16-594"><a href="#cb16-594" aria-hidden="true" tabindex="-1"></a>利用許可を得たNetCDFから計算し直す場合は、terraと手元の処理スクリプトを使います。元のデータは変更しません。</span>
-<span id="cb16-595"><a href="#cb16-595" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-596"><a href="#cb16-596" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">計算関数</span><span class="co">](../R/pipeline_p0_et0.R)</span>、<span class="co">[</span><span class="ot">補助関数</span><span class="co">](../R/et0_support.R)</span>、</span>
-<span id="cb16-597"><a href="#cb16-597" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">架空の日別CSV</span><span class="co">](../data/examples/et0_daily_synthetic.csv)</span>、</span>
-<span id="cb16-598"><a href="#cb16-598" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">架空の月別CSV</span><span class="co">](../data/examples/et0_monthly_synthetic.csv)</span>をダウンロードできます。</span>
-<span id="cb16-599"><a href="#cb16-599" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-600"><a href="#cb16-600" aria-hidden="true" tabindex="-1"></a>プロジェクトのルートで実行します。</span>
+<span id="cb16-581"><a href="#cb16-581" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Allen et al. (1998), *Crop evapotranspiration*, FAO Paper 56:</span>
+<span id="cb16-582"><a href="#cb16-582" aria-hidden="true" tabindex="-1"></a>  <span class="co">[</span><span class="ot">equation and surface</span><span class="co">](https://www.fao.org/4/x0490e/x0490e06.htm)</span>,</span>
+<span id="cb16-583"><a href="#cb16-583" aria-hidden="true" tabindex="-1"></a>  <span class="co">[</span><span class="ot">inputs</span><span class="co">](https://www.fao.org/4/x0490e/x0490e07.htm)</span>,</span>
+<span id="cb16-584"><a href="#cb16-584" aria-hidden="true" tabindex="-1"></a>  <span class="co">[</span><span class="ot">worked examples</span><span class="co">](https://www.fao.org/4/x0490e/x0490e08.htm)</span>.</span>
+<span id="cb16-585"><a href="#cb16-585" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">NARO Agro-Meteorological Grid Square Data System</span><span class="co">](https://amu.rd.naro.go.jp/)</span>,</span>
+<span id="cb16-586"><a href="#cb16-586" aria-hidden="true" tabindex="-1"></a>  obtained using <span class="co">[</span><span class="ot">agrmesh (Murakami and Nagasaki, 2023)</span><span class="co">](https://github.com/KeachMurakami/agrmesh)</span>.</span>
+<span id="cb16-587"><a href="#cb16-587" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">NARO usage terms and application guide</span><span class="co">](https://amu.rd.naro.go.jp/wiki_open/doku.php?id=subscription)</span>:</span>
+<span id="cb16-588"><a href="#cb16-588" aria-hidden="true" tabindex="-1"></a>  apply for access yourself and check the conditions before using the data.</span>
+<span id="cb16-589"><a href="#cb16-589" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-590"><a href="#cb16-590" aria-hidden="true" tabindex="-1"></a>For further reading:</span>
+<span id="cb16-591"><a href="#cb16-591" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-592"><a href="#cb16-592" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Global ET₀ and AI:** Zomer et al. (2022) describe the global database</span>
+<span id="cb16-593"><a href="#cb16-593" aria-hidden="true" tabindex="-1"></a>  introduced above <span class="co">[</span><span class="ot">@zomerVersion3Global2022</span><span class="co">]</span>.</span>
+<span id="cb16-594"><a href="#cb16-594" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**How NARO temperature and precipitation data are made:** Ohno et al. (2016)</span>
+<span id="cb16-595"><a href="#cb16-595" aria-hidden="true" tabindex="-1"></a>  explain how observations, numerical forecasts and climate normals</span>
+<span id="cb16-596"><a href="#cb16-596" aria-hidden="true" tabindex="-1"></a>  are combined to produce daily 1 km grid data <span class="co">[</span><span class="ot">@ohno2016mesh</span><span class="co">]</span>.</span>
+<span id="cb16-597"><a href="#cb16-597" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Snow modelling with NARO data:** Kominami et al. (2015) describe a snow</span>
+<span id="cb16-598"><a href="#cb16-598" aria-hidden="true" tabindex="-1"></a>  water equivalent model using grid weather data <span class="co">[</span><span class="ot">@kominami2015snow</span><span class="co">]</span>.</span>
+<span id="cb16-599"><a href="#cb16-599" aria-hidden="true" tabindex="-1"></a>  This is background reading on NARO data applications; snow water equivalent</span>
+<span id="cb16-600"><a href="#cb16-600" aria-hidden="true" tabindex="-1"></a>  is not an input to the ET₀ calculation in this chapter.</span>
 <span id="cb16-601"><a href="#cb16-601" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-602"><a href="#cb16-602" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
-<span id="cb16-603"><a href="#cb16-603" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> tests/test_et0.R</span>
-<span id="cb16-604"><a href="#cb16-604" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> tests/verify_et0_local.R</span>
-<span id="cb16-605"><a href="#cb16-605" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render notebooks/calculate_ET0.qmd <span class="at">--profile</span> en</span>
-<span id="cb16-606"><a href="#cb16-606" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render notebooks/calculate_ET0.qmd <span class="at">--profile</span> ja</span>
-<span id="cb16-607"><a href="#cb16-607" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb16-608"><a href="#cb16-608" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-609"><a href="#cb16-609" aria-hidden="true" tabindex="-1"></a>最初のスクリプトは、架空データとFAOの公開計算例を使って関数の動作を確かめます。</span>
-<span id="cb16-610"><a href="#cb16-610" aria-hidden="true" tabindex="-1"></a>2番目は実データを用意した人向けです。<span class="in">`PROJECT_DATA_DIR`</span>で指定した場所の全ブロックを読み、</span>
-<span id="cb16-611"><a href="#cb16-611" aria-hidden="true" tabindex="-1"></a>メッシュと年の対応、対象期間の抜け、11年平均が合うかを確認します。表示するのは集計結果だけです。</span>
-<span id="cb16-612"><a href="#cb16-612" aria-hidden="true" tabindex="-1"></a>この章のレンダリングでは、NAROの実データは読み込みません。</span>
-<span id="cb16-613"><a href="#cb16-613" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-614"><a href="#cb16-614" aria-hidden="true" tabindex="-1"></a><span class="fu">## 参考文献</span></span>
+<span id="cb16-602"><a href="#cb16-602" aria-hidden="true" tabindex="-1"></a>:::::</span>
+<span id="cb16-603"><a href="#cb16-603" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-604"><a href="#cb16-604" aria-hidden="true" tabindex="-1"></a>::::: {.content-visible when-profile="ja"}</span>
+<span id="cb16-605"><a href="#cb16-605" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-606"><a href="#cb16-606" aria-hidden="true" tabindex="-1"></a>対象期間のうち、冬の3か月が揃うのは2009〜2018年の冬季です。</span>
+<span id="cb16-607"><a href="#cb16-607" aria-hidden="true" tabindex="-1"></a>2008年の冬季に必要な2007年12月と、2019年の冬季に必要な2019年1〜2月は含まれていません。</span>
+<span id="cb16-608"><a href="#cb16-608" aria-hidden="true" tabindex="-1"></a>一方、11年平均表の12月・1月・2月を足すと、平均的な冬の値を求められます。</span>
+<span id="cb16-609"><a href="#cb16-609" aria-hidden="true" tabindex="-1"></a>ただし、それは特定の年の冬を表す値ではなく、年ごとのばらつきも分かりません。</span>
+<span id="cb16-610"><a href="#cb16-610" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-611"><a href="#cb16-611" aria-hidden="true" tabindex="-1"></a><span class="fu">## 再現と検証</span></span>
+<span id="cb16-612"><a href="#cb16-612" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-613"><a href="#cb16-613" aria-hidden="true" tabindex="-1"></a>計算を担うのは<span class="in">`R/pipeline_p0_et0.R`</span>、CSVの読込や季節集計を担うのは<span class="in">`R/et0_support.R`</span>です。</span>
+<span id="cb16-614"><a href="#cb16-614" aria-hidden="true" tabindex="-1"></a>このページの例はbase Rで動き、新しいパッケージの追加は不要です。</span>
 <span id="cb16-615"><a href="#cb16-615" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-616"><a href="#cb16-616" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Allen et al. (1998), *Crop evapotranspiration*, FAO Paper 56:</span>
-<span id="cb16-617"><a href="#cb16-617" aria-hidden="true" tabindex="-1"></a>  <span class="co">[</span><span class="ot">式と基準面</span><span class="co">](https://www.fao.org/4/x0490e/x0490e06.htm)</span>、</span>
-<span id="cb16-618"><a href="#cb16-618" aria-hidden="true" tabindex="-1"></a>  <span class="co">[</span><span class="ot">気象入力</span><span class="co">](https://www.fao.org/4/x0490e/x0490e07.htm)</span>、</span>
-<span id="cb16-619"><a href="#cb16-619" aria-hidden="true" tabindex="-1"></a>  <span class="co">[</span><span class="ot">計算例</span><span class="co">](https://www.fao.org/4/x0490e/x0490e08.htm)</span>。</span>
-<span id="cb16-620"><a href="#cb16-620" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">農研機構メッシュ農業気象データ</span><span class="co">](https://amu.rd.naro.go.jp/)</span>。</span>
-<span id="cb16-621"><a href="#cb16-621" aria-hidden="true" tabindex="-1"></a>  取得には<span class="co">[</span><span class="ot">agrmesh（Murakami and Nagasaki, 2023）</span><span class="co">](https://github.com/KeachMurakami/agrmesh)</span>を使用。</span>
-<span id="cb16-622"><a href="#cb16-622" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">農研機構の利用案内・利用規約</span><span class="co">](https://amu.rd.naro.go.jp/wiki_open/doku.php?id=subscription)</span>：</span>
-<span id="cb16-623"><a href="#cb16-623" aria-hidden="true" tabindex="-1"></a>  利用する際は、各自で申請し、利用条件を確認してください。</span>
+<span id="cb16-616"><a href="#cb16-616" aria-hidden="true" tabindex="-1"></a>計算コードは、<span class="in">`japanese-trees-sdms`</span>のコミット<span class="in">`1731a9e9fcaba87d718168e5eed0aeaed68b2acd`</span>を元に、</span>
+<span id="cb16-617"><a href="#cb16-617" aria-hidden="true" tabindex="-1"></a>変更せず取り込んでいます。欠測を補う関数も、同じ版の<span class="in">`R/pipeline_p0_naro.R`</span>から取り出しています。</span>
+<span id="cb16-618"><a href="#cb16-618" aria-hidden="true" tabindex="-1"></a>手元の実データを出力した環境はR 4.5.3・terra 1.8.86で、<span class="in">`build-environment.csv`</span>に記録しています。</span>
+<span id="cb16-619"><a href="#cb16-619" aria-hidden="true" tabindex="-1"></a>利用許可を得たNetCDFから計算し直す場合は、terraと手元の処理スクリプトを使います。元のデータは変更しません。</span>
+<span id="cb16-620"><a href="#cb16-620" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-621"><a href="#cb16-621" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">計算関数</span><span class="co">](../R/pipeline_p0_et0.R)</span>、<span class="co">[</span><span class="ot">補助関数</span><span class="co">](../R/et0_support.R)</span>、</span>
+<span id="cb16-622"><a href="#cb16-622" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">架空の日別CSV</span><span class="co">](../data/examples/et0_daily_synthetic.csv)</span>、</span>
+<span id="cb16-623"><a href="#cb16-623" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">架空の月別CSV</span><span class="co">](../data/examples/et0_monthly_synthetic.csv)</span>をダウンロードできます。</span>
 <span id="cb16-624"><a href="#cb16-624" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-625"><a href="#cb16-625" aria-hidden="true" tabindex="-1"></a>関連する手法やNAROデータについて詳しく知りたい方は、次の文献も参考にしてください。</span>
+<span id="cb16-625"><a href="#cb16-625" aria-hidden="true" tabindex="-1"></a>プロジェクトのルートで実行します。</span>
 <span id="cb16-626"><a href="#cb16-626" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-627"><a href="#cb16-627" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**全球のET₀・AIデータについて**：Zomerら（2022）は、上で紹介した全球データベースの</span>
-<span id="cb16-628"><a href="#cb16-628" aria-hidden="true" tabindex="-1"></a>  作成方法を説明しています <span class="co">[</span><span class="ot">@zomerVersion3Global2022</span><span class="co">]</span>。</span>
-<span id="cb16-629"><a href="#cb16-629" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**気温・降水量データの作り方について**：大野ら（2016）は、実況値・数値予報・平年値を</span>
-<span id="cb16-630"><a href="#cb16-630" aria-hidden="true" tabindex="-1"></a>  組み合わせて、約1 kmのメッシュごとに日別の気温と降水量を求める方法を説明しています <span class="co">[</span><span class="ot">@ohno2016mesh</span><span class="co">]</span>。</span>
-<span id="cb16-631"><a href="#cb16-631" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**積雪に関するモデルについて**：小南ら（2015）は、メッシュ農業気象データを使って</span>
-<span id="cb16-632"><a href="#cb16-632" aria-hidden="true" tabindex="-1"></a>  積雪水量を推定する方法を説明しています <span class="co">[</span><span class="ot">@kominami2015snow</span><span class="co">]</span>。</span>
-<span id="cb16-633"><a href="#cb16-633" aria-hidden="true" tabindex="-1"></a>  NAROデータの活用方法を知るための参考文献です。この章のET₀計算では、積雪水量は入力に使いません。</span>
-<span id="cb16-634"><a href="#cb16-634" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-635"><a href="#cb16-635" aria-hidden="true" tabindex="-1"></a>:::::</span>
+<span id="cb16-627"><a href="#cb16-627" aria-hidden="true" tabindex="-1"></a><span class="in">```bash</span></span>
+<span id="cb16-628"><a href="#cb16-628" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">--vanilla</span> tests/test_et0.R</span>
+<span id="cb16-629"><a href="#cb16-629" aria-hidden="true" tabindex="-1"></a><span class="ex">Rscript</span> tests/verify_et0_local.R</span>
+<span id="cb16-630"><a href="#cb16-630" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render notebooks/calculate_ET0.qmd <span class="at">--profile</span> en</span>
+<span id="cb16-631"><a href="#cb16-631" aria-hidden="true" tabindex="-1"></a><span class="ex">quarto</span> render notebooks/calculate_ET0.qmd <span class="at">--profile</span> ja</span>
+<span id="cb16-632"><a href="#cb16-632" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb16-633"><a href="#cb16-633" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-634"><a href="#cb16-634" aria-hidden="true" tabindex="-1"></a>最初のスクリプトは、架空データとFAOの公開計算例を使って関数の動作を確かめます。</span>
+<span id="cb16-635"><a href="#cb16-635" aria-hidden="true" tabindex="-1"></a>2番目は実データを用意した人向けです。<span class="in">`PROJECT_DATA_DIR`</span>で指定した場所の全ブロックを読み、</span>
+<span id="cb16-636"><a href="#cb16-636" aria-hidden="true" tabindex="-1"></a>メッシュと年の対応、対象期間の抜け、11年平均が合うかを確認します。表示するのは集計結果だけです。</span>
+<span id="cb16-637"><a href="#cb16-637" aria-hidden="true" tabindex="-1"></a>この章のレンダリングでは、NAROの実データは読み込みません。</span>
+<span id="cb16-638"><a href="#cb16-638" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-639"><a href="#cb16-639" aria-hidden="true" tabindex="-1"></a><span class="fu">## 参考文献</span></span>
+<span id="cb16-640"><a href="#cb16-640" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-641"><a href="#cb16-641" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Allen et al. (1998), *Crop evapotranspiration*, FAO Paper 56:</span>
+<span id="cb16-642"><a href="#cb16-642" aria-hidden="true" tabindex="-1"></a>  <span class="co">[</span><span class="ot">式と基準面</span><span class="co">](https://www.fao.org/4/x0490e/x0490e06.htm)</span>、</span>
+<span id="cb16-643"><a href="#cb16-643" aria-hidden="true" tabindex="-1"></a>  <span class="co">[</span><span class="ot">気象入力</span><span class="co">](https://www.fao.org/4/x0490e/x0490e07.htm)</span>、</span>
+<span id="cb16-644"><a href="#cb16-644" aria-hidden="true" tabindex="-1"></a>  <span class="co">[</span><span class="ot">計算例</span><span class="co">](https://www.fao.org/4/x0490e/x0490e08.htm)</span>。</span>
+<span id="cb16-645"><a href="#cb16-645" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">農研機構メッシュ農業気象データ</span><span class="co">](https://amu.rd.naro.go.jp/)</span>。</span>
+<span id="cb16-646"><a href="#cb16-646" aria-hidden="true" tabindex="-1"></a>  取得には<span class="co">[</span><span class="ot">agrmesh（Murakami and Nagasaki, 2023）</span><span class="co">](https://github.com/KeachMurakami/agrmesh)</span>を使用。</span>
+<span id="cb16-647"><a href="#cb16-647" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span><span class="co">[</span><span class="ot">農研機構の利用案内・利用規約</span><span class="co">](https://amu.rd.naro.go.jp/wiki_open/doku.php?id=subscription)</span>：</span>
+<span id="cb16-648"><a href="#cb16-648" aria-hidden="true" tabindex="-1"></a>  利用する際は、各自で申請し、利用条件を確認してください。</span>
+<span id="cb16-649"><a href="#cb16-649" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-650"><a href="#cb16-650" aria-hidden="true" tabindex="-1"></a>関連する手法やNAROデータについて詳しく知りたい方は、次の文献も参考にしてください。</span>
+<span id="cb16-651"><a href="#cb16-651" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-652"><a href="#cb16-652" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**全球のET₀・AIデータについて**：Zomerら（2022）は、上で紹介した全球データベースの</span>
+<span id="cb16-653"><a href="#cb16-653" aria-hidden="true" tabindex="-1"></a>  作成方法を説明しています <span class="co">[</span><span class="ot">@zomerVersion3Global2022</span><span class="co">]</span>。</span>
+<span id="cb16-654"><a href="#cb16-654" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**気温・降水量データの作り方について**：大野ら（2016）は、実況値・数値予報・平年値を</span>
+<span id="cb16-655"><a href="#cb16-655" aria-hidden="true" tabindex="-1"></a>  組み合わせて、約1 kmのメッシュごとに日別の気温と降水量を求める方法を説明しています <span class="co">[</span><span class="ot">@ohno2016mesh</span><span class="co">]</span>。</span>
+<span id="cb16-656"><a href="#cb16-656" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**積雪に関するモデルについて**：小南ら（2015）は、メッシュ農業気象データを使って</span>
+<span id="cb16-657"><a href="#cb16-657" aria-hidden="true" tabindex="-1"></a>  積雪水量を推定する方法を説明しています <span class="co">[</span><span class="ot">@kominami2015snow</span><span class="co">]</span>。</span>
+<span id="cb16-658"><a href="#cb16-658" aria-hidden="true" tabindex="-1"></a>  NAROデータの活用方法を知るための参考文献です。この章のET₀計算では、積雪水量は入力に使いません。</span>
+<span id="cb16-659"><a href="#cb16-659" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-660"><a href="#cb16-660" aria-hidden="true" tabindex="-1"></a>:::::</span>
 </code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->

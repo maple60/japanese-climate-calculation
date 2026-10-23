@@ -379,8 +379,20 @@ It is not their union or a count of missing days in all input variables.
 
 ## Month windows and AI
 
-Sum monthly totals; do not multiply them by days again. ET0 and precipitation
-become depths in mm per selected period. AI is **sum(P)/sum(ET0)** over identical
+For July–September, add the three monthly ET₀ totals and the three precipitation totals:
+
+$$
+\begin{aligned}
+ET_{0,7:9} &= \sum_{m=7}^{9} ET_{0,m} = ET_{0,7} + ET_{0,8} + ET_{0,9}, \\
+P_{7:9} &= \sum_{m=7}^{9} P_m = P_7 + P_8 + P_9, \\
+AI_{7:9} &= \frac{P_{7:9}}{ET_{0,7:9}}
+         = \frac{P_7 + P_8 + P_9}{ET_{0,7} + ET_{0,8} + ET_{0,9}}.
+\end{aligned}
+$$
+
+Here, $m$ is the month number, $ET_{0,m}$ and $P_m$ are the monthly totals in mm,
+and $7:9$ denotes July–September. AI is dimensionless.
+Do not multiply the monthly totals by days again. AI is **sum(P)/sum(ET0)** over identical
 months, rather than the mean of monthly AI. Missing months propagate and
 non-positive or missing ET0 denominators give `NA`. P−ET0 is a climatic water
 balance, not a soil-water balance model.
@@ -404,6 +416,19 @@ base Rでgzip圧縮CSVを直接読めます。`read_monthly_csv()`は`mesh3_code
 ## 集計する月の選び方と乾燥指数AI
 
 例えば7〜9月を集計する場合は、その3か月のET₀と降水量をそれぞれ足します。
+
+$$
+\begin{aligned}
+ET_{0,7:9} &= \sum_{m=7}^{9} ET_{0,m} = ET_{0,7} + ET_{0,8} + ET_{0,9}, \\
+P_{7:9} &= \sum_{m=7}^{9} P_m = P_7 + P_8 + P_9, \\
+AI_{7:9} &= \frac{P_{7:9}}{ET_{0,7:9}}
+         = \frac{P_7 + P_8 + P_9}{ET_{0,7} + ET_{0,8} + ET_{0,9}}.
+\end{aligned}
+$$
+
+ここで、$m$は月の番号、$ET_{0,m}$と$P_m$はそれぞれ$m$月のET₀と降水量の月合計（mm）です。
+添字の$7:9$は7〜9月を表します。AIには単位がありません。
+
 もとの値はすでに月合計なので、日数をもう一度掛ける必要はありません。単位は、選んだ期間の合計mmです。
 乾燥指数AIは、**同じ期間の降水量の合計をET₀の合計で割った値**（`sum(P) / sum(ET0)`）とします。
 月ごとのAIを平均する方法とは区別してください。
