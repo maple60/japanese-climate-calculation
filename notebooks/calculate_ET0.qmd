@@ -27,8 +27,10 @@ subtitle-ja: "NAROの日別入力と月別集計（2008〜2018年）"
 
 ## Scope and relation to PET
 
-All executed examples use **synthetic data or the published FAO example**.
-No NARO values or maps are embedded in the rendered page.
+This chapter shows how to calculate daily reference evapotranspiration (ET₀)
+and combine it into monthly and seasonal totals. All examples run on this page
+use **synthetic data or a published FAO example**. The page does not include
+actual NARO data or maps made from them.
 
 | Property | Existing [Thornthwaite PET](calculate_PET.qmd) | This ET0 workflow |
 |---|---|---|
@@ -44,10 +46,16 @@ The existing PET and AI chapters retain their original definitions and inputs.
 Precipitation is needed for AI, but is not an input to the ET0 equation.
 
 ::: {.callout-warning}
-External sharing permission for NARO-derived ET0 and precipitation tables
-remains unconfirmed. Do not publish the tables, maps derived from them, or
-external share links. The repository's code/documentation licenses do not
-license the weather data. Keep originals immutable and real tables outside Git.
+## Using NARO data
+
+Before using the data, read NARO's [usage terms and application guide](https://amu.rd.naro.go.jp/wiki_open/doku.php?id=subscription).
+Each user should apply for access and handle the data according to the terms.
+This site provides calculation code and synthetic examples, not NARO data.
+
+Permission to share the ET₀ and precipitation tables prepared for this project,
+or maps made from them, has not been confirmed, so they are not published here.
+The code and documentation licenses do not grant permission to redistribute
+weather data. Keep original files unchanged and actual data outside Git.
 :::
 
 :::::
@@ -56,25 +64,34 @@ license the weather data. Keep originals immutable and real tables outside Git.
 
 ## 対象範囲とPETとの違い
 
-この章で実行する例は、すべて**架空データまたはFAOの公開計算例**です。
-生成HTMLにはNAROの実データや地図を埋め込みません。
+この章では、農研機構メッシュ農業気象データを使って、1日ごとの**基準蒸発散量（ET₀）**を計算し、
+月や季節ごとに集計する方法を説明します。
+実データの利用には申請が必要なため、ページ内で実行する例には**架空データまたはFAOの公開計算例**を使います。
+NAROの実データや、それを使った地図は掲載していません。
 
 | 項目 | 従来の[Thornthwaite法によるPET](calculate_PET.qmd) | この章のET₀ |
 |---|---|---|
-| データ | JMAメッシュ平年値2020（国土交通省から提供） | 農研機構メッシュ農業気象データ |
+| データ | [JMAメッシュ平年値2020](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html)（国土交通省から提供） | [農研機構メッシュ農業気象データ](https://amu.rd.naro.go.jp/wiki_open/doku.php?id=start) |
 | 期間 | 1991〜2020年の月別平年値 | 2008〜2018年の日別値 |
 | 入力 | 月平均気温と緯度・日長 | 日平均・最高・最低気温、日射量、相対湿度、風速、標高、緯度、日付 |
 | 物理量 | 気温に基づく潜在蒸発散量 | 十分に給水された仮想的な草地面からの基準蒸発散量 |
 | AIの分母 | Thornthwaite法のPET | FAO-56法のET₀ |
 
-いずれも森林の実蒸発散量の測定値ではありません。両者の比較には手法・入力・期間の違いが
-含まれるため、手法だけの効果として解釈できません。従来のPET・AI章の定義と入力は維持します。
+いずれも**森林の実蒸発散量の測定値ではありません**。
+両者は計算方法だけでなく、入力データや対象期間も異なります。
+値に差があっても、計算方法だけが原因とはいえません。
 降水量はAIに必要ですが、ET₀式そのものの入力には含まれません。
 
 ::: {.callout-warning}
-NARO派生のET₀・降水量表の外部共有可否は未確認です。これらの表、派生地図、外部共有リンクを
-公開しないでください。コード・文書のライセンスは気象データの権利を与えません。
-原本は変更せず、実データはGitの外に置いてください。
+## NAROデータを利用する方へ
+
+利用にあたっては、[農研機構の利用案内・利用規約](https://amu.rd.naro.go.jp/wiki_open/doku.php?id=subscription)を確認し、
+データの扱いに注意してください。**利用する際は、各自で利用申請を行ってください。**
+このサイトで提供するのは計算コードと架空の入力例であり、NAROの実データは配布していません。
+
+今回作成したET₀・降水量の表や、それらを使った地図を外部へ共有できるかは未確認のため、ここでは公開していません。
+コードや文書のライセンスがあっても、気象データを自由に再配布できるわけではありません。
+元のファイルは変更せずに保管し、実データはGitの管理対象に含めないでください。
 :::
 
 :::::
@@ -131,6 +148,14 @@ Monthly mean weather cannot exactly reproduce daily ET0 because the equation
 is nonlinear. Changing wind or humidity assumptions requires authorized daily
 inputs and recalculation, rather than the monthly tables.
 
+### Relation to Zomer et al. (2022)
+
+The global database described by Zomer et al. also uses FAO Penman–Monteith
+reference evapotranspiration [@zomerVersion3Global2022]. However, it uses
+WorldClim monthly climate data for 1970–2000, while this chapter uses daily
+NARO data for 2008–2018. The basic method is shared, but the inputs, time
+steps and resulting values are not identical.
+
 ### Published FAO check
 
 The Uccle example (6 July, FAO-56 example 18) uses the published actual vapour
@@ -143,7 +168,8 @@ about 3.9 mm/day. This checks implementation, not the accuracy of every cell.
 
 ## 日別計算式と仮定
 
-[FAO-56の式6](https://www.fao.org/4/x0490e/x0490e06.htm)を使用します。
+ET₀は、十分に水が供給された草地を基準にした蒸発散量です。
+ここでは、気温に加えて日射量・湿度・風速を使う[FAO-56の式6](https://www.fao.org/4/x0490e/x0490e06.htm)で計算します。
 
 $$
 ET_0 = \frac{0.408\Delta(R_n-G)
@@ -151,38 +177,60 @@ ET_0 = \frac{0.408\Delta(R_n-G)
  {\Delta+\gamma(1+0.34u_2)}.
 $$
 
-ET₀はmm/日、Tは日平均気温（℃）、RnとGは純放射・地中熱流量（MJ/m²/日）、
-u2は地上2 mの風速（m/s）、esとeaは飽和・実水蒸気圧（kPa）です。
-Deltaは飽和水蒸気圧曲線の傾き、gammaは乾湿計定数（いずれもkPa/℃）です。
+式に出てくる記号と単位は次のとおりです。
 
-- 日別の地中熱流量Gは0、基準面のアルベドは0.23とします。
+| 記号 | 意味 | 単位 |
+|---|---|---|
+| $ET_0$ | 1日あたりの基準蒸発散量 | mm/日 |
+| $T$ | 日平均気温 | ℃ |
+| $R_n$ | 地表が受け取る放射と放出する放射の差（純放射） | MJ/m²/日 |
+| $G$ | 地中へ出入りする熱（地中熱流量） | MJ/m²/日 |
+| $u_2$ | 地上2 mの風速 | m/s |
+| $e_s$, $e_a$ | 飽和水蒸気圧と実際の水蒸気圧 | kPa |
+| $\Delta$ | 飽和水蒸気圧が気温とともに変わる割合 | kPa/℃ |
+| $\gamma$ | 気圧などに応じて決まる乾湿計定数 | kPa/℃ |
+
+今回の計算では、次の仮定と欠測の扱いを用います。
+
+- 日別の地中熱流量Gは0、地表が日射を反射する割合（アルベド）は0.23とします。
 - 飽和水蒸気圧は日最高・最低気温から求めた値の平均です。実水蒸気圧には、
   最高・最低相対湿度の組ではなく日平均相対湿度を用います。
 - 元の風速は**地上10 mの値と仮定**し、2 mへ換算します。NAROの元データが表す高度は未確認です。
-- 相対湿度と風速について、それぞれ各暦年内で、観測値に挟まれた最大2日間の欠測を線形補間します。
-  より長い欠測と年の端の欠測は残します。他の入力変数は補間しません。
-- 未補間の欠測は日別ET₀、月合計、多年平均に伝播します。合計・平均に`na.rm = TRUE`は使いません。
+- 相対湿度と風速は、同じ年の前後の値が揃っている場合に限り、連続2日までの欠測を直線で補います。
+  3日以上続く欠測や、年初・年末で前後の値が揃わない欠測は残します。他の入力変数は補いません。
+- 必要な値に欠測が残る日は、ET₀も欠測になります。その日を含む月合計や、その月を含む多年平均も欠測とします。
+  欠測を除いて計算する`na.rm = TRUE`は使いません。
 - 計算された負のET₀は0に切り上げず、そのまま保持します。
 
 $e^\circ(T)=0.6108\exp[17.27T/(T+237.3)]$として、日平均相対湿度による近似は
 $e_a=(RH_{mean}/100)[e^\circ(T_{max})+e^\circ(T_{min})]/2$です。
 風速換算は$u_2=u_z4.87/\ln(67.8z-5.42)$、z = 10 mとします。
 [FAO-56の式19・47](https://www.fao.org/4/x0490e/x0490e07.htm)に対応します。
-相対湿度の極値が得られる場合は、その組を使う方法が望まれます。
-実装にある最低気温による代替関数は、今回の相対湿度欠測の補完には**使いません**。
+最高・最低相対湿度が得られる場合は、それらを使う方法が望まれます。
+コードには最低気温から水蒸気圧を推定する関数もありますが、今回の湿度の欠測を補うためには**使いません**。
 
-純放射は吸収短波放射とFAO式による長波放射から計算し、日射量／晴天日射量の比の上限は1です。
-気圧と乾湿計定数は標高から計算します。太陽位置の式の分母365は閏年も維持しますが、
-月合計には2月29日を含む実際の全日付を含めます。白夜・極夜は実装の対象外です。
+純放射は、地表が吸収する日射と、FAO式で推定した長波放射から求めます。
+日射量を晴天時の日射量で割った比は、1を上限とします。気圧と乾湿計定数は標高から計算します。
+太陽位置を求める式では、うるう年も分母を365とします。
+ただし月合計には、2月29日を含めて実際にあるすべての日を入れます。白夜・極夜は対象としていません。
 
-式は非線形なので、月平均の気象値から日別計算を正確に再現することはできません。
-風速・湿度の仮定を変更するには、利用許可のある日別入力から再計算する必要があります。
+この式では、入力値とET₀が単純な比例関係になりません。
+そのため、月平均の気象値を式に入れた結果は、日別に計算してから合計した結果とは一致しません。
+風速や湿度の仮定を変えたい場合は、利用許可を得た日別データから計算し直す必要があります。
+
+### Zomerら（2022）のデータベースとの関係
+
+Zomerらの全球データベースも、FAO Penman–Monteith法によるET₀を基礎にしています [@zomerVersion3Global2022]。
+ただし、同じ式を基礎にしていても、入力データや時間の単位まで同じとは限りません。
+ZomerらはWorldClimの1970〜2000年の月別気候値を使い、この章ではNAROの2008〜2018年の日別値を使います。
+したがって、基本となる計算方法は共通ですが、計算手順や得られる値がすべて同じとはいえません。
 
 ### FAOの公開計算例との照合
 
 Uccleの例（7月6日、FAO-56の例18）は、NARO用の日平均相対湿度による近似ではなく、
 公開されている実水蒸気圧を使います。期待値は約3.9 mm/日です。
-これは実装の検証であり、各メッシュの推定精度の検証ではありません。
+この例で確認できるのは、コードが公開計算例に近い値を返すことです。
+各メッシュのET₀が、現地の値をどれほど正確に表すかを確かめるものではありません。
 
 :::::
 
@@ -195,7 +243,9 @@ example_et0 <- pipeline_p0_et0_fao56(
   solar_radiation = matrix(22.07),
   actual_vapour_pressure = matrix(1.409),
   wind_2m = matrix(pipeline_p0_wind_at_2m(10 * 1000 / 3600, 10)),
-  elevation = 100, latitude = 50.80, day_of_year = 187
+  elevation = 100,
+  latitude = 50.80,
+  day_of_year = 187
 )
 stopifnot(abs(as.numeric(example_et0) - 3.9) < 0.08)
 data.frame(et0_mm_day = as.numeric(example_et0))
@@ -216,7 +266,8 @@ and elevation have one entry per row; day of year has one per column.
 ### 架空の日別CSVによる例
 
 次のCSVは1地点・3日分の架空入力です。7月全体の合計を意味しません。
-行列の各行が地点、各列が日です。緯度・標高は行ごと、通日は列ごとに1値を与えます。
+計算関数へ渡す行列では、各行を地点、各列を日とします。
+緯度と標高は地点ごとに、年初から数えた日番号（通日）は日ごとに指定します。
 
 :::::
 
@@ -230,10 +281,13 @@ daily$et0_mm_day <- as.numeric(pipeline_p0_et0_fao56(
   minimum_temperature = as_row(daily$minimum_temperature_c),
   solar_radiation = as_row(daily$solar_radiation_mj_m2_day),
   actual_vapour_pressure = as_row(pipeline_p0_actual_vapour_pressure_rh(
-    daily$relative_humidity_percent, daily$maximum_temperature_c,
-    daily$minimum_temperature_c)),
+    daily$relative_humidity_percent,
+    daily$maximum_temperature_c,
+    daily$minimum_temperature_c
+  )),
   wind_2m = as_row(pipeline_p0_wind_at_2m(daily$wind_10m_m_s, 10)),
-  elevation = daily$elevation_m[1], latitude = daily$latitude_degrees[1],
+  elevation = daily$elevation_m[1],
+  latitude = daily$latitude_degrees[1],
   day_of_year = as.integer(format(as.Date(daily$date), "%j"))
 ))
 daily[c("date", "et0_mm_day")]
@@ -267,26 +321,28 @@ The following example is deliberately **not executed during rendering**:
 
 ::::: {.content-visible when-profile="ja"}
 
-欠測がある場合は、ローカル一式の`export_yearly.R`と同様に、各年の相対湿度・風速へ
-それぞれ`pipeline_p0_fill_short_gaps()`を適用してから計算します。
-低水準関数`pipeline_p0_monthly_sums()`は暦の完全性を検査しません。
-月合計を報告する前に、28・29・30・31日という月の長さに応じて全日付を過不足なく、
-入力間で同じ順に揃えてください。
+欠測がある場合は、ローカルの`export_yearly.R`と同様に、年ごとの相対湿度と風速に
+それぞれ`pipeline_p0_fill_short_gaps()`を使ってから計算します。
+月合計を求める`pipeline_p0_monthly_sums()`自体は、日付の抜けや重複を調べません。
+計算前に、その月の全日付が1回ずつ含まれ、すべての入力で日付の順序が揃っていることを確認してください。
 
 ## ローカルの月別データ
 
-年別ファイルはメッシュ・年ごとに12か月の合計を持ち、2008年1月〜2018年12月を網羅します。
-1メッシュ・1変数あたり132か月です。平均表には11年分の各月合計の平均を格納します。
+年別ファイルには、メッシュと年ごとに、12か月分の月合計が入っています。
+対象は2008年1月〜2018年12月で、1メッシュ・1変数あたり132か月分です。
+平均表には、11年分の月合計を月ごとに平均した値が入っています。
 例えば7月の値は11個の7月合計の平均であり、**標準的な30年平年値ではありません**。
 
-用意済みのデータは377,449メッシュ・153一次メッシュブロック・4,151,939メッシュ年行です。
+手元で用意したデータは377,449メッシュ分で、153個の一次メッシュのブロックに分かれています。
+年別表は1メッシュ・1年を1行とし、合計4,151,939行あります。
 `verification.csv`には、年別表から再計算した平均と既存平均表との差が1e-8 mm未満
 （最大4.77484718430787e-12 mm）であることが記録されています。
-これは集計の整合性の確認であり、気象値の正確さを保証するものではありません。
-`SHA256SUMS`はファイルの完全性を確認するための一覧です。
+この比較は、集計し直しても同じ値になることを確かめたものです。気象値そのものの正確さを保証するものではありません。
+`SHA256SUMS`は、ファイルの内容が変わっていないかを調べるための一覧です。
 
 Git管理外の`.Renviron`に`PROJECT_DATA_DIR`を設定し、変更後はRを再起動します。
-以下の実データ読込例は、**描画時には実行しません**。
+以下は、各自で利用申請を行い、同じ構成のデータを用意した場合の読込例です。
+**ページのレンダリング時には実行しません**。
 
 :::::
 
@@ -294,10 +350,16 @@ Git管理外の`.Renviron`に`PROJECT_DATA_DIR`を設定し、変更後はRを�
 #| label: et0-local-access
 #| eval: false
 bundle <- et0_data_dir() # PROJECT_DATA_DIR/naro-et0/2008-2018
-normal <- read_monthly_csv(file.path(bundle, "data",
-  "monthly_normals_2008_2018.csv.gz"))
-yearly_files <- list.files(file.path(bundle, "data", "yearly"),
-  pattern = "^monthly_[0-9]{4}_2008_2018[.]csv[.]gz$", full.names = TRUE)
+normal <- read_monthly_csv(file.path(
+  bundle,
+  "data",
+  "monthly_normals_2008_2018.csv.gz"
+))
+yearly_files <- list.files(
+  file.path(bundle, "data", "yearly"),
+  pattern = "^monthly_[0-9]{4}_2008_2018[.]csv[.]gz$",
+  full.names = TRUE
+)
 # One block, not all Japan:
 one_block <- read_monthly_csv(yearly_files[1])
 period_summary(one_block, 7:9, "Jul-Sep")
@@ -334,16 +396,21 @@ base Rでgzip圧縮CSVを直接読めます。`read_monthly_csv()`は`mesh3_code
 環境変数が未設定の場合、`et0_data_dir()`は停止します。
 月別列は`et0_fao56_Jan`〜`et0_fao56_Dec`と`precipitation_Jan`〜`precipitation_Dec`で、
 単位はmm/月です。ローカル一式の`data-dictionary.csv`と`STATUS.md`も参照してください。
-平均表の年合計は12か月の和です。`et0_filled_days`は、各メッシュ・年の湿度と風速の
-補間日数の大きい方で、平均表では11年分を合計します。両変数の補間日の和集合や、
-すべての入力変数における欠測日数ではありません。
+平均表の年合計は、12か月の値を足したものです。
+`et0_filled_days`は、各メッシュ・年について、湿度を補った日数と風速を補った日数のうち大きい方です。
+平均表では、この日数を11年分足しています。湿度か風速のどちらかを補った日の総数や、
+すべての入力変数の欠測日数を表す値ではありません。
 
-## 月の窓と乾燥指数AI
+## 集計する月の選び方と乾燥指数AI
 
-月合計を足し合わせます。日数を再度掛けてはいけません。ET₀・降水量は選択期間あたりのmmです。
-AIは同じ月の窓について**sum(P)/sum(ET0)**とし、月ごとのAIの算術平均にはしません。
-欠測月は集計値に伝播し、ET₀の分母が0以下または欠測ならAIは`NA`です。
-P−ET₀は気候学的な水収支であり、土壌水分モデルではありません。
+例えば7〜9月を集計する場合は、その3か月のET₀と降水量をそれぞれ足します。
+もとの値はすでに月合計なので、日数をもう一度掛ける必要はありません。単位は、選んだ期間の合計mmです。
+乾燥指数AIは、**同じ期間の降水量の合計をET₀の合計で割った値**（`sum(P) / sum(ET0)`）とします。
+月ごとのAIを平均する方法とは区別してください。
+
+選んだ月に欠測があれば集計結果も欠測とし、ET₀の合計が0以下、または欠測の場合はAIを`NA`とします。
+降水量からET₀を引いたP−ET₀も計算できますが、これは気候上の水の過不足を表す目安です。
+土壌の保水量や流出を計算しているわけではないので、土壌水分そのものとは異なります。
 
 次の架空CSVは、実在メッシュを表さない2個の識別子と3年分の月合計を持ちます。
 上の日別CSVとは独立した説明用の数値です。
@@ -355,20 +422,32 @@ P−ET₀は気候学的な水収支であり、土壌水分モデルではあ�
 yearly <- read_monthly_csv("data/examples/et0_monthly_synthetic.csv")
 jas <- period_summary(yearly, 7:9, "Jul-Sep")
 jas
-columns <- c(paste0("et0_fao56_", month.abb),
-  paste0("precipitation_", month.abb))
+columns <- c(
+  paste0("et0_fao56_", month.abb),
+  paste0("precipitation_", month.abb)
+)
 normal <- yearly[yearly$year == 2008, "mesh3_code", drop = FALSE]
 for (column in columns) {
-  normal[[column]] <- vapply(normal$mesh3_code, function(key) {
-    mean(yearly[yearly$mesh3_code == key, column]) # no na.rm
-  }, numeric(1))
+  normal[[column]] <- vapply(
+    normal$mesh3_code,
+    function(key) {
+      mean(yearly[yearly$mesh3_code == key, column]) # no na.rm
+    },
+    numeric(1)
+  )
 }
 climate_jas <- period_summary(normal, 7:9, "Jul-Sep")
-data.frame(mesh3_code = normal$mesh3_code,
+data.frame(
+  mesh3_code = normal$mesh3_code,
   ratio_of_climatological_sums = climate_jas$aridity_index,
-  mean_yearly_ai = vapply(normal$mesh3_code, function(key) {
-    mean(jas$aridity_index[jas$mesh3_code == key])
-  }, numeric(1)))
+  mean_yearly_ai = vapply(
+    normal$mesh3_code,
+    function(key) {
+      mean(jas$aridity_index[jas$mesh3_code == key])
+    },
+    numeric(1)
+  )
+)
 ```
 
 ::::: {.content-visible unless-profile="ja"}
@@ -380,8 +459,9 @@ differs from the mean yearly AI. Averaging monthly AI also changes the weighting
 
 ::::: {.content-visible when-profile="ja"}
 
-平年合計の比（元の計算で使うAIの定義）は、年別AIの平均とは一般に一致しません。
-月別AIを平均した場合も、次の例のように重み付けが変わります。
+この章のAIは、11年平均の月別値を足してから比を求めます。
+各年のAIを先に求めてから平均した値とは、一般に一致しません。
+月別AIの平均も、合計同士の比とは異なります。次の例で違いを確認できます。
 
 :::::
 
@@ -408,10 +488,11 @@ year of January-February. Missing prior December yields `NA`.
 
 ### 年をまたぐ冬季
 
-冬季Yは前年Y−1の12月と当年Yの1〜2月を結合します。
-`period_summary(data, c(12, 1, 2))`だけでは同じ行の月を選ぶため、この時系列の冬季にはなりません。
-年別行へ`winter_summary()`を使うと、メッシュ・年で対応付け、入力行を保持し、
-1〜2月の年で冬季を表します。前年12月がなければ`NA`を返します。
+例えば2009年の冬季は、2008年12月と2009年1〜2月を合わせた期間とします。
+`period_summary(data, c(12, 1, 2))`では、同じ行にある同じ年の12月・1月・2月を選んでしまいます。
+連続した冬の3か月を集計するには、年別表に`winter_summary()`を使ってください。
+この関数は同じメッシュの前年12月を探し、1〜2月が属する年を冬季の年として表示します。
+入力行は削除せず、前年12月がない場合は`NA`を返します。
 
 :::::
 
@@ -464,27 +545,39 @@ Rendering this chapter never reads NARO tables.
   [worked examples](https://www.fao.org/4/x0490e/x0490e08.htm).
 - [NARO Agro-Meteorological Grid Square Data System](https://amu.rd.naro.go.jp/),
   obtained using [agrmesh (Murakami and Nagasaki, 2023)](https://github.com/KeachMurakami/agrmesh).
-- [Source terms](https://amu.rd.naro.go.jp/wiki_open/doku.php?id=subscription):
-  permission for sharing these derivatives remains unconfirmed.
+- [NARO usage terms and application guide](https://amu.rd.naro.go.jp/wiki_open/doku.php?id=subscription):
+  apply for access yourself and check the conditions before using the data.
+
+For further reading:
+
+- **Global ET₀ and AI:** Zomer et al. (2022) describe the global database
+  introduced above [@zomerVersion3Global2022].
+- **How NARO temperature and precipitation data are made:** Ohno et al. (2016)
+  explain how observations, numerical forecasts and climate normals
+  are combined to produce daily 1 km grid data [@ohno2016mesh].
+- **Snow modelling with NARO data:** Kominami et al. (2015) describe a snow
+  water equivalent model using grid weather data [@kominami2015snow].
+  This is background reading on NARO data applications; snow water equivalent
+  is not an input to the ET₀ calculation in this chapter.
 
 :::::
 
 ::::: {.content-visible when-profile="ja"}
 
-実データでは、2009〜2018年に終了する冬季の暦範囲が揃います。
-2008年の冬季には2007年12月がなく、2019年の冬季には2019年1〜2月とその基準行がありません。
-12月・1月・2月の**平均値**を足した場合は、平均的な季節の窓を表し、
-特定の冬季や年変動を表すものではありません。
+対象期間のうち、冬の3か月が揃うのは2009〜2018年の冬季です。
+2008年の冬季に必要な2007年12月と、2019年の冬季に必要な2019年1〜2月は含まれていません。
+一方、11年平均表の12月・1月・2月を足すと、平均的な冬の値を求められます。
+ただし、それは特定の年の冬を表す値ではなく、年ごとのばらつきも分かりません。
 
 ## 再現と検証
 
-`R/pipeline_p0_et0.R`は独立版から変更せず取り込んだもので、元は`japanese-trees-sdms`の
-コミット`1731a9e9fcaba87d718168e5eed0aeaed68b2acd`です。
-欠測補間関数も、その`R/pipeline_p0_naro.R`から変更せず抽出しました。
-`R/et0_support.R`にはCSV読込・パス・季節集計をまとめています。新規パッケージは不要です。
-ローカル一式の`build-environment.csv`に記録された出力時の環境はR 4.5.3・terra 1.8.86です。
-許可されたNetCDF入力からの任意の再生成にはterraとローカル一式のスクリプトを使います。
-原本は不変とし、この統合でSDMを再学習することはありません。
+計算を担うのは`R/pipeline_p0_et0.R`、CSVの読込や季節集計を担うのは`R/et0_support.R`です。
+このページの例はbase Rで動き、新しいパッケージの追加は不要です。
+
+計算コードは、`japanese-trees-sdms`のコミット`1731a9e9fcaba87d718168e5eed0aeaed68b2acd`を元に、
+変更せず取り込んでいます。欠測を補う関数も、同じ版の`R/pipeline_p0_naro.R`から取り出しています。
+手元の実データを出力した環境はR 4.5.3・terra 1.8.86で、`build-environment.csv`に記録しています。
+利用許可を得たNetCDFから計算し直す場合は、terraと手元の処理スクリプトを使います。元のデータは変更しません。
 
 [計算関数](../R/pipeline_p0_et0.R)、[補助関数](../R/et0_support.R)、
 [架空の日別CSV](../data/examples/et0_daily_synthetic.csv)、
@@ -499,9 +592,10 @@ quarto render notebooks/calculate_ET0.qmd --profile en
 quarto render notebooks/calculate_ET0.qmd --profile ja
 ```
 
-最初のスクリプトはbase Rと架空入力を使います。2番目は`PROJECT_DATA_DIR`を通じて
-ローカルの全ブロックを読み、キー・年の網羅性と11年平均を検証し、集計統計だけを表示します。
-この章のHTML描画ではNARO表を読みません。
+最初のスクリプトは、架空データとFAOの公開計算例を使って関数の動作を確かめます。
+2番目は実データを用意した人向けです。`PROJECT_DATA_DIR`で指定した場所の全ブロックを読み、
+メッシュと年の対応、対象期間の抜け、11年平均が合うかを確認します。表示するのは集計結果だけです。
+この章のレンダリングでは、NAROの実データは読み込みません。
 
 ## 参考文献
 
@@ -511,7 +605,17 @@ quarto render notebooks/calculate_ET0.qmd --profile ja
   [計算例](https://www.fao.org/4/x0490e/x0490e08.htm)。
 - [農研機構メッシュ農業気象データ](https://amu.rd.naro.go.jp/)。
   取得には[agrmesh（Murakami and Nagasaki, 2023）](https://github.com/KeachMurakami/agrmesh)を使用。
-- [元データの利用条件](https://amu.rd.naro.go.jp/wiki_open/doku.php?id=subscription)：
-  今回の派生表の外部共有可否は未確認です。
+- [農研機構の利用案内・利用規約](https://amu.rd.naro.go.jp/wiki_open/doku.php?id=subscription)：
+  利用する際は、各自で申請し、利用条件を確認してください。
+
+関連する手法やNAROデータについて詳しく知りたい方は、次の文献も参考にしてください。
+
+- **全球のET₀・AIデータについて**：Zomerら（2022）は、上で紹介した全球データベースの
+  作成方法を説明しています [@zomerVersion3Global2022]。
+- **気温・降水量データの作り方について**：大野ら（2016）は、実況値・数値予報・平年値を
+  組み合わせて、約1 kmのメッシュごとに日別の気温と降水量を求める方法を説明しています [@ohno2016mesh]。
+- **積雪に関するモデルについて**：小南ら（2015）は、メッシュ農業気象データを使って
+  積雪水量を推定する方法を説明しています [@kominami2015snow]。
+  NAROデータの活用方法を知るための参考文献です。この章のET₀計算では、積雪水量は入力に使いません。
 
 :::::
