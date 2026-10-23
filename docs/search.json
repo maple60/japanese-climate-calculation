@@ -134,7 +134,27 @@
     "href": "notebooks/calculate_PET.html",
     "title": "Calculate Potential Evapotranspiration (PET)",
     "section": "",
-    "text": "Load libraries\n日本語はこちら（JP）\nThis chapter calculates potential evapotranspiration (PET) using the Thornthwaite method (Thornthwaite 1948) with the SPEI package (Beguería and Vicente-Serrano 2023).\nlibrary(sf)\nlibrary(SPEI)",
+    "text": "Monthly equation and parameters\n日本語はこちら（JP）\nThis chapter calculates potential evapotranspiration (PET) using the Thornthwaite method (Thornthwaite 1948) with the SPEI package (Beguería and Vicente-Serrano 2023).\nThornthwaite is a temperature-based empirical method. It uses monthly mean temperature and a latitude-based day-length correction to estimate monthly PET. Precipitation, measured solar radiation, humidity and wind are not inputs. This chapter uses the 1991–2020 monthly climate normals described in the data-preparation chapter.\nFor month mm, the calculation is\nTm+=max⁡(Tm,0),I=∑j=112(Tj+5)1.514,\nT_m^+=\\max(T_m,0),\\qquad\nI=\\sum_{j=1}^{12}\\left(\\frac{T_j^+}{5}\\right)^{1.514},\na=6.75×10−7I3−7.71×10−5I2+1.792×10−2I+0.49239,\na=6.75\\times10^{-7}I^3-7.71\\times10^{-5}I^2\n  +1.792\\times10^{-2}I+0.49239,\nPETm=16(Lm12)(dm30)(10Tm+I)a(I&gt;0).\nPET_m=16\\left(\\frac{L_m}{12}\\right)\\left(\\frac{d_m}{30}\\right)\n       \\left(\\frac{10T_m^+}{I}\\right)^a\\quad (I&gt;0).\nThe factor 16 gives PET in mm for a standard 30-day month with 12-hour days; Lm/12L_m/12 and dm/30d_m/30 adjust day length and month length. These are the coefficients used by the installed SPEI 1.8.1, rather than locally fitted parameters.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate PET</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/calculate_PET.html#monthly-equation-and-parameters",
+    "href": "notebooks/calculate_PET.html#monthly-equation-and-parameters",
+    "title": "Calculate Potential Evapotranspiration (PET)",
+    "section": "",
+    "text": "Symbol\nMeaning\nUnit\n\n\n\nPETmPET_m\nPotential evapotranspiration for month mm\n\nmm/month (monthly total)\n\n\n\nTmT_m, Tm+T_m^+\n\nMonthly mean temperature and its value clipped at zero\n°C\n\n\nII\nAnnual heat index, calculated from all 12 monthly temperatures\nDimensionless (temperature entered in °C)\n\n\naa\nExponent calculated from II\n\nDimensionless\n\n\nLmL_m\nAstronomical day length approximated at the 15th of the month\nhours/day\n\n\ndmd_m\nNumber of days in the month\ndays\n\n\n\n\nDay-length correction\nFor the January–December numeric vector used here, SPEI uses dm=(31,28,31,30,31,30,31,31,30,31,30,31)d_m=(31,28,31,30,31,30,31,31,30,31,30,31) and Jm=∑j&lt;mdj+15J_m=\\sum_{j&lt;m}d_j+15, the day of year of the 15th of each month:\nδm=0.4093sin⁡(2πJm365−1.405),Lm=24πarccos⁡[clip(−tanϕtanδm,−1,1)].\n\\delta_m=0.4093\\sin\\left(\\frac{2\\pi J_m}{365}-1.405\\right),\\qquad\nL_m=\\frac{24}{\\pi}\\arccos\\!\\left[\n\\operatorname{clip}(-\\tan\\phi\\tan\\delta_m,-1,1)\\right].\n\nHere ϕ\\phi is latitude in radians and δm\\delta_m is solar declination in radians; the implementation converts latitude in degrees using division by 57.2957795. The clip operation restricts the argument to [−1,1][-1,1]. Day length is calculated from latitude and date; it is not observed sunshine duration. The calculation follows the SPEI 1.8.1 source.\nAssumptions and missing values in this chapter\n\nThe 12 input temperatures are ordered from January to December. This numeric-vector input assumes a non-leap year; February has 28 days.\nNegative monthly temperatures are set to zero inside the function. Months at or below 0°C have PET = 0; if all 12 months are at or below 0°C, I=0I=0 and PET is zero throughout the year.\nMeshes with any missing monthly temperature are excluded before calculation. The function uses its default na.rm = FALSE; omitted meshes remain missing after the join.\nAnnual PET is the sum of the 12 monthly PET values, in mm/year.\nApplying this nonlinear equation to monthly climate normals does not give exactly the same result as averaging PET calculated for each individual year.\nPET assumes sufficient water supply. It is not measured forest evapotranspiration, and is distinct from the grass-reference quantity in the FAO-56 Penman–Monteith chapter.",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate PET</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/calculate_PET.html#load-libraries",
+    "href": "notebooks/calculate_PET.html#load-libraries",
+    "title": "Calculate Potential Evapotranspiration (PET)",
+    "section": "Load libraries",
+    "text": "Load libraries\n\nlibrary(sf)\nlibrary(SPEI)",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate PET</span>"
     ]
@@ -154,7 +174,7 @@
     "href": "notebooks/calculate_PET.html#create-a-data-frame-for-pet-calculation",
     "title": "Calculate Potential Evapotranspiration (PET)",
     "section": "Create a data frame for PET calculation",
-    "text": "Create a data frame for PET calculation\n\nlatitudes &lt;- sf_climate$latitude\ndf_temp &lt;- sf_climate[, grep(\"mean_temperature\", names(sf_climate))]\ndf_temp &lt;- st_drop_geometry(df_temp)\ndf_temp &lt;- df_temp[, 1:12]\n\nkeep &lt;- complete.cases(df_temp)\nremoved_rows &lt;- which(!keep)\n\ndf_temp_clean &lt;- df_temp[keep, ]\nsf_climate_clean &lt;- sf_climate[keep, ]\nrow.names(df_temp_clean) &lt;- sf_climate_clean$mesh_code_3rd",
+    "text": "Create a data frame for PET calculation\nAfter excluding incomplete temperature rows, take latitude from the same filtered mesh table so each temperature vector uses its own mesh’s latitude.\n\ndf_temp &lt;- sf_climate[, grep(\"mean_temperature\", names(sf_climate))]\ndf_temp &lt;- st_drop_geometry(df_temp)\ndf_temp &lt;- df_temp[, 1:12]\n\nkeep &lt;- complete.cases(df_temp)\nremoved_rows &lt;- which(!keep)\n\ndf_temp_clean &lt;- df_temp[keep, ]\nsf_climate_clean &lt;- sf_climate[keep, ]\nlatitudes &lt;- sf_climate_clean$latitude\nrow.names(df_temp_clean) &lt;- sf_climate_clean$mesh_code_3rd",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>Calculate PET</span>"
     ]

@@ -134,7 +134,27 @@
     "href": "notebooks/calculate_PET.html",
     "title": "潜在蒸発散量（PET）の計算",
     "section": "",
-    "text": "ライブラリの読み込み\nRead this page in English (EN)\n潜在蒸発散量 Potential evapotranspiration; PETを計算します。 方法はThornthwaite method(Thornthwaite 1948年)です。 パッケージはSPEIを使用します(Beguería と Vicente-Serrano 2023年)。\nlibrary(sf)\nlibrary(SPEI)",
+    "text": "月別計算式とパラメータ\nRead this page in English (EN)\nこの章では、Thornthwaite法(Thornthwaite 1948年)を使って、潜在蒸発散量（PET）を計算します。 計算にはSPEIパッケージを使います(Beguería と Vicente-Serrano 2023年)。\nThornthwaite法は、月平均気温と、緯度から求める日長を使う経験式です。 降水量・観測された日射量・湿度・風速は入力しません。 ここでは、データ準備の章で扱った1991〜2020年の月別平年値を使います。\n月mmのPETを、次の式で求めます。\nTm+=max⁡(Tm,0),I=∑j=112(Tj+5)1.514,\nT_m^+=\\max(T_m,0),\\qquad\nI=\\sum_{j=1}^{12}\\left(\\frac{T_j^+}{5}\\right)^{1.514},\na=6.75×10−7I3−7.71×10−5I2+1.792×10−2I+0.49239,\na=6.75\\times10^{-7}I^3-7.71\\times10^{-5}I^2\n  +1.792\\times10^{-2}I+0.49239,\nPETm=16(Lm12)(dm30)(10Tm+I)a(I&gt;0).\nPET_m=16\\left(\\frac{L_m}{12}\\right)\\left(\\frac{d_m}{30}\\right)\n       \\left(\\frac{10T_m^+}{I}\\right)^a\\quad (I&gt;0).\n係数16は「1か月30日・日長12時間」を基準に、PETをmmで求めるためのものです。 Lm/12L_m/12で日長を、dm/30d_m/30で月の日数を補正します。 ここに示した係数は、使用しているSPEI 1.8.1の実装に合わせた値で、今回のデータに当てはめて推定したパラメータではありません。",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>潜在蒸発散量（PET）の計算</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/calculate_PET.html#月別計算式とパラメータ",
+    "href": "notebooks/calculate_PET.html#月別計算式とパラメータ",
+    "title": "潜在蒸発散量（PET）の計算",
+    "section": "",
+    "text": "記号\n意味\n単位\n\n\n\nPETmPET_m\n月mmの潜在蒸発散量\nmm/月（月合計）\n\n\n\nTmT_m, Tm+T_m^+\n\n月平均気温と、0℃未満を0に置き換えた気温\n℃\n\n\nII\n12か月の気温から求める年熱指数\n無次元（気温を℃で代入）\n\n\naa\n年熱指数IIから決まるべき指数\n無次元\n\n\nLmL_m\nその月の15日の日長で近似した天文日長\n時間/日\n\n\ndmd_m\nその月の日数\n日\n\n\n\n\n日長の補正\n今回のように、1〜12月の気温を通常の数値ベクトルで渡す場合、SPEIは通常年の月日数 dm=(31,28,31,30,31,30,31,31,30,31,30,31)d_m=(31,28,31,30,31,30,31,31,30,31,30,31)を使います。 各月15日の通日をJm=∑j&lt;mdj+15J_m=\\sum_{j&lt;m}d_j+15とし、日長を次のように近似します。\nδm=0.4093sin⁡(2πJm365−1.405),Lm=24πarccos⁡[clip(−tanϕtanδm,−1,1)].\n\\delta_m=0.4093\\sin\\left(\\frac{2\\pi J_m}{365}-1.405\\right),\\qquad\nL_m=\\frac{24}{\\pi}\\arccos\\!\\left[\n\\operatorname{clip}(-\\tan\\phi\\tan\\delta_m,-1,1)\\right].\n\nϕ\\phiは緯度、δm\\delta_mは太陽赤緯で、いずれもラジアンで表します。 実装では、度で表した緯度を57.2957795で割ってラジアンへ換算します。 clip\\operatorname{clip}は、値を−1-1から11の範囲に収める操作です。 ここでいう日長は、緯度と日付から求める天文日長であり、観測された日照時間ではありません。 式の細部はSPEI 1.8.1のソースコードで確認できます。\nこの章での仮定と欠測の扱い\n\n入力は1〜12月の順に並べた12個の月平均気温です。通常の数値ベクトルで渡すため、うるう年の補正は行わず、2月は28日として計算します。\n0℃未満の月平均気温は関数内で0に置き換えます。0℃以下の月のPETは0です。全月が0℃以下でI=0I=0になる場合も、全月のPETを0とします。\n月平均気温に欠測が1つでもあるメッシュは、計算前に除外します。関数のna.rm = FALSEは既定値のまま使い、除外したメッシュは結合後もPETを欠測のまま残します。\n年間PETは、12か月のPETの合計です。単位はmm/年です。\n式は非線形なので、月別平年気温から求めるPETは、各年のPETを計算して平均した値とは厳密には一致しません。\nPETは、水が十分に供給される条件を想定した蒸発散量です。森林の実蒸発散量の測定値ではなく、FAO-56 Penman–Monteith式の章で扱う草地基準のET₀とも区別します。",
+    "crumbs": [
+      "<span class='chapter-number'>3</span>  <span class='chapter-title'>潜在蒸発散量（PET）の計算</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/calculate_PET.html#ライブラリの読み込み",
+    "href": "notebooks/calculate_PET.html#ライブラリの読み込み",
+    "title": "潜在蒸発散量（PET）の計算",
+    "section": "ライブラリの読み込み",
+    "text": "ライブラリの読み込み\n\nlibrary(sf)\nlibrary(SPEI)",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>潜在蒸発散量（PET）の計算</span>"
     ]
@@ -154,7 +174,7 @@
     "href": "notebooks/calculate_PET.html#計算用データフレームの作成",
     "title": "潜在蒸発散量（PET）の計算",
     "section": "計算用データフレームの作成",
-    "text": "計算用データフレームの作成\n緯度、月平均気温を抽出します。\n\nlatitudes &lt;- sf_climate$latitude\ndf_temp &lt;- sf_climate[, grep(\"mean_temperature\", names(sf_climate))]\ndf_temp &lt;- st_drop_geometry(df_temp)\ndf_temp &lt;- df_temp[, 1:12]\n\nkeep &lt;- complete.cases(df_temp)\nremoved_rows &lt;- which(!keep)\n\ndf_temp_clean &lt;- df_temp[keep, ]\nsf_climate_clean &lt;- sf_climate[keep, ]\nrow.names(df_temp_clean) &lt;- sf_climate_clean$mesh_code_3rd",
+    "text": "計算用データフレームの作成\n緯度、月平均気温を抽出します。 欠測がある行を除いた後に、同じメッシュ表から緯度も取り出します。 気温と緯度の行の対応をそろえるためです。\n\ndf_temp &lt;- sf_climate[, grep(\"mean_temperature\", names(sf_climate))]\ndf_temp &lt;- st_drop_geometry(df_temp)\ndf_temp &lt;- df_temp[, 1:12]\n\nkeep &lt;- complete.cases(df_temp)\nremoved_rows &lt;- which(!keep)\n\ndf_temp_clean &lt;- df_temp[keep, ]\nsf_climate_clean &lt;- sf_climate[keep, ]\nlatitudes &lt;- sf_climate_clean$latitude\nrow.names(df_temp_clean) &lt;- sf_climate_clean$mesh_code_3rd",
     "crumbs": [
       "<span class='chapter-number'>3</span>  <span class='chapter-title'>潜在蒸発散量（PET）の計算</span>"
     ]
