@@ -29,6 +29,7 @@
 
 - クリーニング済みの気候メッシュデータセット
 - PET（Thornthwaite 法）
+- 基準蒸発散量ET₀（NARO 2008〜2018年、日別FAO-56 Penman–Monteith法）
 - 乾燥度指数（`Precipitation / PET`）
 - 任意座標から最寄りの気候値を取得するユーティリティ関数
 - 日本地図の可視化例
@@ -40,16 +41,18 @@
 - [https://maple60.github.io/japanese-climate-calculation/](https://maple60.github.io/japanese-climate-calculation/)
 
 - 英語を主としたドキュメントは `docs/` から公開されています。
-- 各英語ページには、対応する日本語ページへのリンクがあります。
+- ET₀章を含む全7ページは日英共通QMDから生成し、JP／ENで同じページの言語を切り替えます。
+- 日本語版は [ja/](https://maple60.github.io/japanese-climate-calculation/ja/) に配置します。
 
 このサイトはデフォルトブランチの `/docs` から配信されます。
 
 ## プロジェクト構成
 
-- `index.qmd`: 英語ランディングページ
-- `index_ja.qmd`: 日本語ランディングページ
-- `notebooks/*.qmd`: 英語チャプター
-- `notebooks/*_ja.qmd`: 日本語チャプター
+- `index.qmd`、`notebooks/*.qmd`: 日英の文章と共通Rコード
+- `_quarto-en.yml`、`_quarto-ja.yml`: 言語別の目次と出力先
+- `filters/language-title.lua`: 日本語タイトル・副題の選択
+- `language-switch.html`、`language-switch.css`: 対応するページへの言語切替
+- `scripts/render-japanese.R`: 日本語版の生成と旧日本語URLの転送
 - `R/get_nearest_climate_value.R`: 最近傍取得ユーティリティ関数
 - `_quarto.yml`: book/site 設定
 
@@ -84,12 +87,31 @@ Quarto book をレンダリングします。
 quarto render
 ```
 
-生成ファイルは `docs/` に出力されます。
+標準の英語プロファイルは `docs/` を生成した後、日本語版を `docs/ja/` に生成します。
+日本語版だけを生成する場合は `quarto render --profile ja` を使います。
+旧 `*_ja.html` は対応する日本語ページへ転送します。
+
+文章を編集する際は、英語を `content-visible unless-profile="ja"`、日本語を
+`content-visible when-profile="ja"` に置き、`title` と `title-ja` を揃えて更新します。
+実行するRコードは言語ブロックの外に置いて共有します。文章の自動翻訳機能ではありません。
+
+```bash
+Rscript --vanilla tests/test_et0.R
+quarto render
+node tests/check_bilingual.cjs
+```
+
+ET₀章の実行例は架空データのみです。実表は
+`PROJECT_DATA_DIR/naro-et0/2008-2018/` に置き、任意の全件照合には
+`Rscript tests/verify_et0_local.R` を使います。Thornthwaite法のPETとは定義・入力・期間が異なります。
 
 ## データとライセンスに関する注意
 
 このリポジトリでは、元データセットを**再配布していません**。
 必要なファイルは公式ソースからダウンロードし、各利用規約に従ってください。
+
+NARO派生のET₀・降水量表の外部共有可否は未確認です。実表、その派生地図、外部共有リンクを
+公開しないでください。コード・文書のライセンスは気象データの利用権を与えません。
 
 - 国土数値情報 利用約款: https://nlftp.mlit.go.jp/ksj/other/agreement.html
 
@@ -99,8 +121,8 @@ quarto render
 
 ## 言語ポリシー
 
-- ソースコードのコメントおよび主要ドキュメントは英語で維持します。
-- アクセシビリティと継続性のため、日本語の対応ページを提供します。
+- ソースコードのコメントとエラーメッセージは英語で維持します。
+- 日英の文章を同じQMDで管理し、計算用のRコードを共有します。
 
 ## コントリビュート
 

@@ -1,9 +1,22 @@
 ---
 title: "Calculate Aridity Index"
 bibliography: references.bib
+title-ja: "乾燥指数（AI）の計算"
 ---
 
-[日本語版はこちら (Japanese version)](calculate_aridity_index_ja.qmd)
+::::: {.content-visible unless-profile="ja"}
+
+[日本語はこちら（JP）](../ja/notebooks/calculate_aridity_index.html){#language-switch hreflang="ja" lang="ja"}
+
+:::::
+
+::::: {.content-visible when-profile="ja"}
+
+[Read this page in English (EN)](../../notebooks/calculate_aridity_index.html){#language-switch hreflang="en" lang="en"}
+
+:::::
+
+::::: {.content-visible unless-profile="ja"}
 
 This chapter calculates the Aridity Index (AI).
 AI is a dryness indicator defined here as precipitation ($P$) divided by potential evapotranspiration ($PET$) [@UNEP1992].
@@ -17,14 +30,45 @@ where $P$ is precipitation and $PET$ is potential evapotranspiration.
 
 ## Load libraries
 
+:::::
+
+::::: {.content-visible when-profile="ja"}
+
+この章では、Aridity Index (AI; 乾燥指数) を計算します。
+AI は気候の乾燥度を表す指標で、降水量 (precipitation; $P$) を潜在蒸発散量 (potential evapotranspiration; $PET$) で割った値として定義します [@UNEP1992]。
+値が小さいほど、降水量に対して潜在蒸発散量が大きく、乾燥した条件を示します。
+
+乾燥指数には複数の定義がありますが、ここでは以下の式を用います。
+
+$$AI = \frac{P}{PET}$$
+
+ここで、$P$ は降水量、$PET$ は潜在蒸発散量です。
+
+## ライブラリの読み込み
+
+:::::
+
 ```{r}
 library(sf)
 ```
+
+::::: {.content-visible unless-profile="ja"}
 
 ## Load data
 
 In this repository, the `PROJECT_DATA_DIR` environment variable points to the directory where input and output data are stored.
 Change it as needed for your local environment.
+
+:::::
+
+::::: {.content-visible when-profile="ja"}
+
+## データの読み込み
+
+このリポジトリの解析では、環境変数 `PROJECT_DATA_DIR` に入力・出力データの保存先を指定しています。
+必要に応じて、適宜変更してください。
+
+:::::
 
 ```{r}
 data_dir <- Sys.getenv("PROJECT_DATA_DIR")
@@ -34,10 +78,23 @@ sf_climate <- readRDS(file.path(
 ))
 ```
 
+::::: {.content-visible unless-profile="ja"}
+
 ## Calculate Aridity Index
 
 First, calculate the annual Aridity Index and add it to the `sf_climate` object as a new `aridity_index` column.
 When PET is zero, negative, or missing, the Aridity Index is undefined, so the value is set to `NA`.
+
+:::::
+
+::::: {.content-visible when-profile="ja"}
+
+## Aridity Index の計算
+
+年単位の Aridity Index を計算し、`sf_climate` オブジェクトに新しい列 `aridity_index` として追加します。
+PET が 0 以下または欠損している場合は、Aridity Index を定義できないため `NA` とします。
+
+:::::
 
 ```{r}
 sf_climate$aridity_index <- ifelse(
@@ -47,8 +104,19 @@ sf_climate$aridity_index <- ifelse(
 )
 ```
 
+::::: {.content-visible unless-profile="ja"}
+
 Then, calculate monthly Aridity Index values.
 The monthly columns are named from `aridity_index_Jan` to `aridity_index_Dec`.
+
+:::::
+
+::::: {.content-visible when-profile="ja"}
+
+同様に、月ごとの Aridity Index も計算します。
+列名は `aridity_index_Jan` から `aridity_index_Dec` までの形式にします。
+
+:::::
 
 ```{r}
 month_labels <- month.abb
@@ -67,10 +135,23 @@ for (month in seq_along(month_labels)) {
 }
 ```
 
+::::: {.content-visible unless-profile="ja"}
+
 ## Save data
 
 Save the result in both RDS and CSV formats.
 Change the output path as needed.
+
+:::::
+
+::::: {.content-visible when-profile="ja"}
+
+## データの保存
+
+RDS形式とCSV形式で保存します。
+必要に応じて、保存先のパスを変更してください。
+
+:::::
 
 ```{r}
 saveRDS(
@@ -91,4 +172,14 @@ write.csv(
 )
 ```
 
+::::: {.content-visible unless-profile="ja"}
+
 ## References
+
+:::::
+
+::::: {.content-visible when-profile="ja"}
+
+## References
+
+:::::

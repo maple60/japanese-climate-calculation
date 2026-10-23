@@ -1,0 +1,28 @@
+lang: ja
+
+project:
+  output-dir: docs/ja
+
+book:
+  title: "日本の気候データ処理と蒸発散量の計算"
+  site-url: https://maple60.github.io/japanese-climate-calculation/ja/
+  navbar:
+    right:
+      - text: "EN"
+        href: ../index.html
+  chapters:
+    - href: index.qmd
+      text: "はじめに"
+    - href: notebooks/prepare_climate_data.qmd
+      text: "気候データの準備"
+    - href: notebooks/calculate_PET.qmd
+      text: "潜在蒸発散量（PET）の計算"
+    - href: notebooks/calculate_aridity_index.qmd
+      text: "乾燥指数（AI）の計算"
+    - href: notebooks/calculate_ET0.qmd
+      text: "FAO-56基準蒸発散量（ET₀）"
+    - href: notebooks/get_nearest_climate_value.qmd
+      text: "最近傍の気候値取得"
+  appendices:
+    - href: notebooks/plot_japan_climate_map.qmd
+      text: "日本の気候マップの描画"

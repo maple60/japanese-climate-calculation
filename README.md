@@ -30,7 +30,7 @@ Main outputs include:
 - Cleaned climate mesh dataset
 - PET (Thornthwaite method)
 - Reference ET0 (daily FAO-56 Penman–Monteith, NARO 2008–2018), documented in
-  [the English notebook](notebooks/calculate_ET0.qmd) with synthetic examples
+  [the bilingual notebook](notebooks/calculate_ET0.qmd) with synthetic examples
 - Aridity Index (`Precipitation / PET`)
 - Utility function to retrieve nearest climate values from arbitrary coordinates
 - Example map visualizations for Japan
@@ -42,17 +42,18 @@ The full documentation is available at:
 - [https://maple60.github.io/japanese-climate-calculation/](https://maple60.github.io/japanese-climate-calculation/)
 
 - English-first documentation is published from `docs/`.
-- The JMA/MLIT chapters link to Japanese companion pages; the NARO ET0 chapter
-  is currently available in English.
+- All seven pages, including NARO ET0, share English/Japanese QMD sources.
+- JP/EN switches to the same page in the other language; Japanese HTML is in `docs/ja/`.
 
 The site is served from `/docs` on the default branch.
 
 ## Project structure
 
-- `index.qmd`: English landing page
-- `index_ja.qmd`: Japanese landing page
-- `notebooks/*.qmd`: English chapters
-- `notebooks/*_ja.qmd`: Japanese chapters
+- `index.qmd`, `notebooks/*.qmd`: shared English/Japanese pages and R chunks
+- `_quarto-en.yml`, `_quarto-ja.yml`: language-specific navigation and output paths
+- `filters/language-title.lua`: select Japanese titles and subtitles
+- `language-switch.html`, `language-switch.css`: corresponding-page JP/EN links
+- `scripts/render-japanese.R`: render Japanese pages and retain legacy Japanese URLs
 - `R/get_nearest_climate_value.R`: nearest-neighbor utility function
 - `R/pipeline_p0_et0.R`, `R/et0_support.R`: base R daily ET0 and period summaries
 - `data/examples/et0_*_synthetic.csv`: invented inputs, safe to render
@@ -90,13 +91,23 @@ Render the Quarto book:
 quarto render
 ```
 
-Generated files are written to `docs/`.
+The default English profile writes to `docs/`, then its post-render hook builds
+the Japanese profile in `docs/ja/`. The published site remains on `main:/docs`.
+Legacy `*_ja.html` URLs redirect to their corresponding new Japanese pages.
+
+For Japanese only, use `quarto render --profile ja`. To edit a page, keep
+executable R chunks outside the language blocks, put English prose in
+`content-visible unless-profile="ja"` and Japanese prose in
+`content-visible when-profile="ja"`, and maintain `title` / `title-ja` together.
+This selects text at build time; it does not automatically translate prose.
+No additional R package is required for language switching.
 
 For the ET0 chapter alone, execute and render with:
 
 ```bash
 Rscript --vanilla tests/test_et0.R
-quarto render notebooks/calculate_ET0.qmd --to html
+quarto render notebooks/calculate_ET0.qmd --profile en
+node tests/check_bilingual.cjs
 ```
 
 The ET0 examples execute without NARO data. Authorized local tables are read
@@ -125,8 +136,8 @@ When using derivatives from NLNI datasets, include required attribution per prov
 
 ## Language policy
 
-- Source comments and core documentation are maintained in English.
-- Japanese companion pages are available for accessibility and continuity.
+- Source comments and error messages are maintained in English.
+- English and Japanese prose are maintained together, with shared R code.
 
 ## Contributing
 

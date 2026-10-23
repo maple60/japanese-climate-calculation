@@ -1,8 +1,21 @@
 ---
 title: "Climate Calculations for Japan"
+title-ja: "日本の気候データ処理と蒸発散量の計算"
 ---
 
-[日本語版はこちら (Japanese version)](index_ja.qmd)
+::::: {.content-visible unless-profile="ja"}
+
+[日本語はこちら（JP）](ja/index.html){#language-switch hreflang="ja" lang="ja"}
+
+:::::
+
+::::: {.content-visible when-profile="ja"}
+
+[Read this page in English (EN)](../index.html){#language-switch hreflang="en" lang="en"}
+
+:::::
+
+::::: {.content-visible unless-profile="ja"}
 
 This documentation explains how to process climate variables using the Japan Meteorological Agency's [Mesh Climatology 2020](https://www.data.jma.go.jp/stats/etrn/view/atlas.html).
 
@@ -31,3 +44,34 @@ This repository uses [renv](https://rstudio.github.io/renv/) for R package depen
 After cloning, run `renv::restore()` to reproduce the package environment.
 
 If you do not use renv, install required packages manually.
+
+:::::
+
+::::: {.content-visible when-profile="ja"}
+
+このドキュメントでは、気象庁の[メッシュ平年値2020](https://www.data.jma.go.jp/stats/etrn/view/atlas.html)を用いて、気候変数を処理する方法を説明します。
+
+NAROの2008〜2018年の日別データを用いる[FAO-56 ET₀章](notebooks/calculate_ET0.qmd)を追加しました。従来のThornthwaite法によるPETはJMA・国土交通省の1991〜2020年の月別平年値を用います。両者は物理量の定義、入力、期間が異なります。ET₀章は架空データだけで実行し、NARO派生表・地図の外部共有可否は未確認です。
+
+## データについて
+
+::: {.callout-note}
+メッシュ平年値2020の概要については、[気象庁の報道発表資料](https://www.jma.go.jp/jma/press/2204/04a/mesh2020.html)を参照してください。
+:::
+
+データは、国土数値情報の[平均値メッシュデータ](https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html)を使用します。
+
+元データや加工データについてはこのリポジトリでは配布いたしません。
+必要なデータは、ご自身でダウンロードいただくようお願いいたします。
+
+利用規約については、[国土数値情報の利用規約](https://nlftp.mlit.go.jp/ksj/other/agreement.html)をご確認ください。
+特に、**出典の明記**を忘れないようにお願いいたします。
+
+## パッケージ管理について
+
+本リポジトリでは、Rのパッケージ管理に[renv](https://rstudio.github.io/renv/)を使用しています。
+リポジトリをクローンした場合、`renv::restore()`を実行することで、本リポジトリの環境を再現できます。
+
+もしrenvを使用しない場合、適宜必要なパッケージをインストールしてください。
+
+:::::

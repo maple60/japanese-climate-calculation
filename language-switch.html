@@ -1,0 +1,14 @@
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  // Use the page's relative link so previews and sites in subdirectories work.
+  const target = document.querySelector("#language-switch");
+  if (!target) return;
+  for (const link of document.querySelectorAll(".navbar-nav .nav-link")) {
+    if (["JP", "EN"].includes(link.textContent.trim())) {
+      link.href = target.href;
+      link.hreflang = target.hreflang;
+      link.setAttribute("aria-label", target.textContent.trim());
+    }
+  }
+});
+</script>
