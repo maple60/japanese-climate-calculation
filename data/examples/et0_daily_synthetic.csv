@@ -1,0 +1,4 @@
+date,mean_temperature_c,maximum_temperature_c,minimum_temperature_c,solar_radiation_mj_m2_day,relative_humidity_percent,wind_10m_m_s,elevation_m,latitude_degrees
+2008-07-05,16,21,11,21,75,2.5,100,50.8
+2008-07-06,16.9,21.5,12.3,22.07,73.5,2.77777777777778,100,50.8
+2008-07-07,17.5,22,13,23,72,2.8,100,50.8

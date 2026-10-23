@@ -1,0 +1,276 @@
+---
+title: "Calculate FAO-56 Reference Evapotranspiration (ET₀)"
+subtitle: "Daily NARO inputs and monthly summaries, 2008–2018"
+lang: en
+execute:
+  eval: true
+  cache: false
+format:
+  html:
+    html-math-method: mathml
+---
+
+## Scope and relation to PET
+
+All executed examples use **synthetic data or the published FAO example**.
+No NARO values or maps are embedded in the rendered page.
+
+| Property | Existing [Thornthwaite PET](calculate_PET.qmd) | This ET0 workflow |
+|---|---|---|
+| Source | JMA Mesh Climatology 2020, distributed by MLIT | NARO Agro-Meteorological Grid Square Data |
+| Period | 1991–2020 monthly climate normals | Daily inputs, 2008–2018 |
+| Inputs | Monthly mean temperature and latitude/day length | Daily mean, maximum and minimum temperature, solar radiation, RH, wind, elevation, latitude and date |
+| Quantity | Temperature-based potential evapotranspiration | Reference evapotranspiration from a hypothetical well-watered grass surface |
+| AI denominator | Thornthwaite PET | FAO-56 ET0 |
+
+Neither quantity is measured forest evapotranspiration. Comparing these products
+mixes method, input and period differences; it does not isolate a method effect.
+The existing PET and AI chapters retain their original definitions and inputs.
+Precipitation is needed for AI, but is not an input to the ET0 equation.
+
+::: {.callout-warning}
+External sharing permission for NARO-derived ET0 and precipitation tables
+remains unconfirmed. Do not publish the tables, maps derived from them, or
+external share links. The repository's code/documentation licenses do not
+license the weather data. Keep originals immutable and real tables outside Git.
+:::
+
+```{r}
+#| label: et0-setup
+source("R/et0_support.R")
+source("R/pipeline_p0_et0.R")
+```
+
+## Daily equation and assumptions
+
+The implementation uses [FAO-56 equation 6](https://www.fao.org/4/x0490e/x0490e06.htm):
+
+$$
+ET_0 = \frac{0.408\Delta(R_n-G)
+ + \gamma\frac{900}{T+273}u_2(e_s-e_a)}
+ {\Delta+\gamma(1+0.34u_2)}.
+$$
+
+ET0 is in mm/day; T is daily mean temperature (°C); Rn and G are net radiation
+and soil heat flux (MJ/m²/day); u2 is wind speed at 2 m (m/s); es and ea are
+saturation and actual vapour pressure (kPa); Delta and gamma are the slope of
+the saturation vapour-pressure curve and psychrometric constant (kPa/°C).
+
+- Daily soil heat flux G is zero; reference albedo is 0.23.
+- Saturation pressure is averaged from daily maximum and minimum temperature.
+  Actual pressure uses mean relative humidity, rather than paired RH extremes.
+- Source wind is **assumed** to be at 10 m and converted to 2 m. The source
+  measurement height remains unconfirmed.
+- Interior gaps of at most two days in RH and wind are linearly interpolated
+  separately within each calendar year. Longer gaps and gaps at year edges
+  remain missing. Other input variables are not interpolated.
+- Missing inputs propagate to daily ET0, monthly totals and multi-year means.
+  Sums and means do not use `na.rm = TRUE`.
+- Negative computed ET0 is retained, without clipping to zero.
+
+With $e^\circ(T)=0.6108\exp[17.27T/(T+237.3)]$, mean-RH vapour pressure is
+$e_a=(RH_{mean}/100)[e^\circ(T_{max})+e^\circ(T_{min})]/2$.
+Wind conversion is $u_2=u_z4.87/\ln(67.8z-5.42)$ with z = 10 m.
+These are [FAO-56 equations 19 and 47](https://www.fao.org/4/x0490e/x0490e07.htm).
+Mean RH is less preferable than paired humidity extremes when available.
+The available Tmin vapour-pressure fallback is **not** used to fill RH here.
+
+Net radiation uses absorbed shortwave and FAO-estimated longwave radiation;
+the solar/clear-sky radiation ratio is capped at 1. Pressure and gamma depend
+on elevation. Solar geometry retains the FAO denominator 365 even in leap
+years; monthly sums include every actual date, including 29 February.
+Polar day/night is outside the implementation's scope.
+
+Monthly mean weather cannot exactly reproduce daily ET0 because the equation
+is nonlinear. Changing wind or humidity assumptions requires authorized daily
+inputs and recalculation, rather than the monthly tables.
+
+### Published FAO check
+
+The Uccle example (6 July, FAO-56 example 18) uses the published actual vapour
+pressure, rather than the NARO mean-RH approximation. The expected result is
+about 3.9 mm/day. This checks implementation, not the accuracy of every cell.
+
+```{r}
+#| label: et0-worked-example
+example_et0 <- pipeline_p0_et0_fao56(
+  mean_temperature = matrix(16.9),
+  maximum_temperature = matrix(21.5),
+  minimum_temperature = matrix(12.3),
+  solar_radiation = matrix(22.07),
+  actual_vapour_pressure = matrix(1.409),
+  wind_2m = matrix(pipeline_p0_wind_at_2m(10 * 1000 / 3600, 10)),
+  elevation = 100, latitude = 50.80, day_of_year = 187
+)
+stopifnot(abs(as.numeric(example_et0) - 3.9) < 0.08)
+data.frame(et0_mm_day = as.numeric(example_et0))
+```
+
+### Synthetic daily CSV
+
+The CSV below contains three invented days for one cell. They do not constitute
+a July total. Matrices have one row per cell and one column per day. Latitude
+and elevation have one entry per row; day of year has one per column.
+
+```{r}
+#| label: et0-daily-csv
+daily <- read.csv("data/examples/et0_daily_synthetic.csv")
+as_row <- function(x) matrix(x, nrow = 1)
+daily$et0_mm_day <- as.numeric(pipeline_p0_et0_fao56(
+  mean_temperature = as_row(daily$mean_temperature_c),
+  maximum_temperature = as_row(daily$maximum_temperature_c),
+  minimum_temperature = as_row(daily$minimum_temperature_c),
+  solar_radiation = as_row(daily$solar_radiation_mj_m2_day),
+  actual_vapour_pressure = as_row(pipeline_p0_actual_vapour_pressure_rh(
+    daily$relative_humidity_percent, daily$maximum_temperature_c,
+    daily$minimum_temperature_c)),
+  wind_2m = as_row(pipeline_p0_wind_at_2m(daily$wind_10m_m_s, 10)),
+  elevation = daily$elevation_m[1], latitude = daily$latitude_degrees[1],
+  day_of_year = as.integer(format(as.Date(daily$date), "%j"))
+))
+daily[c("date", "et0_mm_day")]
+```
+
+For gaps, call `pipeline_p0_fill_short_gaps()` separately on each year's RH
+and wind before the equation, as in the local bundle's `export_yearly.R`.
+The low-level `pipeline_p0_monthly_sums()` does not check calendar completeness:
+supply every date exactly once, in matching order, for a complete month
+(28/29/30/31 days) before reporting a monthly total.
+
+## Local monthly products
+
+Year-specific files contain 12 monthly totals per mesh/year, covering January
+2008 through December 2018 (132 months per variable per cell). The means table
+contains 12 mean monthly totals: July is the mean of the eleven July totals.
+These are 11-year averages, **not standard 30-year climate normals**.
+
+The prepared bundle covers 377,449 meshes, 153 primary-mesh blocks and
+4,151,939 mesh-year rows. Its `verification.csv` records agreement of yearly
+averages with the supplied means within 1e-8 mm (maximum difference
+4.77484718430787e-12 mm). This verifies aggregation, not meteorological accuracy.
+`SHA256SUMS` records bundle integrity.
+
+Set `PROJECT_DATA_DIR` in the ignored `.Renviron` and restart R after editing.
+The following example is deliberately **not executed during rendering**:
+
+```{r}
+#| label: et0-local-access
+#| eval: false
+bundle <- et0_data_dir() # PROJECT_DATA_DIR/naro-et0/2008-2018
+normal <- read_monthly_csv(file.path(bundle, "data",
+  "monthly_normals_2008_2018.csv.gz"))
+yearly_files <- list.files(file.path(bundle, "data", "yearly"),
+  pattern = "^monthly_[0-9]{4}_2008_2018[.]csv[.]gz$", full.names = TRUE)
+# One block, not all Japan:
+one_block <- read_monthly_csv(yearly_files[1])
+period_summary(one_block, 7:9, "Jul-Sep")
+winter_summary(one_block)
+```
+
+Base R reads gzip CSVs directly. `read_monthly_csv()` keeps `mesh3_code` as
+character. `et0_data_dir()` fails if the environment variable is unset.
+Monthly columns are `et0_fao56_Jan` through `et0_fao56_Dec` and
+`precipitation_Jan` through `precipitation_Dec`, in mm/month. See the bundle's
+`data-dictionary.csv` and `STATUS.md`. Annual totals in the means table sum
+its 12 months. `et0_filled_days` is the maximum of separate RH and wind
+filled-day counts per cell/year, summed across 11 years in the means table.
+It is not their union or a count of missing days in all input variables.
+
+## Month windows and AI
+
+Sum monthly totals; do not multiply them by days again. ET0 and precipitation
+become depths in mm per selected period. AI is **sum(P)/sum(ET0)** over identical
+months, rather than the mean of monthly AI. Missing months propagate and
+non-positive or missing ET0 denominators give `NA`. P−ET0 is a climatic water
+balance, not a soil-water balance model.
+
+The synthetic CSV below has two invented identifiers and three years of
+illustrative monthly totals, independent of the daily example above.
+
+```{r}
+#| label: et0-synthetic-monthly
+yearly <- read_monthly_csv("data/examples/et0_monthly_synthetic.csv")
+jas <- period_summary(yearly, 7:9, "Jul-Sep")
+jas
+columns <- c(paste0("et0_fao56_", month.abb),
+  paste0("precipitation_", month.abb))
+normal <- yearly[yearly$year == 2008, "mesh3_code", drop = FALSE]
+for (column in columns) {
+  normal[[column]] <- vapply(normal$mesh3_code, function(key) {
+    mean(yearly[yearly$mesh3_code == key, column]) # no na.rm
+  }, numeric(1))
+}
+climate_jas <- period_summary(normal, 7:9, "Jul-Sep")
+data.frame(mesh3_code = normal$mesh3_code,
+  ratio_of_climatological_sums = climate_jas$aridity_index,
+  mean_yearly_ai = vapply(normal$mesh3_code, function(key) {
+    mean(jas$aridity_index[jas$mesh3_code == key])
+  }, numeric(1)))
+```
+
+A ratio of climatological sums (the original production definition) generally
+differs from the mean yearly AI. Averaging monthly AI also changes the weighting:
+
+```{r}
+#| label: et0-ai-weighting
+p <- c(50, 200)
+et0 <- c(100, 50)
+data.frame(ratio_of_sums = sum(p) / sum(et0), mean_monthly_ai = mean(p / et0))
+```
+
+### Winter crosses years
+
+Winter Y combines December Y−1 with January-February Y.
+`period_summary(data, c(12, 1, 2))` only selects months within the same row.
+Use `winter_summary()` on year-specific rows for a chronological winter.
+It aligns by mesh and year, preserves input rows, and labels winter by the
+year of January-February. Missing prior December yields `NA`.
+
+```{r}
+#| label: et0-synthetic-winter
+winter_summary(yearly)
+```
+
+For the complete real export, winters ending in 2009–2018 are available.
+Winter 2008 lacks December 2007; winter 2019 lacks January-February 2019 and
+has no anchor row. Summing December, January and February **means** describes
+an average seasonal window, not a specific winter or its variability.
+
+## Reproduction and verification
+
+`R/pipeline_p0_et0.R` is unchanged from the standalone bundle, originating at
+`japanese-trees-sdms` commit `1731a9e9fcaba87d718168e5eed0aeaed68b2acd`.
+The gap helper is extracted unchanged from its `R/pipeline_p0_naro.R`.
+`R/et0_support.R` adds CSV reading, paths and seasonal summaries. No new package
+dependency is required. The export environment was R 4.5.3 and terra 1.8.86,
+as recorded in the bundle's `build-environment.csv`. Optional regeneration
+from authorized NetCDFs uses terra and the local bundle scripts. Raw inputs
+remain immutable. This integration does not retrain an SDM.
+
+Download the [calculation functions](../R/pipeline_p0_et0.R),
+[support functions](../R/et0_support.R), [synthetic daily CSV](../data/examples/et0_daily_synthetic.csv)
+and [synthetic monthly CSV](../data/examples/et0_monthly_synthetic.csv).
+
+From the project root:
+
+```bash
+Rscript --vanilla tests/test_et0.R
+Rscript tests/verify_et0_local.R
+quarto render notebooks/calculate_ET0.qmd --to html
+```
+
+The first script uses base R and synthetic inputs. The second reads all local
+yearly tables via `PROJECT_DATA_DIR`, validates keys and coverage, and compares
+their means with the supplied table. It prints aggregate statistics only.
+Rendering this chapter never reads NARO tables.
+
+## References
+
+- Allen et al. (1998), *Crop evapotranspiration*, FAO Paper 56:
+  [equation and surface](https://www.fao.org/4/x0490e/x0490e06.htm),
+  [inputs](https://www.fao.org/4/x0490e/x0490e07.htm),
+  [worked examples](https://www.fao.org/4/x0490e/x0490e08.htm).
+- [NARO Agro-Meteorological Grid Square Data System](https://amu.rd.naro.go.jp/),
+  obtained using [agrmesh (Murakami and Nagasaki, 2023)](https://github.com/KeachMurakami/agrmesh).
+- [Source terms](https://amu.rd.naro.go.jp/wiki_open/doku.php?id=subscription):
+  permission for sharing these derivatives remains unconfirmed.

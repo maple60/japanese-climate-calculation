@@ -5,9 +5,13 @@ project:
   resources:
     - data/manual/mesh_climate_data_labels.csv
     - R/get_nearest_climate_value.R
+    - R/pipeline_p0_et0.R
+    - R/et0_support.R
+    - data/examples/et0_daily_synthetic.csv
+    - data/examples/et0_monthly_synthetic.csv
 
 book:
-  title: "Climate Data Processing with Mesh Climatology 2020"
+  title: "Climate Calculations for Japan"
   repo-url: https://github.com/maple60/japanese-climate-calculation
   chapters:
     - href: index.qmd
@@ -18,6 +22,8 @@ book:
       text: "Calculate PET"
     - href: notebooks/calculate_aridity_index.qmd
       text: "Calculate Aridity Index"
+    - href: notebooks/calculate_ET0.qmd
+      text: "FAO-56 Reference ET0 (NARO)"
     - href: notebooks/get_nearest_climate_value.qmd
       text: "Get Nearest Climate Value"
   appendices:

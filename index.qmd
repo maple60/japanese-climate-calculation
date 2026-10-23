@@ -1,10 +1,17 @@
 ---
-title: "Climate Data Processing with Mesh Climatology 2020"
+title: "Climate Calculations for Japan"
 ---
 
 [日本語版はこちら (Japanese version)](index_ja.qmd)
 
 This documentation explains how to process climate variables using the Japan Meteorological Agency's [Mesh Climatology 2020](https://www.data.jma.go.jp/stats/etrn/view/atlas.html).
+
+The [FAO-56 ET0 chapter](notebooks/calculate_ET0.qmd) adds a separate workflow
+for NARO daily inputs from 2008–2018, alongside the existing Thornthwaite PET
+workflow based on 1991–2020 JMA/MLIT monthly normals. Reference ET0 and
+temperature-based PET have different definitions, inputs and periods.
+The new chapter executes synthetic examples only; permission to share the
+NARO-derived ET0 and precipitation tables or maps remains unconfirmed.
 
 ## About the data
 

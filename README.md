@@ -29,6 +29,8 @@ Main outputs include:
 
 - Cleaned climate mesh dataset
 - PET (Thornthwaite method)
+- Reference ET0 (daily FAO-56 Penman–Monteith, NARO 2008–2018), documented in
+  [the English notebook](notebooks/calculate_ET0.qmd) with synthetic examples
 - Aridity Index (`Precipitation / PET`)
 - Utility function to retrieve nearest climate values from arbitrary coordinates
 - Example map visualizations for Japan
@@ -40,7 +42,8 @@ The full documentation is available at:
 - [https://maple60.github.io/japanese-climate-calculation/](https://maple60.github.io/japanese-climate-calculation/)
 
 - English-first documentation is published from `docs/`.
-- Each English page includes a link to the corresponding Japanese page.
+- The JMA/MLIT chapters link to Japanese companion pages; the NARO ET0 chapter
+  is currently available in English.
 
 The site is served from `/docs` on the default branch.
 
@@ -51,6 +54,9 @@ The site is served from `/docs` on the default branch.
 - `notebooks/*.qmd`: English chapters
 - `notebooks/*_ja.qmd`: Japanese chapters
 - `R/get_nearest_climate_value.R`: nearest-neighbor utility function
+- `R/pipeline_p0_et0.R`, `R/et0_support.R`: base R daily ET0 and period summaries
+- `data/examples/et0_*_synthetic.csv`: invented inputs, safe to render
+- `tests/test_et0.R`: base R checks; `tests/verify_et0_local.R`: optional local-table checks
 - `_quarto.yml`: book/site configuration
 
 ## Setup
@@ -86,10 +92,30 @@ quarto render
 
 Generated files are written to `docs/`.
 
+For the ET0 chapter alone, execute and render with:
+
+```bash
+Rscript --vanilla tests/test_et0.R
+quarto render notebooks/calculate_ET0.qmd --to html
+```
+
+The ET0 examples execute without NARO data. Authorized local tables are read
+from `PROJECT_DATA_DIR/naro-et0/2008-2018/` via `.Renviron`; run
+`Rscript tests/verify_et0_local.R` to verify all yearly blocks against the
+11-year means without writing data or embedding values in the site.
+FAO-56 ET0 describes a grass reference surface. It differs from the existing
+Thornthwaite PET in quantity, inputs and period (JMA/MLIT 1991–2020 normals).
+AI uses the chosen method's denominator; seasonal ET0-based AI is
+`sum(P)/sum(ET0)`. See the chapter for gaps, assumptions and cross-year winters.
+
 ## Data and license notes
 
 This repository does **not** redistribute source datasets.
 Please download required files from official sources and follow their terms of use.
+
+Permission to externally share NARO-derived ET0 and precipitation tables is
+unconfirmed. Do not publish those tables, their maps, or external share links.
+The code and documentation licenses do not grant rights to the weather data.
 
 - MLIT NLNI terms of use: https://nlftp.mlit.go.jp/ksj/other/agreement.html
 

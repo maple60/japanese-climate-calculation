@@ -8,3 +8,7 @@
 data/climate_mesh_data/
 /.quarto/
 **/*.quarto_ipynb
+
+# Real NARO inputs and derivatives stay in PROJECT_DATA_DIR, outside Git.
+/naro-et0/
+/data/naro-et0/
