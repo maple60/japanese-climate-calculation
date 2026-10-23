@@ -27,8 +27,12 @@ subtitle-ja: "NAROの日別入力と月別集計（2008〜2018年）"
 
 ## Scope and relation to PET
 
-This chapter shows how to calculate daily reference evapotranspiration (ET₀)
-and combine it into monthly and seasonal totals. All examples run on this page
+This chapter uses the **FAO-56 Penman–Monteith equation** to calculate daily
+reference evapotranspiration (ET₀) and combine it into monthly and seasonal totals.
+FAO-56 refers to [Irrigation and Drainage Paper 56](https://www.fao.org/4/x0490e/x0490e00.htm),
+the technical guide published by the Food and Agriculture Organization of the United Nations (FAO).
+
+All examples run on this page
 use **synthetic data or a published FAO example**. The page does not include
 actual NARO data or maps made from them.
 
@@ -64,8 +68,11 @@ weather data. Keep original files unchanged and actual data outside Git.
 
 ## 対象範囲とPETとの違い
 
-この章では、農研機構メッシュ農業気象データを使って、1日ごとの**基準蒸発散量（ET₀）**を計算し、
+この章では、**FAO-56 Penman–Monteith式**を使って、1日ごとの**基準蒸発散量（ET₀）**を計算し、
 月や季節ごとに集計する方法を説明します。
+入力には農研機構メッシュ農業気象データを使います。
+FAO-56は、この式を説明したFAO（国連食糧農業機関）の[灌漑排水技術資料第56号](https://www.fao.org/4/x0490e/x0490e00.htm)を指します。
+
 実データの利用には申請が必要なため、ページ内で実行する例には**架空データまたはFAOの公開計算例**を使います。
 NAROの実データや、それを使った地図は掲載していません。
 
