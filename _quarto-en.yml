@@ -26,3 +26,5 @@ book:
   appendices:
     - href: notebooks/plot_japan_climate_map.qmd
       text: "Plot Japan Climate Map"
+    - href: notebooks/bilingual_quarto.qmd
+      text: "Build a Bilingual Quarto Site"

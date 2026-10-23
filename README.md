@@ -42,7 +42,7 @@ The full documentation is available at:
 - [https://maple60.github.io/japanese-climate-calculation/](https://maple60.github.io/japanese-climate-calculation/)
 
 - English-first documentation is published from `docs/`.
-- All seven pages, including NARO ET0, share English/Japanese QMD sources.
+- All chapters, including NARO ET0 and the bilingual-authoring guide, share English/Japanese QMD sources.
 - JP/EN switches to the same page in the other language; Japanese HTML is in `docs/ja/`.
 
 The site is served from `/docs` on the default branch.

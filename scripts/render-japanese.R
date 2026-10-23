@@ -23,7 +23,10 @@ local({
   }
 
   # Keep previously published Japanese URLs usable without duplicate QMDs.
-  for (file in setdiff(qmd, "notebooks/calculate_ET0.qmd")) {
+  legacy <- c("index.qmd", paste0("notebooks/", c("prepare_climate_data",
+    "calculate_PET", "calculate_aridity_index", "get_nearest_climate_value",
+    "plot_japan_climate_map"), ".qmd"))
+  for (file in intersect(qmd, legacy)) {
     old <- sub("\\.qmd$", "_ja.html", file)
     target <- paste0(if (dirname(file) == ".") "" else "../",
       "ja/", sub("\\.qmd$", ".html", file))

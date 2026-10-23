@@ -7,6 +7,7 @@ const root = path.resolve(process.argv[2] || "docs");
 const pages = ["index.html", ...[
   "prepare_climate_data", "calculate_PET", "calculate_aridity_index",
   "calculate_ET0", "get_nearest_climate_value", "plot_japan_climate_map",
+  "bilingual_quarto",
 ].map(name => `notebooks/${name}.html`)];
 let references = 0;
 for (const language of ["en", "ja"]) {
@@ -32,6 +33,12 @@ for (const language of ["en", "ja"]) {
       assert(fs.existsSync(destination), `${relative}: missing ${target}`);
       references++;
     }
+    if (page === "notebooks/bilingual_quarto.html") {
+      assert.match(html, new RegExp(`<img[^>]+src="[^"]*bilingual-quarto-${language}[.]svg"`),
+        `${relative}: guide must include its language-specific diagram`);
+      assert.equal([...html.matchAll(/<h3\b/g)].length, 7,
+        `${relative}: guide must include all seven steps`);
+    }
     if (page === "notebooks/calculate_ET0.html") {
       assert.match(html, /3\.879455/, "FAO example must execute");
       assert.match(html, /<math\b/, "ET0 equations must use native MathML");
@@ -47,7 +54,8 @@ for (const language of ["en", "ja"]) {
     }
   }
 }
-for (const page of pages.filter(page => !page.includes("calculate_ET0"))) {
+const legacyPages = pages.filter(page => !/calculate_ET0|bilingual_quarto/.test(page));
+for (const page of legacyPages) {
   const legacy = page.replace(/\.html$/, "_ja.html");
   const html = fs.readFileSync(path.join(root, legacy), "utf8");
   assert.doesNotMatch(html, /[\u0000-\u0008\u000b\u000c\u000e-\u001f]/,
@@ -58,4 +66,4 @@ for (const page of pages.filter(page => !page.includes("calculate_ET0"))) {
 }
 assert(!fs.existsSync(path.join(root, "naro-et0")), "Real NARO bundle must stay outside the site");
 assert(!fs.existsSync(path.join(root, "data/naro-et0")), "Real NARO bundle must stay outside the site");
-console.log(`14 language pages, 6 legacy redirects and ${references} local references passed.`);
+console.log(`${pages.length * 2} language pages, ${legacyPages.length} legacy redirects and ${references} local references passed.`);

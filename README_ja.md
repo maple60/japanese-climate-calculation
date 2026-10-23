@@ -41,7 +41,7 @@
 - [https://maple60.github.io/japanese-climate-calculation/](https://maple60.github.io/japanese-climate-calculation/)
 
 - 英語を主としたドキュメントは `docs/` から公開されています。
-- ET₀章を含む全7ページは日英共通QMDから生成し、JP／ENで同じページの言語を切り替えます。
+- ET₀章・言語切替の解説を含む全ページを日英共通QMDから生成し、JP／ENで同じページの言語を切り替えます。
 - 日本語版は [ja/](https://maple60.github.io/japanese-climate-calculation/ja/) に配置します。
 
 このサイトはデフォルトブランチの `/docs` から配信されます。
