@@ -12,3 +12,6 @@ data/climate_mesh_data/
 # Real NARO inputs and derivatives stay in PROJECT_DATA_DIR, outside Git.
 /naro-et0/
 /data/naro-et0/
+
+# Local reports with NARO-derived data, figures and self-contained HTML.
+/local-reports/

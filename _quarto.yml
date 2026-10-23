@@ -9,6 +9,7 @@ project:
   render:
     - index.qmd
     - notebooks/*.qmd
+    - "!local-reports/**"
   resources:
     - /data/manual/mesh_climate_data_labels.csv
     - /R/get_nearest_climate_value.R
@@ -16,6 +17,7 @@ project:
     - /R/et0_support.R
     - /data/examples/et0_daily_synthetic.csv
     - /data/examples/et0_monthly_synthetic.csv
+    - "!/local-reports/**"
 
 book:
   title: "Climate Calculations for Japan"

@@ -150,9 +150,10 @@ tm <- tm_shape(japan, crs = 4612) +
   tm_shape(sf_plot[, variable], crs = 4612) +
   tm_fill(
     fill = variable,
-    fill.scale = tm_scale_continuous(values = "viridis"),
+    # Low AI (drier) is yellow; high AI (wetter) is purple.
+    fill.scale = tm_scale_continuous(values = hcl.colors(100, "Viridis", rev = TRUE)),
     fill.legend = tm_legend(
-      title = variable,
+      title = "AI: low = dry, high = humid",
       reverse = TRUE,
       position = c("right", "bottom"),
       frame = FALSE,
@@ -176,6 +177,7 @@ tmap_save(
 
 ![Aridity Index map result; Data source: National Land Numerical Information Download Site, Ministry of Land, Infrastructure, Transport and Tourism, Japan. URL: https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html](../output/japan_climate_map_aridity_index.png)
 
+Yellow indicates lower AI (drier conditions); purple indicates higher AI (wetter conditions).
 
 ### Plot monthly Aridity Index
 
@@ -188,6 +190,8 @@ The same map can be drawn for each monthly AI column. Run the loop to save one P
 結果は以下のようになります。
 
 ![Aridity Indexの描画結果｜出典：国土交通省国土数値情報ダウンロードサイト URL: https://nlftp.mlit.go.jp/ksj/gml/datalist/KsjTmplt-G02-v3_0.html](../output/japan_climate_map_aridity_index.png)
+
+黄色ほどAIが小さく乾燥側、紫色ほどAIが大きく湿潤側を表します。
 
 ### 月ごとのAridity Indexの描画
 
@@ -208,10 +212,10 @@ for (month in seq_along(month_labels)) {
     tm_fill(
       fill = variable,
       fill.scale = tm_scale_continuous(
-        values = "viridis"
+        values = hcl.colors(100, "Viridis", rev = TRUE)
       ),
       fill.legend = tm_legend(
-        title = variable,
+        title = paste0(variable, ": low = dry, high = humid"),
         reverse = TRUE,
         position = c("right", "bottom"),
         frame = FALSE,
