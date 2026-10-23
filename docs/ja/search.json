@@ -421,5 +421,71 @@
       "付録",
       "<span class='chapter-number'>A</span>  <span class='chapter-title'>日本の気候マップの描画</span>"
     ]
+  },
+  {
+    "objectID": "notebooks/bilingual_quarto.html",
+    "href": "notebooks/bilingual_quarto.html",
+    "title": "1つのQMDで日英を切り替える：Quartoの手順",
+    "section": "",
+    "text": "何ができるようになるか\nRead this page in English (EN)\n1ページにつき1つのQMDに、英語の文章、日本語の文章、共通のRコードを置きます。 そこから日英それぞれのHTMLを作り、JP／ENボタンで対応するページへ移動します。 計算を修正する場所は1か所で済み、次の描画で両言語に反映されます。 文章の翻訳と内容の照合は、人が行います。\nこのサイトとleaf-mechanics-dehydrationで 採用した方法です。まず、サイトを作る段階と読む段階を分けて捉えると理解しやすくなります。\n読む段階では、作成済みの別ページを開くだけです。ブラウザーでRを実行したり、 Quartoを描画したり、自動翻訳したりするわけではありません。そのため、日英両方のHTMLを用意します。",
+    "crumbs": [
+      "付録",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Quartoの日英切替の作り方</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/bilingual_quarto.html#何ができるようになるか",
+    "href": "notebooks/bilingual_quarto.html#何ができるようになるか",
+    "title": "1つのQMDで日英を切り替える：Quartoの手順",
+    "section": "",
+    "text": "1つの共通QMDから日英のHTMLを作り、読む人はJP／ENリンクで両ページを移動する。",
+    "crumbs": [
+      "付録",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Quartoの日英切替の作り方</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/bilingual_quarto.html#小さな練習用プロジェクトを作る",
+    "href": "notebooks/bilingual_quarto.html#小さな練習用プロジェクトを作る",
+    "title": "1つのQMDで日英を切り替える：Quartoの手順",
+    "section": "小さな練習用プロジェクトを作る",
+    "text": "小さな練習用プロジェクトを作る\n以下は、新しい練習用フォルダで動かす最小例です。 このリポジトリの気候解析設定を丸ごと置き換えるための設定ではありません。 Quartoを導入し、共通Rコードの実行例も試す場合はR・knitr・rmarkdownを用意します。 このリポジトリでは既存のrenv::restore()を使い、別のパッケージ管理を追加する必要はありません。\n次の構成にします。docs/は自動生成されるので、そこへ直接翻訳文を書かないでください。\npractice/\n  _quarto.yml\n  _quarto-en.yml\n  _quarto-ja.yml\n  index.qmd\n  language-switch.html\n  filters/\n    language-title.lua\n  docs/                       # generated / 自動生成\n    index.html\n    ja/\n      index.html\n\n手順1：共通設定を _quarto.yml に書く\n「プロファイル」は、名前を付けた描画設定の組です。以下ではenとjaを切り替える組にし、 先頭のenを標準にします。目次と見た目は共通にし、日本語版だけ出力先を上書きします。\n\n\n_quarto.yml\n\nprofile:\n  group:\n    - [en, ja]\n\nproject:\n  type: book\n  execute-dir: project\n  output-dir: docs\n\nbook:\n  title: \"My bilingual notebook\"\n  chapters:\n    - index.qmd\n\nfilters:\n  - filters/language-title.lua\n\nformat:\n  html:\n    theme: cosmo\n    include-after-body: language-switch.html\n\n\n\n手順2：言語別の設定ファイルを作る\nlangは、目次などQuartoの表示言語を指定します。本文を翻訳する設定ではありません。 出力先を分けることで、日本語版の描画で英語HTMLが上書きされるのを防ぎます。\nナビゲーションのリンクは、最初はトップページへ向けます。 複数の章を追加したときも同じ章へ移動できるようにする仕組みは、手順5で加えます。\n\n\n_quarto-en.yml\n\nlang: en\n\nbook:\n  navbar:\n    right:\n      - text: \"JP\"\n        href: ja/index.html\n\n\n\n_quarto-ja.yml\n\nlang: ja\n\nproject:\n  output-dir: docs/ja\n\nbook:\n  title: \"私の日英ノート\"\n  navbar:\n    right:\n      - text: \"EN\"\n        href: ../index.html\n\n\n\n手順3：1つの index.qmd に日英の文章を書く\nunless-profile=\"ja\"は日本語プロファイル以外で、when-profile=\"ja\"は日本語プロファイルで 表示する文章です。::::でブロックを開閉します。区切りは独立した行に置き、前後に空行を入れます。\n実行するRコードは、両方の言語ブロックの外へ置きます。 以下では、どちらの言語も同じmean(c(1, 2, 3))を使い、結果は2です。 #language-switchは、後でナビゲーションの移動先を決めるための目印です。 描画された各ページに、この目印を持つリンクが1個だけ残るようにします。\n\n\nindex.qmd\n\n---\ntitle: \"A small calculation\"\ntitle-ja: \"小さな計算例\"\n---\n\n:::: {.content-visible unless-profile=\"ja\"}\n\n[日本語はこちら（JP）](ja/index.html){#language-switch hreflang=\"ja\" lang=\"ja\"}\n\n## Mean of three numbers\n\nWe calculate the arithmetic mean of 1, 2 and 3.\n\n::::\n\n:::: {.content-visible when-profile=\"ja\"}\n\n[Read this page in English (EN)](../index.html){#language-switch hreflang=\"en\" lang=\"en\"}\n\n## 3つの数の平均\n\n1、2、3の算術平均を計算します。\n\n::::\n\n```{r}\n#| label: shared-mean\nmean(c(1, 2, 3))\n```\n\n\n\n\n\n\n\n重要文章の表示とコードの実行は別です\n\n\n\n文章を非表示にする設定は、コードの実行を止める設定ではありません。 重い処理やデータ読込を言語ブロックへ入れて、実行を回避しようとしないでください。 実行するかどうかは、チャンクのeval: falseなどで明示します。 共通コードであっても、通常は言語ごとの描画でそれぞれ実行されます。 コードを1つにすることと、計算回数が全体で1回になることは別です。\n\n\n\n\n手順4：小さなLuaフィルターでタイトルを切り替える\ntitle-jaは、この方法で独自に設けたメタデータです。 次のフィルターはlangがjaのときだけtitleを差し替えます。 任意のsubtitle-jaによる副題の切替にも対応しています。 LuaはQuartoに含まれているので、このためのRパッケージ追加は不要です。\n\n\nfilters/language-title.lua\n\nfunction Meta(meta)\n  if pandoc.utils.stringify(meta.lang) == \"ja\" then\n    for _, field in ipairs({\"title\", \"subtitle\"}) do\n      if meta[field .. \"-ja\"] then\n        meta[field] = meta[field .. \"-ja\"]\n      end\n    end\n  end\n  return meta\nend\n\n\n\n手順5：ナビゲーションも同じページへ切り替える\nページ本文の言語リンクは、JavaScriptがなくても動きます。 次のスクリプトは、そのページの言語リンクをナビゲーションへ転記します。 そのため、ET₀章からJP／ENを押したときも、トップへ戻らず相手の言語のET₀章を開けます。\nlanguage-switch.htmlとして保存します。手順1のinclude-after-bodyで読み込むファイルです。 スクリプトはJPとENを探すので、ナビゲーションのラベルもこの表記に揃えます。 日の丸は任意です。このサイトの language-switch.cssは、 環境によって表示が変わる旗の絵文字を避け、埋め込みSVGを使っています。 同じ見た目にする場合はCSSをコピーし、共通設定のformat: html:に css: language-switch.cssを追加します。\n\n\nlanguage-switch.html\n\n&lt;script&gt;\ndocument.addEventListener(\"DOMContentLoaded\", () =&gt; {\n  const target = document.querySelector(\"#language-switch\");\n  if (!target) return;\n  for (const link of document.querySelectorAll(\".navbar-nav .nav-link\")) {\n    if ([\"JP\", \"EN\"].includes(link.textContent.trim())) {\n      link.href = target.href;\n      link.hreflang = target.hreflang;\n      link.setAttribute(\"aria-label\", target.textContent.trim());\n    }\n  }\n});\n&lt;/script&gt;\n\n\n\n手順6：両言語を描画し、ブラウザーで確認する\n練習用フォルダで、次のコマンドを順番に実行します。 最小例には自動描画のフックを付けていないので、2つとも必要です。\nquarto render --profile en\nquarto render --profile ja\nquarto preview --profile en\nquarto previewが表示したローカルURLを開き、本文リンクとナビゲーションの両方で往復します。 両ページで結果が2になり、タイトルと説明がそれぞれの言語になれば成功です。 その後に日本語の文章を編集した場合は、日本語プロファイルも再描画して確認します。\nnotebooks/に章を置く場合のリンクは次のとおりです。 リンクの基準は、リポジトリの入口ではなく生成HTMLの置かれたフォルダです。 表のexampleは追加する章の仮名で、このサイトに実在するページではありません。\n\n\n\n\n\n\n\n今開いているページ\n相手の言語へのリンク\n\n\n\n\n英語トップ：docs/index.html\nja/index.html\n\n\n日本語トップ：docs/ja/index.html\n../index.html\n\n\n英語の章：docs/notebooks/example.html\n../ja/notebooks/example.html\n\n\n日本語の章：docs/ja/notebooks/example.html\n../../notebooks/example.html\n\n\n\n\n\n手順7：このリポジトリでは自動描画も利用する\nこのサイトでは、最小例に次の補助処理を加えています。\n\n_quarto-en.ymlから、英語の描画後にscripts/render-japanese.Rを呼びます。\nスクリプトは、ソースに変更があれば日本語版も描画し、その間は英語のナビゲーション索引を保護します。\n従来の6個の*_ja.htmlを新日本語ページへ転送し、GitHub Pages用の.nojekyllも作ります。 この移行処理は、このサイト固有のものです。\n\nしたがって、このリポジトリではquarto renderだけで両言語を作れます。 日本語だけならquarto render --profile jaです。 日本語を呼ぶフックを共通設定や日本語設定にも書くと、描画の繰り返しを招くので避けます。 別プロジェクトへコピーする場合は、スクリプト内のフォルダ名や旧URL一覧を合わせて変更してください。\nここへ新しい章を追加するときの順序は、次のとおりです。\n\n日英の文章、共通コード、両言語のタイトルを持つQMDを1つ作ります。\n両方のプロファイルの目次・付録へ追加します。\ntests/check_bilingual.cjsのpages一覧へファイル名を追加します。\n下のコマンドで描画・リンク検査を行い、ブラウザーでも言語切替を試します。\n公開する際は、ソースの変更と生成されたdocs/を揃えてコミットします。\n\nquarto render\nnode tests/check_bilingual.cjs",
+    "crumbs": [
+      "付録",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Quartoの日英切替の作り方</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/bilingual_quarto.html#編集しながら参照するファイル",
+    "href": "notebooks/bilingual_quarto.html#編集しながら参照するファイル",
+    "title": "1つのQMDで日英を切り替える：Quartoの手順",
+    "section": "編集しながら参照するファイル",
+    "text": "編集しながら参照するファイル\n\n\n\nこのリポジトリのファイル\n役割\n\n\n\n\n_quarto.yml\nサイト全体・配布資源・見た目の共通設定\n\n\n_quarto-en.yml / _quarto-ja.yml\n言語・目次・出力先\n\n\ncalculate_ET0.qmd\n計算を共有して説明を切り替える実例\n\n\nlanguage-title.lua\n日本語タイトル・副題の選択\n\n\nlanguage-switch.html\nナビゲーションを現在のページに対応させる処理\n\n\nrender-japanese.R\n日本語版の自動描画と旧URL転送",
+    "crumbs": [
+      "付録",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Quartoの日英切替の作り方</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/bilingual_quarto.html#うまく動かないとき",
+    "href": "notebooks/bilingual_quarto.html#うまく動かないとき",
+    "title": "1つのQMDで日英を切り替える：Quartoの手順",
+    "section": "うまく動かないとき",
+    "text": "うまく動かないとき\n\n\n\n\n\n\n\n症状\n確認するところ\n\n\n\n\n本文に両方の言語が出る\ncontent-visibleの属性、プロファイル名、閉じるコロン、前後の空行\n\n\n本文は日本語なのにタイトルが英語\ntitle-ja、Luaファイルへのパス、lang: ja\n\n\nJP／ENで毎回トップへ戻る\n本文の#language-switchリンクと、スクリプトの読込\n\n\n相手の言語が404になる\n両言語のHTMLが存在するか、相対パス、両方の公開先への配置\n\n\n日本語版だけ古い\n編集後に日本語プロファイルも再描画したか\n\n\n非表示のコードがデータを読む\n表示と実行は別なので、必要ならeval: falseを明記\n\n\ndocs/*.htmlを直しても元に戻る\nQMD・設定を編集してから再描画する\n\n\n\nGitHub Pagesでは、pushの成功とデプロイの成功は別です。 pushしたコミットのデプロイ結果を確認し、公開された日英両方のURLを開きます。 描画中のフォルダを公開せず、完成して検証した出力を使ってください。 気象データの外部共有条件は、言語切替の仕組みとは別に守る必要があります。",
+    "crumbs": [
+      "付録",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Quartoの日英切替の作り方</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/bilingual_quarto.html#公式資料",
+    "href": "notebooks/bilingual_quarto.html#公式資料",
+    "title": "1つのQMDで日英を切り替える：Quartoの手順",
+    "section": "公式資料",
+    "text": "公式資料\n基盤となる機能は、QuartoのProject Profilesと Conditional Contentです。 タイトル用Lua、ナビゲーション用JavaScript、日本語版の自動描画は、これらへこのプロジェクトで 追加した小さな補助処理です。",
+    "crumbs": [
+      "付録",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Quartoの日英切替の作り方</span>"
+    ]
   }
 ]

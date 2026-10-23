@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="420" viewBox="0 0 760 420" role="img" aria-labelledby="title desc">
+  <title id="title">One QMD, two language outputs</title>
+  <desc id="desc">Render index.qmd with en and ja to create docs/index.html and docs/ja/index.html. Readers move between the completed pages using JP and EN links.</desc>
+  <defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M 0 0 L 10 5 L 0 10 z" fill="#526174"/></marker></defs>
+  <rect width="760" height="420" rx="12" fill="#fff"/>
+  <g fill="none" stroke="#526174" stroke-width="2">
+    <path d="M380 95 V130 H190 V157" marker-end="url(#arrow)"/>
+    <path d="M380 130 H570 V157" marker-end="url(#arrow)"/>
+    <path d="M190 225 V267" marker-end="url(#arrow)"/>
+    <path d="M570 225 V267" marker-end="url(#arrow)"/>
+  </g>
+  <g font-family="system-ui, 'Yu Gothic', Meiryo, sans-serif" text-anchor="middle" fill="#203047">
+    <rect x="130" y="20" width="500" height="75" rx="9" fill="#f1f5f9" stroke="#8594a7"/>
+    <text x="380" y="49" font-size="23" font-weight="600">index.qmd</text>
+    <text x="380" y="77" font-size="18">English prose + Japanese prose + shared R</text>
+    <rect x="40" y="160" width="300" height="65" rx="8" fill="#e9f2ff" stroke="#5b85bb"/>
+    <text x="190" y="186" font-size="20" font-weight="600">English profile</text>
+    <text x="190" y="210" font-size="16">quarto render --profile en</text>
+    <rect x="420" y="160" width="300" height="65" rx="8" fill="#e9f6ef" stroke="#588b6d"/>
+    <text x="570" y="186" font-size="20" font-weight="600">Japanese profile</text>
+    <text x="570" y="210" font-size="16">quarto render --profile ja</text>
+    <rect x="40" y="270" width="300" height="70" rx="8" fill="#fff" stroke="#5b85bb"/>
+    <text x="190" y="296" font-size="20" font-weight="600">English HTML</text>
+    <text x="190" y="323" font-size="17">docs/index.html</text>
+    <rect x="420" y="270" width="300" height="70" rx="8" fill="#fff" stroke="#588b6d"/>
+    <text x="570" y="296" font-size="20" font-weight="600">Japanese HTML</text>
+    <text x="570" y="323" font-size="17">docs/ja/index.html</text>
+    <path d="M345 308 H415" stroke="#526174" stroke-width="2" marker-start="url(#arrow)" marker-end="url(#arrow)"/>
+    <text x="380" y="290" font-size="14" font-weight="600">JP / EN</text>
+    <text x="380" y="389" font-size="18">Build: render each language. Read: follow JP / EN links.</text>
+  </g>
+</svg>

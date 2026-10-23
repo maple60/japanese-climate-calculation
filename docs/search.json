@@ -401,5 +401,71 @@
       "Appendices",
       "<span class='chapter-number'>A</span>  <span class='chapter-title'>Plot Japan Climate Map</span>"
     ]
+  },
+  {
+    "objectID": "notebooks/bilingual_quarto.html",
+    "href": "notebooks/bilingual_quarto.html",
+    "title": "Appendix B — One QMD, Two Languages: A Quarto Guide",
+    "section": "",
+    "text": "What you will build\n日本語はこちら（JP）\nKeep English prose, Japanese prose and shared R code in one source file per page. Build two sets of HTML, then link matching pages with JP/EN buttons. Editing the calculation once updates both language versions on the next build. Translations still need to be written and reviewed by a person.\nThis is the method used by this site and by leaf-mechanics-dehydration. The diagram separates building the site from reading the site.\nWhen reading: the browser opens an already built page. It does not run R, render Quarto, or translate the page. Keep both language outputs available.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Build a Bilingual Quarto Site</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/bilingual_quarto.html#try-a-small-project-first",
+    "href": "notebooks/bilingual_quarto.html#try-a-small-project-first",
+    "title": "Appendix B — One QMD, Two Languages: A Quarto Guide",
+    "section": "Try a small project first",
+    "text": "Try a small project first\nThe following is a complete minimal example for a new practice folder. It is not a replacement for this repository’s climate-analysis configuration. Install Quarto and, for the shared R example, R with knitr and rmarkdown. This repository already manages its R packages with renv; use its usual renv::restore() workflow instead of adding a second package setup.\nCreate this layout. docs/ will be generated; do not write translations there.\npractice/\n  _quarto.yml\n  _quarto-en.yml\n  _quarto-ja.yml\n  index.qmd\n  language-switch.html\n  filters/\n    language-title.lua\n  docs/                       # generated / 自動生成\n    index.html\n    ja/\n      index.html\n\nStep 1: Put shared settings in _quarto.yml\nA profile is a named set of build settings. The group below makes en and ja alternatives, with en as the default. The book chapters and formatting are shared. The Japanese profile will override the output directory.\n\n\n_quarto.yml\n\nprofile:\n  group:\n    - [en, ja]\n\nproject:\n  type: book\n  execute-dir: project\n  output-dir: docs\n\nbook:\n  title: \"My bilingual notebook\"\n  chapters:\n    - index.qmd\n\nfilters:\n  - filters/language-title.lua\n\nformat:\n  html:\n    theme: cosmo\n    include-after-body: language-switch.html\n\n\n\nStep 2: Add the two language profiles\nlang selects Quarto’s interface language, such as the table-of-contents label. It does not translate your prose. Use separate output directories so the Japanese build does not replace the English HTML.\nThe navbar links initially point to the home page. Step 5 will make them follow the matching page when more chapters are added.\n\n\n_quarto-en.yml\n\nlang: en\n\nbook:\n  navbar:\n    right:\n      - text: \"JP\"\n        href: ja/index.html\n\n\n\n_quarto-ja.yml\n\nlang: ja\n\nproject:\n  output-dir: docs/ja\n\nbook:\n  title: \"私の日英ノート\"\n  navbar:\n    right:\n      - text: \"EN\"\n        href: ../index.html\n\n\n\nStep 3: Write both languages in index.qmd\nunless-profile=\"ja\" shows English when the Japanese profile is inactive; when-profile=\"ja\" shows Japanese when it is active. :::: opens and closes a language block. Keep these delimiters on their own lines, with blank lines around them.\nThe executable R chunk is outside both language blocks. Both builds use the same calculation, mean(c(1, 2, 3)), whose result is 2. The #language-switch ID identifies the link used by the navbar script. Only one such link should remain in each rendered page.\n\n\nindex.qmd\n\n---\ntitle: \"A small calculation\"\ntitle-ja: \"小さな計算例\"\n---\n\n:::: {.content-visible unless-profile=\"ja\"}\n\n[日本語はこちら（JP）](ja/index.html){#language-switch hreflang=\"ja\" lang=\"ja\"}\n\n## Mean of three numbers\n\nWe calculate the arithmetic mean of 1, 2 and 3.\n\n::::\n\n:::: {.content-visible when-profile=\"ja\"}\n\n[Read this page in English (EN)](../index.html){#language-switch hreflang=\"en\" lang=\"en\"}\n\n## 3つの数の平均\n\n1、2、3の算術平均を計算します。\n\n::::\n\n```{r}\n#| label: shared-mean\nmean(c(1, 2, 3))\n```\n\n\n\n\n\n\n\nImportantVisibility and execution are different\n\n\n\nHiding a prose block is not an execution control. Do not put expensive or data-reading R chunks inside the language blocks to prevent them from running. Use chunk options such as eval: false to control execution explicitly. Shared source code may still execute once per language build; sharing the code does not guarantee that the computation runs only once in total.\n\n\n\n\nStep 4: Select the translated page title with a small Lua filter\ntitle-ja is our own metadata field. The filter below replaces title only when lang is ja; it also supports an optional subtitle-ja field. Lua is included with Quarto, so no additional R package is needed for this step.\n\n\nfilters/language-title.lua\n\nfunction Meta(meta)\n  if pandoc.utils.stringify(meta.lang) == \"ja\" then\n    for _, field in ipairs({\"title\", \"subtitle\"}) do\n      if meta[field .. \"-ja\"] then\n        meta[field] = meta[field .. \"-ja\"]\n      end\n    end\n  end\n  return meta\nend\n\n\n\nStep 5: Make the navbar switch to the same page\nThe page-level links already work without JavaScript. This script copies that page’s language link into the navbar, so switching from the ET0 chapter opens the other ET0 chapter rather than returning to the home page.\nSave it as language-switch.html, referenced by include-after-body in Step 1. Keep the navbar labels exactly JP and EN, as those are the labels the script looks for. A Japanese flag is optional: this site’s language-switch.css uses an embedded SVG, which avoids platform-dependent flag emoji rendering. To reuse that decoration, copy the CSS file and add css: language-switch.css under format: html: in the common configuration.\n\n\nlanguage-switch.html\n\n&lt;script&gt;\ndocument.addEventListener(\"DOMContentLoaded\", () =&gt; {\n  const target = document.querySelector(\"#language-switch\");\n  if (!target) return;\n  for (const link of document.querySelectorAll(\".navbar-nav .nav-link\")) {\n    if ([\"JP\", \"EN\"].includes(link.textContent.trim())) {\n      link.href = target.href;\n      link.hreflang = target.hreflang;\n      link.setAttribute(\"aria-label\", target.textContent.trim());\n    }\n  }\n});\n&lt;/script&gt;\n\n\n\nStep 6: Build both languages and check them in a browser\nFrom the practice folder, run these commands in order. The small example has no automatic post-render hook, so both commands are required.\nquarto render --profile en\nquarto render --profile ja\nquarto preview --profile en\nOpen the local address printed by quarto preview, then test the page link and navbar switch in both directions. Both pages should show the number 2, with their own title and explanatory text. If you edit the Japanese prose afterward, rebuild the Japanese profile before checking it again.\nFor a chapter under notebooks/, use these relative links. A link is resolved from the generated HTML’s directory, not from the repository home page. Here example is the name of your new chapter, not a page in this site.\n\n\n\n\n\n\n\nPage being read\nLink to the other language\n\n\n\n\nEnglish home: docs/index.html\nja/index.html\n\n\nJapanese home: docs/ja/index.html\n../index.html\n\n\nEnglish chapter: docs/notebooks/example.html\n../ja/notebooks/example.html\n\n\nJapanese chapter: docs/ja/notebooks/example.html\n../../notebooks/example.html\n\n\n\n\n\nStep 7: Use the existing automation in this repository\nThis site adds a convenience layer to the minimal example:\n\n_quarto-en.yml runs scripts/render-japanese.R after the English render.\nThe script builds Japanese pages when their sources have changed and keeps the English navigation index intact during the second build.\nIt also preserves the six old *_ja.html URLs with redirects and writes .nojekyll for GitHub Pages. These migration steps are specific to this site.\n\nTherefore, in this repository, a normal quarto render builds both languages. An explicit quarto render --profile ja builds Japanese only. Do not put the Japanese post-render hook into _quarto.yml or _quarto-ja.yml: that could trigger repeated rendering. The hook’s paths and list of legacy URLs need adjustment before copying it into a different project.\nWhen adding a chapter here:\n\nCreate a single QMD with both prose blocks, shared code and both titles.\nAdd it to the appropriate chapter/appendix list in both profile files.\nAdd its filename to the pages list in tests/check_bilingual.cjs.\nRun the build and link check below. Check the actual page switches in a browser.\nCommit the source change and generated docs/ together before publishing.\n\nquarto render\nnode tests/check_bilingual.cjs",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Build a Bilingual Quarto Site</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/bilingual_quarto.html#files-to-refer-to-while-editing",
+    "href": "notebooks/bilingual_quarto.html#files-to-refer-to-while-editing",
+    "title": "Appendix B — One QMD, Two Languages: A Quarto Guide",
+    "section": "Files to refer to while editing",
+    "text": "Files to refer to while editing\n\n\n\nFile in this repository\nPurpose\n\n\n\n\n_quarto.yml\nShared book, resources and format settings\n\n\n_quarto-en.yml / _quarto-ja.yml\nLanguage, navigation and output paths\n\n\ncalculate_ET0.qmd\nA real example of shared calculations and bilingual explanations\n\n\nlanguage-title.lua\nJapanese title/subtitle selection\n\n\nlanguage-switch.html\nMatch the navbar link to the current page\n\n\nrender-japanese.R\nAutomatic second render and legacy URL redirects",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Build a Bilingual Quarto Site</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/bilingual_quarto.html#if-something-does-not-work",
+    "href": "notebooks/bilingual_quarto.html#if-something-does-not-work",
+    "title": "Appendix B — One QMD, Two Languages: A Quarto Guide",
+    "section": "If something does not work",
+    "text": "If something does not work\n\n\n\n\n\n\n\nSymptom\nCheck\n\n\n\n\nBoth languages appear in the body\nThe content-visible attributes, profile name, closing colons and blank lines\n\n\nJapanese prose appears under an English title\ntitle-ja, the Lua filter path and lang: ja\n\n\nJP/EN always returns to the home page\nThe page-level #language-switch link and loaded navbar script\n\n\nThe other language gives a 404\nBoth builds exist, relative paths are correct, and both output trees were published\n\n\nThe Japanese page is out of date\nThe Japanese profile was rebuilt after the edit\n\n\nA hidden chunk still reads data\nVisibility is separate from execution; explicitly set eval: false\n\n\nEditing docs/*.html has no lasting effect\nEdit the QMD/configuration instead, then render\n\n\n\nFor GitHub Pages, a successful push is not the same as a successful deployment. Check the deployment for the pushed commit, then open both public language URLs. Publish from a completed, verified build; do not publish a folder while it is being rendered. Climate-data sharing restrictions still apply independently of the language-switching mechanism.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Build a Bilingual Quarto Site</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/bilingual_quarto.html#official-references",
+    "href": "notebooks/bilingual_quarto.html#official-references",
+    "title": "Appendix B — One QMD, Two Languages: A Quarto Guide",
+    "section": "Official references",
+    "text": "Official references\nThe underlying Quarto features are Project Profiles and Conditional Content. The title filter, navbar script and automatic second render are this project’s small additions to those features.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Build a Bilingual Quarto Site</span>"
+    ]
+  },
+  {
+    "objectID": "notebooks/bilingual_quarto.html#what-you-will-build",
+    "href": "notebooks/bilingual_quarto.html#what-you-will-build",
+    "title": "Appendix B — One QMD, Two Languages: A Quarto Guide",
+    "section": "",
+    "text": "One shared QMD builds English and Japanese HTML; the reader follows JP/EN links between those pages.",
+    "crumbs": [
+      "Appendices",
+      "<span class='chapter-number'>B</span>  <span class='chapter-title'>Build a Bilingual Quarto Site</span>"
+    ]
   }
 ]
