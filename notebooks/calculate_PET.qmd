@@ -1,6 +1,9 @@
 ---
 title: "Calculate Potential Evapotranspiration (PET)"
 bibliography: references.bib
+format:
+  html:
+    html-math-method: mathml
 title-ja: "潜在蒸発散量（PET）の計算"
 ---
 
@@ -20,14 +23,141 @@ title-ja: "潜在蒸発散量（PET）の計算"
 
 This chapter calculates potential evapotranspiration (PET) using the Thornthwaite method [@thornthwaite1948] with the [SPEI](https://cran.r-project.org/web/packages/SPEI/index.html) package [@Santiago2023].
 
+## Monthly equation and parameters
+
+Thornthwaite is a temperature-based empirical method. It uses monthly mean
+temperature and a latitude-based day-length correction to estimate monthly PET.
+Precipitation, measured solar radiation, humidity and wind are not inputs.
+This chapter uses the 1991–2020 monthly climate normals described in the data-preparation chapter.
+
+For month $m$, the calculation is
+
+$$
+T_m^+=\max(T_m,0),\qquad
+I=\sum_{j=1}^{12}\left(\frac{T_j^+}{5}\right)^{1.514},
+$$
+
+$$
+a=6.75\times10^{-7}I^3-7.71\times10^{-5}I^2
+  +1.792\times10^{-2}I+0.49239,
+$$
+
+$$
+PET_m=16\left(\frac{L_m}{12}\right)\left(\frac{d_m}{30}\right)
+       \left(\frac{10T_m^+}{I}\right)^a\quad (I>0).
+$$
+
+| Symbol | Meaning | Unit |
+|---|---|---|
+| $PET_m$ | Potential evapotranspiration for month $m$ | mm/month (monthly total) |
+| $T_m$, $T_m^+$ | Monthly mean temperature and its value clipped at zero | °C |
+| $I$ | Annual heat index, calculated from all 12 monthly temperatures | Dimensionless (temperature entered in °C) |
+| $a$ | Exponent calculated from $I$ | Dimensionless |
+| $L_m$ | Astronomical day length approximated at the 15th of the month | hours/day |
+| $d_m$ | Number of days in the month | days |
+
+The factor 16 gives PET in mm for a standard 30-day month with 12-hour days;
+$L_m/12$ and $d_m/30$ adjust day length and month length.
+These are the coefficients used by the installed **SPEI 1.8.1**, rather than locally fitted parameters.
+
+### Day-length correction
+
+For the January–December numeric vector used here, SPEI uses
+$d_m=(31,28,31,30,31,30,31,31,30,31,30,31)$ and
+$J_m=\sum_{j<m}d_j+15$, the day of year of the 15th of each month:
+
+$$
+\delta_m=0.4093\sin\left(\frac{2\pi J_m}{365}-1.405\right),\qquad
+L_m=\frac{24}{\pi}\arccos\!\left[
+\operatorname{clip}(-\tan\phi\tan\delta_m,-1,1)\right].
+$$
+
+Here $\phi$ is latitude in radians and $\delta_m$ is solar declination in radians;
+the implementation converts latitude in degrees using division by 57.2957795.
+The clip operation restricts the argument to $[-1,1]$.
+Day length is calculated from latitude and date; it is not observed sunshine duration.
+The calculation follows the [SPEI 1.8.1 source](https://github.com/sbegueria/SPEI/blob/v1.8.1/R/thornthwaite.R).
+
+### Assumptions and missing values in this chapter
+
+- The 12 input temperatures are ordered from January to December. This numeric-vector input assumes a non-leap year; February has 28 days.
+- Negative monthly temperatures are set to zero inside the function. Months at or below 0°C have PET = 0; if all 12 months are at or below 0°C, $I=0$ and PET is zero throughout the year.
+- Meshes with any missing monthly temperature are excluded before calculation. The function uses its default `na.rm = FALSE`; omitted meshes remain missing after the join.
+- Annual PET is the sum of the 12 monthly PET values, in mm/year.
+- Applying this nonlinear equation to monthly climate normals does not give exactly the same result as averaging PET calculated for each individual year.
+- PET assumes sufficient water supply. It is not measured forest evapotranspiration, and is distinct from the grass-reference quantity in the [FAO-56 Penman–Monteith chapter](calculate_ET0.qmd).
+
 ## Load libraries
 
 :::::
 
 ::::: {.content-visible when-profile="ja"}
 
-潜在蒸発散量 Potential evapotranspiration; PETを計算します。
-方法はThornthwaite method[@thornthwaite1948]です。 パッケージは[SPEI](https://cran.r-project.org/web/packages/SPEI/index.html)を使用します[@Santiago2023]。
+この章では、**Thornthwaite法**[@thornthwaite1948]を使って、潜在蒸発散量（PET）を計算します。
+計算には[SPEIパッケージ](https://cran.r-project.org/web/packages/SPEI/index.html)を使います[@Santiago2023]。
+
+## 月別計算式とパラメータ
+
+Thornthwaite法は、月平均気温と、緯度から求める日長を使う経験式です。
+降水量・観測された日射量・湿度・風速は入力しません。
+ここでは、データ準備の章で扱った1991〜2020年の月別平年値を使います。
+
+月$m$のPETを、次の式で求めます。
+
+$$
+T_m^+=\max(T_m,0),\qquad
+I=\sum_{j=1}^{12}\left(\frac{T_j^+}{5}\right)^{1.514},
+$$
+
+$$
+a=6.75\times10^{-7}I^3-7.71\times10^{-5}I^2
+  +1.792\times10^{-2}I+0.49239,
+$$
+
+$$
+PET_m=16\left(\frac{L_m}{12}\right)\left(\frac{d_m}{30}\right)
+       \left(\frac{10T_m^+}{I}\right)^a\quad (I>0).
+$$
+
+| 記号 | 意味 | 単位 |
+|---|---|---|
+| $PET_m$ | 月$m$の潜在蒸発散量 | mm/月（月合計） |
+| $T_m$, $T_m^+$ | 月平均気温と、0℃未満を0に置き換えた気温 | ℃ |
+| $I$ | 12か月の気温から求める年熱指数 | 無次元（気温を℃で代入） |
+| $a$ | 年熱指数$I$から決まるべき指数 | 無次元 |
+| $L_m$ | その月の15日の日長で近似した天文日長 | 時間/日 |
+| $d_m$ | その月の日数 | 日 |
+
+係数16は「1か月30日・日長12時間」を基準に、PETをmmで求めるためのものです。
+$L_m/12$で日長を、$d_m/30$で月の日数を補正します。
+ここに示した係数は、使用している**SPEI 1.8.1の実装**に合わせた値で、今回のデータに当てはめて推定したパラメータではありません。
+
+### 日長の補正
+
+今回のように、1〜12月の気温を通常の数値ベクトルで渡す場合、SPEIは通常年の月日数
+$d_m=(31,28,31,30,31,30,31,31,30,31,30,31)$を使います。
+各月15日の通日を$J_m=\sum_{j<m}d_j+15$とし、日長を次のように近似します。
+
+$$
+\delta_m=0.4093\sin\left(\frac{2\pi J_m}{365}-1.405\right),\qquad
+L_m=\frac{24}{\pi}\arccos\!\left[
+\operatorname{clip}(-\tan\phi\tan\delta_m,-1,1)\right].
+$$
+
+$\phi$は緯度、$\delta_m$は太陽赤緯で、いずれもラジアンで表します。
+実装では、度で表した緯度を57.2957795で割ってラジアンへ換算します。
+$\operatorname{clip}$は、値を$-1$から$1$の範囲に収める操作です。
+ここでいう日長は、緯度と日付から求める天文日長であり、観測された日照時間ではありません。
+式の細部は[SPEI 1.8.1のソースコード](https://github.com/sbegueria/SPEI/blob/v1.8.1/R/thornthwaite.R)で確認できます。
+
+### この章での仮定と欠測の扱い
+
+- 入力は1〜12月の順に並べた12個の月平均気温です。通常の数値ベクトルで渡すため、うるう年の補正は行わず、2月は28日として計算します。
+- 0℃未満の月平均気温は関数内で0に置き換えます。0℃以下の月のPETは0です。全月が0℃以下で$I=0$になる場合も、全月のPETを0とします。
+- 月平均気温に欠測が1つでもあるメッシュは、計算前に除外します。関数の`na.rm = FALSE`は既定値のまま使い、除外したメッシュは結合後もPETを欠測のまま残します。
+- 年間PETは、12か月のPETの合計です。単位はmm/年です。
+- 式は非線形なので、月別平年気温から求めるPETは、各年のPETを計算して平均した値とは厳密には一致しません。
+- PETは、水が十分に供給される条件を想定した蒸発散量です。森林の実蒸発散量の測定値ではなく、[FAO-56 Penman–Monteith式の章](calculate_ET0.qmd)で扱う草地基準のET₀とも区別します。
 
 ## ライブラリの読み込み
 
@@ -66,6 +196,9 @@ sf_climate <- readRDS(file.path(
 
 ## Create a data frame for PET calculation
 
+After excluding incomplete temperature rows, take latitude from the same
+filtered mesh table so each temperature vector uses its own mesh's latitude.
+
 :::::
 
 ::::: {.content-visible when-profile="ja"}
@@ -73,11 +206,12 @@ sf_climate <- readRDS(file.path(
 ## 計算用データフレームの作成
 
 緯度、月平均気温を抽出します。
+欠測がある行を除いた後に、同じメッシュ表から緯度も取り出します。
+気温と緯度の行の対応をそろえるためです。
 
 :::::
 
 ```{r}
-latitudes <- sf_climate$latitude
 df_temp <- sf_climate[, grep("mean_temperature", names(sf_climate))]
 df_temp <- st_drop_geometry(df_temp)
 df_temp <- df_temp[, 1:12]
@@ -87,6 +221,7 @@ removed_rows <- which(!keep)
 
 df_temp_clean <- df_temp[keep, ]
 sf_climate_clean <- sf_climate[keep, ]
+latitudes <- sf_climate_clean$latitude
 row.names(df_temp_clean) <- sf_climate_clean$mesh_code_3rd
 ```
 
